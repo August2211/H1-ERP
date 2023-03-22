@@ -20,7 +20,7 @@ namespace H1_ERP.ErrorHandling
         public int IsNull(int input)
         {
             if (input == null)
-                throw new InvalidDataException("This field cannot be null");
+                throw new InvalidDataException("This field can¨t be null");
             else return input;
         }
         public Address IsNull(Address input)
@@ -33,6 +33,12 @@ namespace H1_ERP.ErrorHandling
         {
             if (input == null)
                 throw new InvalidDataException("This field cannot be null");
+            else return input;
+        }
+        public double IsNull(double input)
+        {
+            if (input == null)
+                throw new InvalidDataException("This field can't be null");
             else return input;
         }
     }
