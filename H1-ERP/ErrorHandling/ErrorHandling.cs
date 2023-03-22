@@ -9,12 +9,14 @@ namespace H1_ERP.ErrorHandling
 {
     public class ErrorHandling
     {
+        //If the input is null, throw an exception else return the input.
         public string IsNull(string input)
         {
             if (input == null)
                 throw new InvalidDataException("This field cannot be null");
             else return input;
         }
+        //Allows int to be used.
         public int IsNull(int input)
         {
             if (input == null)
