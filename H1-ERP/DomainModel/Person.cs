@@ -22,10 +22,12 @@ namespace H1_ERP.DomainModel
         {
             get
             {
+                //If the first name is null, throw an exception else return the first name.
                 return ErrorHandler.IsNull(_firstName);
             }
             set
             {
+                //If the first name is null, throw an exception else set the first name.
                 _firstName = ErrorHandler.IsNull(value);
             }
         }

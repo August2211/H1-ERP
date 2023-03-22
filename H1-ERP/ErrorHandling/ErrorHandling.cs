@@ -17,13 +17,19 @@ namespace H1_ERP.ErrorHandling
         }
         public int IsNull(int input)
         {
-            if (input == null) 
+            if (input == null)
                 throw new InvalidDataException("This field cannot be null");
             else return input;
         }
         public Address IsNull(Address input)
         {
-            if(input.Country == null || input.StreetNumber == null || input.City == null || input.RoadName == null || input.ZipCode == null)
+            if (input.Country == null || input.StreetNumber == null || input.City == null || input.RoadName == null || input.ZipCode == null)
+                throw new InvalidDataException("This field cannot be null");
+            else return input;
+        }
+        public DateTime IsNull(DateTime input)
+        {
+            if (input == null)
                 throw new InvalidDataException("This field cannot be null");
             else return input;
         }
