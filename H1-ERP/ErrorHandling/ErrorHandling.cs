@@ -8,9 +8,10 @@ namespace H1_ERP.ErrorHandling
 {
     public class ErrorHandling
     {
-        public void StringIsNullException()
+        public void IsNull(string input)
         {
-            throw new InvalidDataException("This field cannot be null");
+            if (input == null)
+                throw new InvalidDataException("This field cannot be null");
         }
     }
 }
