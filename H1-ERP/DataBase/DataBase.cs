@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 namespace H1_ERP.DataBase
 {
     internal partial class DataBase
-
     {
-
 
     }
 }
