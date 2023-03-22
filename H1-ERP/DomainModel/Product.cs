@@ -69,7 +69,7 @@ namespace H1_ERP.DomainModel
             }
             set 
             {
-                _salePrice = errorHandling.IsNull (_salePrice);
+                _salePrice = errorHandling.IsNull (value);
             }
         }
         /*---------------------------------*/

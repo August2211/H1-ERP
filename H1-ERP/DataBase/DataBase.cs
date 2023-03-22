@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H1_ERP.DomainModel;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.DataBase
 {
-    internal partial class DataBase
+    public partial class DataBase
     {
         private SqlConnection getConnection()
         {
@@ -19,8 +20,10 @@ namespace H1_ERP.DataBase
             string connectionString = sb.ToString();
             SqlConnection connection = new SqlConnection(connectionString);
             return connection;
+
         }
-
-
+          
     }
+
 }
+
