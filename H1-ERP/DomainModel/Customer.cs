@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.DomainModel
 {
-    public class Customer
+    public class Customer : Person
     {
         //Customer Properties.
         public int CustomerId { get; set; }
