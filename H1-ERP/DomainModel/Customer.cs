@@ -12,7 +12,7 @@ namespace H1_ERP.DomainModel
         ErrorHandling.ErrorHandling ErrorHandler = new();
         //Customer Properties.
         private int _customerId;
-        private DateTime _lastPurchaseDate;
+        private DateTime? _lastPurchaseDate;
 
         public int CustomerId
         {
@@ -27,16 +27,21 @@ namespace H1_ERP.DomainModel
                 _customerId = ErrorHandler.IsNull(value);
             }
         }
-        public DateTime LastPurchaseDate
+        public DateTime? LastPurchaseDate
         {
             get
             {
-                return ErrorHandler.IsNull(_lastPurchaseDate);
+                return _lastPurchaseDate;
             }
             set
             {
-                _lastPurchaseDate = ErrorHandler.IsNull(value);
+                _lastPurchaseDate = value;
             }
+        }
+        //Ensure that there is always a customer id.
+        public Customer(int id)
+        {
+            CustomerId = id;
         }
     }
 }
