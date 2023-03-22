@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Protobuf.WellKnownTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,36 +9,39 @@ namespace H1_ERP.DomainModel
 {
     public class SalesOrderLine
     {
-
-        public ushort Quantity { get { return Quantity; }
+        public uint Id { get; private set; }
+        private ushort _quantity; 
+        private decimal _singleprice;
+        public ushort Quantity { get { return _quantity;   }
             set 
             {
                  if(Quantity == 0)
                  {
                         throw new Exception("u cannot have a 0 quantatiy of anything"); 
-                 }
+                 } 
+
+                 _quantity = value;
             } 
         }
 
        public SalesOrderLine(Product product, ushort quantity) 
        {
-            Quantity = quantity;
+            Id = 2;
+            _quantity = quantity;
+            SingleUnitPrice = product.SalePrice;
             TotalPrice = (decimal)(SingleUnitPrice * Quantity);
             Product = product;
+
        }
 
         public decimal SingleUnitPrice {   
             get 
             {
-                return SingleUnitPrice; 
+                return _singleprice; 
             } 
-            set 
+           private set 
             {
-                if (SingleUnitPrice < 0)
-                {
-                    throw new InvalidDataException("a price cannot be negative");
-                }
-                else SingleUnitPrice = SingleUnitPrice;
+              _singleprice= value;
             }
         }
 

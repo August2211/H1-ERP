@@ -17,8 +17,16 @@ namespace H1_ERP.DomainModel
     }
     public class SalesOrderHeader
     {
-
-
+        public SalesOrderHeader(List<SalesOrderLine> input)
+        {
+            Condtion = Condtion.Created;
+            CustomerID = 1; 
+            Creationtime = DateTime.Now; 
+            CompletionTime = DateTime.Now.AddDays(3);
+            OrderLines = input;
+            OrderID = 2; 
+        }
+        
         public uint OrderID { get; set; }
 
         public DateTime Creationtime { get; private set; }

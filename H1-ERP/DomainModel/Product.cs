@@ -104,17 +104,17 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private int _quantity;
+        private int _productQuantity;
 
-        public int Quantity
+        public int ProductQuantity
         {
             get 
             {
-                return errorHandling.IsNull (_quantity);
+                return errorHandling.IsNull (_productQuantity); 
             }
             set
             {
-                _quantity = errorHandling.IsNull (value);
+                _productQuantity = errorHandling.IsNull (value);
             }
         }
         /*---------------------------------*/
