@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.DataBase
 {
-    public partial class DataBase
+    internal partial class DataBase
     {
         private SqlConnection getConnection()
         {
