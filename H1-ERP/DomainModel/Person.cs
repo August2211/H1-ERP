@@ -78,7 +78,7 @@ namespace H1_ERP.DomainModel
         //Function that returns the full name of a person in "".
         public string FullName()
         {
-            return $"\"{FirstName} {LastName}\"";
+            return $"\"{ErrorHandler.IsNull(FirstName)} {ErrorHandler.IsNull(LastName)}\"";
         }
     }
 }
