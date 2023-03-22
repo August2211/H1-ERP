@@ -14,5 +14,11 @@ namespace H1_ERP.ErrorHandling
                 throw new InvalidDataException("This field cannot be null");
             else return input;
         }
+        public int IsNull(int input)
+        {
+            if (input == null) 
+                throw new InvalidDataException("This field cannot be null");
+            else return input;
+        }
     }
 }
