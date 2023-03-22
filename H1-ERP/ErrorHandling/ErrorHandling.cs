@@ -37,8 +37,18 @@ namespace H1_ERP.ErrorHandling
         }
         public double IsNull(double input)
         {
-            if (input == null)
-                throw new InvalidDataException("This field can't be null");
+            if (input < 0)
+            {
+                throw new InvalidDataException("This field can't be negative");
+            }
+            else return input;
+        }
+        public decimal IsNull(decimal input)
+        {
+            if (input < 0)
+            {
+                throw new InvalidDataException("This field can't be negative");
+            }
             else return input;
         }
     }
