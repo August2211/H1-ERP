@@ -1,4 +1,6 @@
-﻿namespace H1_ERP
+﻿using H1_ERP.DomainModel;
+
+namespace H1_ERP
 {
     internal class Program
     {
@@ -6,6 +8,11 @@
         {
             Console.WriteLine("Hello, World!");
             
+
+            Product product = new Product();
+
+
+
         }
     }
 }

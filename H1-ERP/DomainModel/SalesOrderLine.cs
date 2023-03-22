@@ -20,28 +20,22 @@ namespace H1_ERP.DomainModel
         }
 
        public SalesOrderLine(Product product, ushort quantity) 
-        {
+       {
             Quantity = quantity;
             TotalPrice = (decimal)(SingleUnitPrice * Quantity);
             Product = product;
-        }
+       }
 
-
-        public decimal? SingleUnitPrice { 
-           
+        public decimal SingleUnitPrice {   
             get 
             {
-                if(SingleUnitPrice == null)
-                {
-                    throw new InvalidDataException("Du kan ikke have en pris af null");
-
-                } else { return SingleUnitPrice.Value; }
+                return SingleUnitPrice; 
             } 
             set 
             {
                 if (SingleUnitPrice < 0)
                 {
-                    SingleUnitPrice = null;
+                    throw new InvalidDataException("a price cannot be negative");
                 }
                 else SingleUnitPrice = SingleUnitPrice;
             }

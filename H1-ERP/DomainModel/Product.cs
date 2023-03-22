@@ -12,8 +12,6 @@ namespace H1_ERP.DomainModel
     {
         ErrorHandling.ErrorHandling errorHandling =new(); //obj for ErrorHandling Class
        
-        //Product properties.
-        /*--------------------------------*/
 
         private int _productId;
 
@@ -31,7 +29,6 @@ namespace H1_ERP.DomainModel
 
             }
         }
-        /*---------------------------------*/
 
         private string _Name;
 
@@ -46,7 +43,6 @@ namespace H1_ERP.DomainModel
             
             }
         }
-        /*---------------------------------*/
 
         private string _description;
 
@@ -63,9 +59,9 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private double _salePrice;
+        private decimal _salePrice;
 
-        public double SalePrice
+        public decimal SalePrice
         {
             get
             { 
@@ -78,13 +74,13 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private double _purchasePrice;
+        private decimal _purchasePrice;
 
-        public double PurchasePrice
+        public decimal PurchasePrice
         {
             get
             {
-                return errorHandling.IsNull (_purchasePrice);
+                return errorHandling.IsNull(_purchasePrice);
             }
             set 
             {
@@ -108,9 +104,9 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private double _quantity;
+        private int _quantity;
 
-        public double Quantity
+        public int Quantity
         {
             get 
             {

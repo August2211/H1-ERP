@@ -14,7 +14,6 @@ namespace H1_ERP.DomainModel
         Confirmed = 2,
         Pakagede =3,
         done = 4,
-
     }
     public class SalesOrderHeader
     {
@@ -30,7 +29,7 @@ namespace H1_ERP.DomainModel
 
         internal Condtion Condtion { get; set; }
 
-        List<SalesOrderLine> OrderLines { get; set; }
+         public List<SalesOrderLine> OrderLines { get;  private set; }
 
         /// <summary>
         /// This is a method for calculating the total price of the wholde order
