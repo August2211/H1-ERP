@@ -8,34 +8,134 @@ using System.Threading.Tasks;
 namespace H1_ERP.DomainModel
 {
     public class Product
+
     {
+        ErrorHandling.ErrorHandling errorHandling =new(); //obj for ErrorHandling Class
+       
         //Product properties.
         /*--------------------------------*/
 
-        private int orderId;
+        private int _productId;
 
-        public int OrderId        
+        public int ProductId        
         {
             get
             {
-                if (orderId == null)
-                {
-                  
-
-                }
+                return errorHandling.IsNull(_productId);
+               
             }
             
-            set { orderId = value; }
-        }
+            set 
+            {
+                _productId = errorHandling.IsNull(value);
 
-        //public int OrederID { get; set; }
-        //public string Name { get; set; }
-        //public string Description { get; set; }
-        //public double SalePrice { get; set; }
-        //public double purchasePrice { get; set; }
-        //public string Location { get; set; }
-        //public double quantity { get; set; }
-        //public int unit { get; set; }
+            }
+        }
+        /*---------------------------------*/
+
+        private string _Name;
+
+        public string Name
+        {
+
+            get 
+            { 
+                return errorHandling.IsNull(_Name);
+            }
+            set { _Name = errorHandling.IsNull(value);  
+            
+            }
+        }
+        /*---------------------------------*/
+
+        private string _description;
+
+        public string Description
+        {
+            get 
+            {
+                return errorHandling.IsNull (_description);
+            }
+            set
+            {
+                _description =errorHandling.IsNull (value);
+            }
+        }
+        /*---------------------------------*/
+
+        private double _salePrice;
+
+        public double SalePrice
+        {
+            get
+            { 
+                return errorHandling.IsNull (_salePrice); 
+            }
+            set 
+            {
+                _salePrice = errorHandling.IsNull (value);
+            }
+        }
+        /*---------------------------------*/
+
+        private double _purchasePrice;
+
+        public double PurchasePrice
+        {
+            get
+            {
+                return errorHandling.IsNull (_purchasePrice);
+            }
+            set 
+            {
+                _purchasePrice = errorHandling.IsNull (value); 
+            }
+        }
+        /*---------------------------------*/
+
+        private string _location;
+
+        public string Location
+        {
+            get 
+            { 
+                return errorHandling.IsNull (_location);
+            }
+            set
+            {
+                _location = errorHandling.IsNull (value); 
+            }
+        }
+        /*---------------------------------*/
+
+        private double _quantity;
+
+        public double Quantity
+        {
+            get 
+            {
+                return errorHandling.IsNull (_quantity);
+            }
+            set
+            {
+                _quantity = errorHandling.IsNull (value);
+            }
+        }
+        /*---------------------------------*/
+
+        private int _unit;
+
+        public int Unit
+        {
+            get 
+            {
+                return errorHandling.IsNull (_unit);
+            }
+            set
+            {
+                _unit = errorHandling.IsNull (value); 
+            }
+        }
         /*---------------------------------*/
     }
 }
