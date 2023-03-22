@@ -73,7 +73,7 @@ namespace H1_ERP.DomainModel
             }
             set 
             {
-                _salePrice = errorHandling.IsNull (value);
+                _salePrice = errorHandling.IsNull (_salePrice);
             }
         }
         /*---------------------------------*/
@@ -108,17 +108,17 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private double _quantity;
+        private int _productquantity;
 
-        public double Quantity
+        public int ProductQuantity
         {
             get 
             {
-                return errorHandling.IsNull (_quantity);
+                return errorHandling.IsNull (_productquantity);
             }
             set
             {
-                _quantity = errorHandling.IsNull (value);
+                _productquantity = errorHandling.IsNull (value);
             }
         }
         /*---------------------------------*/
