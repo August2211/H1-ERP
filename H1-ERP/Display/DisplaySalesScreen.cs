@@ -90,6 +90,8 @@ namespace H1_ERP.Display
             SalesOrderHeader OrderHeader = db.GetSalesOrderHeaderFromID(SalesList.IntBoxOutput);
 
             Customer OrderCustomer = db.GetCustomerFromID((int)OrderHeader.CustomerID);
+
+            //Only pull the customer data if his id is not 0 (He doesn't exist)
             if (OrderCustomer.CustomerId != 0)
             {
                 string CustomerFullName = OrderCustomer.FullName();
