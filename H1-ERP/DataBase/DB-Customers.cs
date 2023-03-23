@@ -111,10 +111,20 @@ namespace H1_ERP.DataBase
             connection.Close();
         }
 
+        public uint InsertAddress(Address address)
+        {
+            uint AddressID = 0;
+            SqlConnection connection = getConnection();
+            SqlCommand command = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ({address.RoadName},{address.StreetNumber},{address.ZipCode},{address.City},{address.Country})");
+            command.ExecuteNonQuery();
+            command = new SqlCommand("SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;");
+            SqlDataReader reader = command.ExecuteReader();
 
-
-
-
-
+            while (reader.Read())
+            {
+                AddressID = (uint)reader.GetValue(0);
+            }
+            return AddressID;
+        }
     }
 }

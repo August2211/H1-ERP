@@ -14,7 +14,9 @@ namespace H1_ERP
 
           
             
-
+            DisplaySalesScreen displaySalesScreen = new DisplaySalesScreen();
+            Screen.Display(displaySalesScreen);
+            
 
         }
     }
