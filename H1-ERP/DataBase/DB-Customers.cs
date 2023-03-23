@@ -25,6 +25,7 @@ namespace H1_ERP.DataBase
                 result.LastName = reader.GetString(2);
                 result.Email = reader.GetString(3);
                 result.PhoneNumber = reader.GetString(4);
+
             }
             reader.Close();
             command = new SqlCommand($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE PersonID = {id}", connection);
@@ -52,14 +53,18 @@ namespace H1_ERP.DataBase
             List<int> ids = new List<int>();
             SqlCommand command = new SqlCommand(sql, connection);
             SqlDataReader  sqlreader = command.ExecuteReader();
-
+            List<Customer> result = new List<Customer>();
             while (sqlreader.Read())
             {
-
+                ids.Add(sqlreader.GetInt32(0));
             }
-           
-
-
+            foreach(int id in ids)
+            {
+                Customer tempcustomer = GetCustomerFromID(id);
+                result.Add(tempcustomer); 
+               
+            }
+            return result;  
         }
 
 
