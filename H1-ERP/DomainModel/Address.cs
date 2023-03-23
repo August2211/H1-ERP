@@ -15,6 +15,7 @@ namespace H1_ERP.DomainModel
         private string _city;
         private string _country;
 
+        public uint AdressID { get; set; }
         public string RoadName
         {
             get

@@ -67,6 +67,18 @@ namespace H1_ERP.DataBase
             return result;  
         }
 
+        public void InsertCustomer(Customer input)
+        {
+
+            SqlConnection Connection = getConnection(); 
+            Connection.Open();
+            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES({input.Address.RoadName},{input.Address.StreetNumber},{input.Address.ZipCode},{input.Address.City},{input.Address.Country})";
+            SqlCommand sqlCommand = new SqlCommand(sql,Connection)
+
+
+
+        }
+
 
 
 

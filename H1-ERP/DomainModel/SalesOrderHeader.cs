@@ -20,11 +20,9 @@ namespace H1_ERP.DomainModel
         public SalesOrderHeader(List<SalesOrderLine> input)
         {
             Condtion = Condtion.Created;
-            CustomerID = 1; 
             Creationtime = DateTime.Now; 
             CompletionTime = DateTime.Now.AddDays(3);
-            OrderLines = input;
-            OrderID = 2; 
+            OrderLines = input; 
         }
         
         public uint OrderID { get; set; }

@@ -27,19 +27,22 @@ namespace H1_ERP.DataBase
             int rows = 0; 
 
             
-            List<SalesOrderLine> lines = new List<SalesOrderLine>();    
+            List<SalesOrderLine> lines = new List<SalesOrderLine>();
+            //gets all of the orderlines which is connected to the current order 
             while(sqlDataReader.Read())
             {
                 int GetProdID = (int)sqlDataReader[1];
-
+                //calls the method getproductfromid thereby i can instancetiate my obejct so that i can create an order line 
                 Product temp = GetProductFromID(GetProdID);
                 SalesOrderLine tempsalesorderline = new SalesOrderLine(temp, Convert.ToUInt16(sqlDataReader[4]));
                 lines.Add(tempsalesorderline);
 
             }
+            // after we have all of the orderlines we can create an empty obejct as a representation of the obejct in th DB  
             SalesOrderHeader res = new SalesOrderHeader(lines);
 
             sqlDataReader.Close();
+            // lookup in the Order table for the remaning information 
             commando =new SqlCommand( $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id}",conn);
             sqlDataReader = commando.ExecuteReader();
             rows = 0; 
@@ -60,6 +63,10 @@ namespace H1_ERP.DataBase
             conn.Close(); 
             return res; 
         }  
+        /// <summary>
+        /// Gets all the ids of the current customers and foreach id it finds it calls the method which finds a customer from the id 
+        /// </summary>
+        /// <returns></returns>
         public List<SalesOrderHeader> GetAll()
         {
 
