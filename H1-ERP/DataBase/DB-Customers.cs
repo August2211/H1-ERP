@@ -28,7 +28,7 @@ namespace H1_ERP.DataBase
 
             }
             reader.Close();
-            command = new SqlCommand($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE PersonID = {id}", connection);
+            command = new SqlCommand($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {id}", connection);
             reader = command.ExecuteReader();
             while (reader.Read())
             {
