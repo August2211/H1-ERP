@@ -8,13 +8,12 @@ namespace H1_ERP.DataBase
     {
         public Customer GetCustomerFromID(int id)
         {
+            //for a customer obejct we're gonna need an adress aswell for the customer 
             Customer result = new Customer();
             Address address = new Address();
             SqlConnection connection = getConnection(); 
             connection.Open();
-
-
-
+            //Get the details of the Customer from the person table
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {id}";
             SqlCommand command = new SqlCommand(sql, connection);
             SqlDataReader reader = command.ExecuteReader();
@@ -28,6 +27,7 @@ namespace H1_ERP.DataBase
 
             }
             reader.Close();
+            //Get's the details of the adress which the customer is connected to
             command = new SqlCommand($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {id}", connection);
             reader = command.ExecuteReader();
             while (reader.Read())
@@ -38,7 +38,6 @@ namespace H1_ERP.DataBase
                 address.City = reader.GetString(4);
                 address.Country = reader.GetString(5);
             }
-
             //Only set the address if the id is not 0
             if (address.AdressID != 0)
             {
@@ -66,7 +65,6 @@ namespace H1_ERP.DataBase
             {
                 Customer tempcustomer = GetCustomerFromID(id);
                 result.Add(tempcustomer);
-
             }
             return result;
         }
@@ -75,7 +73,6 @@ namespace H1_ERP.DataBase
 
         public void InsertCustomer(Customer input)
         {
-
             SqlConnection Connection = getConnection();
             Connection.Open();
             string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES('{input.Address.RoadName}','{input.Address.StreetNumber}','{input.Address.ZipCode}','{input.Address.City}','{input.Address.Country}')";
@@ -89,7 +86,7 @@ namespace H1_ERP.DataBase
             Connection.Close();
         }
 
-        public void UpdateCustomer(int id, Customer input)
+        public void UpdateCustomer(Customer input)
         {
             SqlConnection connection = getConnection();
             SqlCommand command = new SqlCommand($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] SET RoadName = '{input.Address.RoadName}',StreetNumber = '{input.Address.StreetNumber}',ZipCode = '{input.Address.ZipCode}',City = '{input.Address.City}', Country = '{input.Address.Country}' WHERE AdressID = {input.Address.AdressID}");

@@ -101,8 +101,6 @@ namespace H1_ERP.DataBase
 
            int i =  command.ExecuteNonQuery(); 
     
-
-
         }
 
         public void Update(SalesOrderLine input, int id)
