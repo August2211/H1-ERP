@@ -17,7 +17,7 @@ namespace H1_ERP.DomainModel
         private string _phoneNumber;
         private Address _address;
 
-        public uint PersonID { get; set; }
+        public uint PersonID { get;private set; }
 
 
         //Person properties.

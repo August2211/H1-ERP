@@ -17,6 +17,7 @@ namespace H1_ERP.DomainModel
     }
     public class SalesOrderHeader
     {
+        private uint _orderId; 
         public SalesOrderHeader(List<SalesOrderLine> input)
         {
             Condtion = Condtion.Created;
@@ -25,7 +26,7 @@ namespace H1_ERP.DomainModel
             OrderLines = input; 
         }
         
-        public uint OrderID { get; set; }
+        public uint OrderID { get;  set; }
 
         public DateTime Creationtime { get;  set; }
 

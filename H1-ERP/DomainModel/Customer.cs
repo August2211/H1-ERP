@@ -39,9 +39,6 @@ namespace H1_ERP.DomainModel
             }
         }
         //Ensure that there is always a customer id.
-        public Customer(int id)
-        {
-            CustomerId = id;
-        }
+    
     }
 }

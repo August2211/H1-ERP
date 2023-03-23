@@ -8,7 +8,7 @@ namespace H1_ERP.DataBase
     {
         public Customer GetCustomerFromID(int id)
         {
-            Customer result = new Customer(id);
+            Customer result = new Customer();
             Address address = new Address(); 
             SqlConnection connection = getConnection(); 
             connection.Open();
@@ -67,17 +67,47 @@ namespace H1_ERP.DataBase
             return result;  
         }
 
+
         public void InsertCustomer(Customer input)
         {
 
             SqlConnection Connection = getConnection(); 
             Connection.Open();
-            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES({input.Address.RoadName},{input.Address.StreetNumber},{input.Address.ZipCode},{input.Address.City},{input.Address.Country})";
-            SqlCommand sqlCommand = new SqlCommand(sql,Connection)
-
-
-
+            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES('{input.Address.RoadName}','{input.Address.StreetNumber}','{input.Address.ZipCode}','{input.Address.City}','{input.Address.Country}')";
+            SqlCommand sqlCommand = new SqlCommand(sql, Connection);
+            sqlCommand.ExecuteNonQuery(); 
+            sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customers.Person] (FirstName,LastName,Email,PhoneNumber,AdressID) VALUES('{input.FirstName}','{input.LastName}','{input.Email}','{input.PhoneNumber}',{input.Address.AdressID})", Connection);
+            sqlCommand.ExecuteNonQuery();
+            sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES({input.LastPurchaseDate},{input.PersonID})");
+            sqlCommand.ExecuteNonQuery();
+            Connection.Close();
         }
+
+        public void UpdateCustomer(int id, Customer input)
+        {
+           SqlConnection connection = getConnection();
+           SqlCommand command = new SqlCommand($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] SET RoadName = '{input.Address.RoadName}',StreetNumber = '{input.Address.StreetNumber}',ZipCode = '{input.Address.ZipCode}',City = '{input.Address.City}', Country = '{input.Address.Country}' WHERE AdressID = {input.Address.AdressID}");
+            command.ExecuteNonQuery();
+            command = new SqlCommand($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customers.Person] SET FirstName = '{input.FirstName}', LastName = '{input.LastName}', Email = '{input.Email}', PhoneNumber = '{input.PhoneNumber}'"); 
+            command.ExecuteNonQuery();
+            command = new SqlCommand($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Customer] SET LastPurchaseDate = {input.LastPurchaseDate}"); 
+            command.ExecuteNonQuery();
+            connection.Close(); 
+        }
+
+
+        public void DeleteCustomer(Customer input)
+        {
+            SqlConnection connection = getConnection();
+            SqlCommand command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {input.Address.AdressID}");
+            command.ExecuteNonQuery();
+            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {input.PersonID}");
+            command.ExecuteNonQuery();
+            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Customer] WHERE CustomerID ={input.CustomerId}"); 
+            command.ExecuteNonQuery();  
+            connection.Close();
+        }
+
 
 
 

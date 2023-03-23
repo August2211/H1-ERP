@@ -2,6 +2,7 @@
 using H1_ERP.Display;
 using H1_ERP.DomainModel;
 using System.Data.Entity;
+using System.Runtime.Loader;
 using TECHCOOL.UI;
 
 namespace H1_ERP
@@ -10,29 +11,28 @@ namespace H1_ERP
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-           // DataBase.DataBase datab= new DataBase.DataBase();
-           // Product product = datab.GetFromID(2);
 
-           // //Product product = new Product();
-           // //product.ProductId
-           // //    = 1;
-           // //product.Name = "Test";
-           // //product.Unit = 2;
-           // //product.Description = "Test";
-           // //product.ProductQuantity = 23;
-           // //product.SalePrice = 12.64m;
-           // //product.PurchasePrice = 5; 
-           // //product.Location = "sweeden";
-           // SalesOrderLine orderLine = new SalesOrderLine(product,4);
-           // List<SalesOrderLine> orders = new List<SalesOrderLine>();
-           // DataBase.DataBase hej = new DataBase.DataBase();
-           // hej.GetfromID(4); 
-           // orders.Add(orderLine);
-           //SalesOrderHeader hej2 = new SalesOrderHeader(orders);
+            Address address= new Address();
+            address.StreetNumber = "123";
+            address.RoadName = "hej";
+            address.Country = "denimarka"; 
+            address.City = "123";
+            address.ZipCode = "123";
+           
 
-            DisplaySalesScreen SalesScreen = new DisplaySalesScreen();
-            Screen.Display(SalesScreen);
+            Customer customer = new Customer();
+            customer.Address = address;
+            customer.PhoneNumber = "123";
+            customer.FirstName = "jens"; 
+            customer.LastName = "jensen";
+            customer.Email = "Jensjens@gmail.com"; 
+            customer.LastPurchaseDate = DateTime.Now;
+
+            DataBase.DataBase data = new DataBase.DataBase(); 
+            data.InsertCustomer(customer);
+            
+
+
         }
     }
 }
