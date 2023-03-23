@@ -8,11 +8,8 @@ namespace H1_ERP.DataBase
     {
         public Customer GetCustomerFromID(int id)
         {
-            Customer result = new Customer(id);
-            Address address = new Address();
-            SqlConnection connection = getConnection();
             Customer result = new Customer();
-            Address address = new Address(); 
+            Address address = new Address();
             SqlConnection connection = getConnection(); 
             connection.Open();
 
@@ -82,6 +79,7 @@ namespace H1_ERP.DataBase
             Connection.Open();
             string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES({input.Address.RoadName},{input.Address.StreetNumber},{input.Address.ZipCode},{input.Address.City},{input.Address.Country})";
             SqlCommand sqlCommand = new SqlCommand(sql, Connection);
+        }
 
         public void UpdateCustomer(int id, Customer input)
         {
