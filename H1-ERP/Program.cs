@@ -10,7 +10,7 @@ namespace H1_ERP
         {
             Console.WriteLine("Hello, World!");
             DataBase.DataBase datab= new DataBase.DataBase();
-            Product product = datab.GetFromID(2);
+            Product product = datab.GetSalesOrderHeaderFromID(2);
 
             //Product product = new Product();
             //product.ProductId

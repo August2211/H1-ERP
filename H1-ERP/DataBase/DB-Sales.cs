@@ -17,7 +17,7 @@ namespace H1_ERP.DataBase
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public SalesOrderHeader GetfromID(int id)
+        public SalesOrderHeader GetSalesOrderHeaderFromID(int id)
         {
             SqlConnection conn = getConnection(); 
             conn.Open();
@@ -32,7 +32,7 @@ namespace H1_ERP.DataBase
             {
                 int GetProdID = (int)sqlDataReader[1];
 
-                Product temp = GetFromID(GetProdID);
+                Product temp = GetProductFromID(GetProdID);
                 SalesOrderLine tempsalesorderline = new SalesOrderLine(temp, Convert.ToUInt16(sqlDataReader[4]));
                 lines.Add(tempsalesorderline);
 
@@ -77,7 +77,7 @@ namespace H1_ERP.DataBase
             }
             foreach(var s in ints)
             {
-               var orderheader = GetfromID(s); 
+               var orderheader = GetSalesOrderHeaderFromID(s); 
                res.Add(orderheader);
             }
              

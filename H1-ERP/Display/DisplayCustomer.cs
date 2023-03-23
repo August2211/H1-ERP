@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.Display
 {
-    internal class DisplayKunde
+    public class DisplayCustomer
     {
+        public void DisplayCustomers()
+        {
+
+
+
+
+        } 
+
+
     }
 }

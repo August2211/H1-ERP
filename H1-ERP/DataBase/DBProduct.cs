@@ -11,7 +11,7 @@ namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
-        public Product GetFromID(int id)
+        public Product GetProductFromID(int id)
         {
 
             SqlConnection conn = getConnection();
