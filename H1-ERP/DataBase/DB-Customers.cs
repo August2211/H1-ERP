@@ -8,6 +8,9 @@ namespace H1_ERP.DataBase
     {
         public Customer GetCustomerFromID(int id)
         {
+            Customer result = new Customer(id);
+            Address address = new Address();
+            SqlConnection connection = getConnection();
             Customer result = new Customer();
             Address address = new Address(); 
             SqlConnection connection = getConnection(); 
@@ -17,11 +20,11 @@ namespace H1_ERP.DataBase
 
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {id}";
             SqlCommand command = new SqlCommand(sql, connection);
-            SqlDataReader reader = command.ExecuteReader(); 
-            while (reader.Read()) 
-            { 
-               result.CustomerId = reader.GetInt32(0);
-               result.FirstName = reader.GetString(1);
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                result.CustomerId = reader.GetInt32(0);
+                result.FirstName = reader.GetString(1);
                 result.LastName = reader.GetString(2);
                 result.Email = reader.GetString(3);
                 result.PhoneNumber = reader.GetString(4);
@@ -36,52 +39,49 @@ namespace H1_ERP.DataBase
                 address.StreetNumber = reader.GetString(2);
                 address.ZipCode = reader.GetString(3);
                 address.City = reader.GetString(4);
-                address.Country= reader.GetString(5);
+                address.Country = reader.GetString(5);
             }
-            result.Address = address; 
-            
 
+            //Only set the address if the id is not 0
+            if (address.AdressID != 0)
+            {
+                result.Address = address;
+            }
 
-            connection.Close(); 
+            connection.Close();
+
             return result;
         }
 
         public List<Customer> GetAllCustomers()
         {
-            SqlConnection connection= getConnection();
+            SqlConnection connection = getConnection();
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person]";
             List<int> ids = new List<int>();
             SqlCommand command = new SqlCommand(sql, connection);
-            SqlDataReader  sqlreader = command.ExecuteReader();
+            SqlDataReader sqlreader = command.ExecuteReader();
             List<Customer> result = new List<Customer>();
             while (sqlreader.Read())
             {
                 ids.Add(sqlreader.GetInt32(0));
             }
-            foreach(int id in ids)
+            foreach (int id in ids)
             {
                 Customer tempcustomer = GetCustomerFromID(id);
-                result.Add(tempcustomer); 
-               
+                result.Add(tempcustomer);
+
             }
-            return result;  
+            return result;
         }
 
 
         public void InsertCustomer(Customer input)
         {
 
-            SqlConnection Connection = getConnection(); 
+            SqlConnection Connection = getConnection();
             Connection.Open();
-            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES('{input.Address.RoadName}','{input.Address.StreetNumber}','{input.Address.ZipCode}','{input.Address.City}','{input.Address.Country}')";
+            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES({input.Address.RoadName},{input.Address.StreetNumber},{input.Address.ZipCode},{input.Address.City},{input.Address.Country})";
             SqlCommand sqlCommand = new SqlCommand(sql, Connection);
-            sqlCommand.ExecuteNonQuery(); 
-            sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customers.Person] (FirstName,LastName,Email,PhoneNumber,AdressID) VALUES('{input.FirstName}','{input.LastName}','{input.Email}','{input.PhoneNumber}',{input.Address.AdressID})", Connection);
-            sqlCommand.ExecuteNonQuery();
-            sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES({input.LastPurchaseDate},{input.PersonID})");
-            sqlCommand.ExecuteNonQuery();
-            Connection.Close();
-        }
 
         public void UpdateCustomer(int id, Customer input)
         {
