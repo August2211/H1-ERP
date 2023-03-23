@@ -25,7 +25,7 @@ namespace H1_ERP
             SalesOrderLine orderLine = new SalesOrderLine(product,4);
             List<SalesOrderLine> orders = new List<SalesOrderLine>();
             DataBase.DataBase hej = new DataBase.DataBase();
-            hej.GetfromID(2); 
+            hej.GetfromID(4); 
             orders.Add(orderLine);
            SalesOrderHeader hej2 = new SalesOrderHeader(orders); 
         }

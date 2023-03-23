@@ -29,7 +29,7 @@ namespace H1_ERP.DomainModel
         
         public uint OrderID { get; set; }
 
-        public DateTime Creationtime { get; private set; }
+        public DateTime Creationtime { get;  set; }
 
         public DateTime CompletionTime { get;  set; }
 
@@ -43,9 +43,9 @@ namespace H1_ERP.DomainModel
         /// This is a method for calculating the total price of the wholde order
         /// </summary>
         /// <returns></returns>
-        public decimal TotalOrderPrice(List<SalesOrderLine> input)
+        public decimal TotalOrderPrice()
         {
-            return input.Select(x => x.TotalPrice).ToArray().Sum();
+            return this.OrderLines.Select(x => x.TotalPrice).ToArray().Sum();
         }
     }
 }
