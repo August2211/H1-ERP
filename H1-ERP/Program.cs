@@ -31,7 +31,9 @@ namespace H1_ERP
             DataBase.DataBase data = new DataBase.DataBase(); 
             data.InsertCustomer(customer);
             
-
+            DisplaySalesScreen displaySalesScreen = new DisplaySalesScreen();
+            Screen.Display(displaySalesScreen);
+            
 
         }
     }
