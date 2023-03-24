@@ -9,7 +9,7 @@ namespace H1_ERP.DomainModel
 {
     public class SalesOrderLine
     {
-        public uint Id { get; private set; }
+        public uint Id { get;  set; }
         private ushort _quantity; 
         private decimal _singleprice;
         public ushort Quantity { get { return _quantity;   }
@@ -26,7 +26,6 @@ namespace H1_ERP.DomainModel
 
        public SalesOrderLine(Product product, ushort quantity) 
        {
-            Id = 2;
             _quantity = quantity;
             SingleUnitPrice = product.SalePrice;
             TotalPrice = (decimal)(SingleUnitPrice * Quantity);

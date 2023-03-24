@@ -1,5 +1,8 @@
 ﻿using H1_ERP.DomainModel;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.Reflection.Metadata;
 using System.Runtime.Loader;
 
 namespace H1_ERP.DataBase
@@ -10,6 +13,7 @@ namespace H1_ERP.DataBase
         {
             //for a customer obejct we're gonna need an adress aswell for the customer 
             Customer result = new Customer();
+            result.CustomerId = id; 
             Address address = new Address();
             SqlConnection connection = getConnection(); 
             connection.Open();
@@ -17,6 +21,7 @@ namespace H1_ERP.DataBase
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {id}";
             SqlCommand command = new SqlCommand(sql, connection);
             SqlDataReader reader = command.ExecuteReader();
+            result.PersonID = Convert.ToUInt32(id);
             while (reader.Read())
             {
                 result.CustomerId = reader.GetInt32(0);
@@ -32,6 +37,7 @@ namespace H1_ERP.DataBase
             reader = command.ExecuteReader();
             while (reader.Read())
             {
+                address.AdressID =Convert.ToUInt32(reader.GetInt32(0));
                 address.RoadName = reader.GetString(1);
                 address.StreetNumber = reader.GetString(2);
                 address.ZipCode = reader.GetString(3);
@@ -74,14 +80,12 @@ namespace H1_ERP.DataBase
         public void InsertCustomer(Customer input)
         {
             SqlConnection Connection = getConnection();
+            uint adressid = InsertAddress(input.Address); 
             Connection.Open();
-            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES('{input.Address.RoadName}','{input.Address.StreetNumber}','{input.Address.ZipCode}','{input.Address.City}','{input.Address.Country}')";
-
-            SqlCommand sqlCommand = new SqlCommand(sql, Connection);
-            sqlCommand.ExecuteNonQuery();
-            sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customers.Person] (FirstName,LastName,Email,PhoneNumber,AdressID) VALUES('{input.FirstName}','{input.LastName}','{input.Email}','{input.PhoneNumber}',{input.Address.AdressID})", Connection);
-            sqlCommand.ExecuteNonQuery();
-            sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES({input.LastPurchaseDate},{input.PersonID})");
+            
+            uint personID = InsertPerson(input, adressid);
+            SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES(@Date,{personID})", Connection);
+            sqlCommand.Parameters.AddWithValue("@Date", input.LastPurchaseDate);
             sqlCommand.ExecuteNonQuery();
             Connection.Close();
         }
@@ -99,32 +103,69 @@ namespace H1_ERP.DataBase
         }
 
 
-        public void DeleteCustomer(Customer input)
+        public void DeleteCustomer(int  input)
         {
             SqlConnection connection = getConnection();
-            SqlCommand command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {input.Address.AdressID}");
+            connection.Open();
+            Customer customercustomer = GetCustomerFromID(input);
+            string sqlgetrfkid = $"SELECT OrderID FROM [dbo].[Sales.Orders] WHERE CustomerID = {customercustomer.CustomerId}";
+            SqlCommand command = new SqlCommand(sqlgetrfkid, connection);
+            int OrderID = 0; 
+            SqlDataReader reader = command.ExecuteReader();
+            while(reader.Read())
+            {
+                OrderID = Convert.ToInt32(reader[0]);
+            }
+            reader.Close(); 
+
+            command = new SqlCommand($"DELETE FROM [dbo].[Sales.Orderlines] WHERE OrderID = {OrderID}", connection);
             command.ExecuteNonQuery();
-            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {input.PersonID}");
+            command = new SqlCommand($"DELETE FROM [dbo].[Sales.Orders] WHERE OrderID = {OrderID}", connection);
             command.ExecuteNonQuery();
-            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Customer] WHERE CustomerID ={input.CustomerId}");
+            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] WHERE CustomerID ={customercustomer.CustomerId}", connection);
+            command.ExecuteNonQuery();
+            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {customercustomer.PersonID}", connection);
+            command.ExecuteNonQuery();
+            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {customercustomer.Address.AdressID}",connection);
             command.ExecuteNonQuery();
             connection.Close();
         }
 
-        public uint InsertAddress(Address address)
+        private uint InsertAddress(Address address)
         {
             uint AddressID = 0;
             SqlConnection connection = getConnection();
-            SqlCommand command = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ({address.RoadName},{address.StreetNumber},{address.ZipCode},{address.City},{address.Country})");
+            connection.Open(); 
+            SqlCommand command = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ('{address.RoadName}','{address.StreetNumber}','{address.ZipCode}','{address.City}','{address.Country}')",connection);
             command.ExecuteNonQuery();
-            command = new SqlCommand("SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;");
+            command = new SqlCommand("SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;",connection);
             SqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
             {
-                AddressID = (uint)reader.GetValue(0);
+                AddressID = Convert.ToUInt32(reader.GetValue(0));
             }
             return AddressID;
         }
+        private uint InsertPerson(Customer input,uint adressid)
+        {
+
+            uint PersonID = 0;
+            SqlConnection connection = getConnection();
+            connection.Open();
+            SqlCommand command = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customers.Person] (FirstName,LastName,Email,PhoneNumber,AdressID) VALUES('{input.FirstName}','{input.LastName}','{input.Email}','{input.PhoneNumber}',{adressid})", connection);
+            command.ExecuteNonQuery();
+            command = new SqlCommand("SELECT TOP (1) [PersonID] FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] ORDER BY [PersonID] desc;", connection);
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                PersonID = Convert.ToUInt32(reader.GetValue(0));
+            }
+            return PersonID;
+
+        }
+
+      
     }
 }

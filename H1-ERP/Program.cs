@@ -12,8 +12,25 @@ namespace H1_ERP
         static void Main(string[] args)
         {
 
-          
-            
+            Address address = new Address();
+            address.StreetNumber = "123";
+            address.RoadName = "hej";
+            address.Country = "denimarka";
+            address.City = "123";
+            address.ZipCode = "123";
+
+
+            Customer customer = new Customer();
+            customer.Address = address;
+            customer.PhoneNumber = "123";
+            customer.FirstName = "jens";
+            customer.LastName = "jensen";
+            customer.Email = "Jensjens@gmail.com";
+            customer.LastPurchaseDate = DateTime.Now;
+
+            DataBase.DataBase data = new DataBase.DataBase();
+            data.DeleteCustomer(1);
+
             DisplaySalesScreen displaySalesScreen = new DisplaySalesScreen();
             Screen.Display(displaySalesScreen);
             
