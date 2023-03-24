@@ -125,10 +125,10 @@ namespace H1_ERP.DataBase
 
             SqlCommand command = new SqlCommand($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {NewsalesHeader.TotalOrderPrice()}, ExpectedDeliveryDate = {NewsalesHeader.CompletionTime} WHERE OrderID = {OldSalesheader.OrderID}",connection);
             command.ExecuteNonQuery();
-            foreach (var OrderLines in OldSalesheader.OrderLines)
+            foreach (var OrderLines in NewsalesHeader.OrderLines)
             {
-                command = new SqlCommand($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SingleUnitPrice}, OrderQuantity = {OrderLines.Quantity}, TotalQuantityPrice = {OrderLines.TotalPrice} WHERE OrderID = {OldSalesheader.OrderID} AND OrderLineID ={OrderLines.Id} ", connection);                 
-
+                command = new SqlCommand($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SingleUnitPrice}, OrderQuantity = {OrderLines.Quantity}, TotalQuantityPrice = {OrderLines.TotalPrice} WHERE OrderID = {OldSalesheader.OrderID} AND OrderLineID ={OrderLines.Id} ", connection);
+                command.ExecuteNonQuery(); 
             }
             connection.Close();
         }
@@ -141,7 +141,7 @@ namespace H1_ERP.DataBase
             command.ExecuteNonQuery();
             command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}", connection); 
             command.ExecuteNonQuery();
-
+            connection.Close(); 
         }
 
 

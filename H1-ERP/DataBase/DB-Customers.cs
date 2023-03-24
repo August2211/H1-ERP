@@ -29,7 +29,6 @@ namespace H1_ERP.DataBase
                 result.LastName = reader.GetString(2);
                 result.Email = reader.GetString(3);
                 result.PhoneNumber = reader.GetString(4);
-
             }
             reader.Close();
             //Get's the details of the adress which the customer is connected to
@@ -78,20 +77,28 @@ namespace H1_ERP.DataBase
         }
 
 
-
+        /// <summary>
+        /// Inserts a Customer to our DB table
+        /// </summary>
+        /// <param name="input"></param>
         public void InsertCustomer(Customer input)
         {
             SqlConnection Connection = getConnection();
+            //findes a the adress which has just been created
             uint adressid = InsertAddress(input.Address); 
             Connection.Open();
             
+            //finds the current person that has been created for the customer
             uint personID = InsertPerson(input, adressid);
             SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES(@Date,{personID})", Connection);
             sqlCommand.Parameters.AddWithValue("@Date", input.LastPurchaseDate);
             sqlCommand.ExecuteNonQuery();
             Connection.Close();
         }
-
+        /// <summary>
+        /// Updates a Customer 
+        /// </summary>
+        /// <param name="input"></param>
         public void UpdateCustomer(Customer input)
         {
             SqlConnection connection = getConnection();
@@ -104,12 +111,15 @@ namespace H1_ERP.DataBase
             connection.Close();
         }
 
-
-        public void DeleteCustomer(int  input)
+        /// <summary>
+        /// Delete's a customer by an ID from the DB
+        /// </summary>
+        /// <param name="ID"></param>
+        public void DeleteCustomer(int ID)
         {
             SqlConnection connection = getConnection();
             connection.Open();
-            Customer customercustomer = GetCustomerFromID(input);
+            Customer customercustomer = GetCustomerFromID(ID);
             string sqlgetrfkid = $"SELECT OrderID FROM [dbo].[Sales.Orders] WHERE CustomerID = {customercustomer.CustomerId}";
             SqlCommand command = new SqlCommand(sqlgetrfkid, connection);
             int OrderID = 0; 
@@ -132,7 +142,11 @@ namespace H1_ERP.DataBase
             command.ExecuteNonQuery();
             connection.Close();
         }
-
+        /// <summary>
+        /// Finds the ID of a newly inserted address 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
         private uint InsertAddress(Address address)
         {
             uint AddressID = 0;
@@ -149,6 +163,12 @@ namespace H1_ERP.DataBase
             }
             return AddressID;
         }
+        /// <summary>
+        /// Finds the ID of a newly Inserted Person 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="adressid"></param>
+        /// <returns></returns>
         private uint InsertPerson(Customer input,uint adressid)
         {
 
@@ -165,9 +185,6 @@ namespace H1_ERP.DataBase
                 PersonID = Convert.ToUInt32(reader.GetValue(0));
             }
             return PersonID;
-
-        }
-
-      
+        }      
     }
 }
