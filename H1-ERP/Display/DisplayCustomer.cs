@@ -20,7 +20,6 @@ namespace H1_ERP.Display
             public string Title2 { get; set; }
             public string Title3 { get; set; }
             public string Title4 { get; set; }
-
             public string Title5 { get; set; }
             public string Title6 { get; set; }
             public int IntboxOutput { get; set; } = -1; 
@@ -30,9 +29,7 @@ namespace H1_ERP.Display
                 Title1 = referenceNumber.ToString();      
                 Title2= fullname.Replace("\"","");
                 Title3 = phoneNumber;   
-                Title4 = email;
-
-                
+                Title4 = email;                
             }
 
             public CustomerDisplay(string fullname,string Roadname, string Country,string City,string Postalcode,DateTime? LastPruchaseTime)
@@ -43,8 +40,6 @@ namespace H1_ERP.Display
                 Title4= City;
                 Title5 = Postalcode;
                 Title6 = LastPruchaseTime.ToString();
-
-
             }
         } 
 
@@ -64,25 +59,27 @@ namespace H1_ERP.Display
             listPage.AddColumn("Fullname", "Title2", customers.Select(x => x.FullName().Length).Max());
             listPage.AddColumn("PhoneNumber", "Title3", customers.Select(x => x.PhoneNumber.Length).Max());
             listPage.AddColumn("Email", "Title4",customers.Select(x => x.Email.Length).Max());
-
+            
             Form<CustomerDisplay> form = new Form<CustomerDisplay>();
              var SelectedRow= listPage.Select();             
              if(SelectedRow.Title1 != null)
              {
                 Clear(this); 
+                Console.Clear();
                 ListPage<CustomerDisplay> SelectedCustomerDisplay = new ListPage<CustomerDisplay>();
                 SelectedCustomerDisplay.AddColumn("Fullname", "Title1");
                 SelectedCustomerDisplay.AddColumn("RoadName", "Title2");
                 SelectedCustomerDisplay.AddColumn("Country", "Title3");
                 SelectedCustomerDisplay.AddColumn("City", "Title4");
                 SelectedCustomerDisplay.AddColumn("PostalCode", "Title5");
-                Customer SelectedCustomer = customers.Select(x => x).Where(x => x.CustomerId == Convert.ToInt32(SelectedRow.Title1)).FirstOrDefault();
+                Customer SelectedCustomer = customers.Select(x => x).Where(x => x.CustomerId == Convert.ToInt32(SelectedRow.Title1)).FirstOrDefault(); 
                 SelectedCustomerDisplay.Add(new CustomerDisplay(SelectedCustomer.FullName(), SelectedCustomer.Address.RoadName, SelectedCustomer.Address.Country, SelectedCustomer.Address.City, SelectedCustomer.Address.ZipCode, SelectedCustomer.LastPurchaseDate));
-                
                 SelectedCustomerDisplay.Draw(); 
 
              }
-             listPage.Draw();
+             if(SelectedRow.Title1 == null) {
+                listPage.Draw();
+            }
         } 
     }
 }
