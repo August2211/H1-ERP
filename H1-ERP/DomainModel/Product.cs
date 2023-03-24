@@ -12,8 +12,17 @@ namespace H1_ERP.DomainModel
     {
         ErrorHandling.ErrorHandling errorHandling =new(); //obj for ErrorHandling Class
        
-
         private int _productId;
+        private string _Name;
+        private string _description;
+        private decimal _salePrice;
+        private decimal _purchasePrice;
+        private string _location;
+        private int _productQuantity;
+        private int _productquantity;
+        private int _unit;
+        /*---------------------------------*/
+
 
         public int ProductId        
         {
@@ -29,8 +38,7 @@ namespace H1_ERP.DomainModel
 
             }
         }
-
-        private string _Name;
+        /*---------------------------------*/
 
         public string Name
         {
@@ -43,8 +51,7 @@ namespace H1_ERP.DomainModel
             
             }
         }
-
-        private string _description;
+        /*---------------------------------*/
 
         public string Description
         {
@@ -59,8 +66,6 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private decimal _salePrice;
-
         public decimal SalePrice
         {
             get
@@ -73,8 +78,6 @@ namespace H1_ERP.DomainModel
             }
         }
         /*---------------------------------*/
-
-        private decimal _purchasePrice;
 
         public decimal PurchasePrice
         {
@@ -89,8 +92,6 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private string _location;
-
         public string Location
         {
             get 
@@ -104,9 +105,6 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        private int _productQuantity;
-        private int _productquantity;
-
         public int ProductQuantity
         {
             get 
@@ -119,8 +117,6 @@ namespace H1_ERP.DomainModel
             }
         }
         /*---------------------------------*/
-
-        private int _unit;
 
         public int Unit
         {

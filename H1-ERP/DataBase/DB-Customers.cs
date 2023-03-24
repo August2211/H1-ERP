@@ -1,9 +1,5 @@
 ﻿using H1_ERP.DomainModel;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using System.Reflection.Metadata;
-using System.Runtime.Loader;
 
 namespace H1_ERP.DataBase
 {
@@ -13,9 +9,9 @@ namespace H1_ERP.DataBase
         {
             //for a customer obejct we're gonna need an adress aswell for the customer 
             Customer result = new Customer();
-            result.CustomerId = id; 
+            result.CustomerId = id;
             Address address = new Address();
-            SqlConnection connection = getConnection(); 
+            SqlConnection connection = getConnection();
             connection.Open();
             //Get the details of the Customer from the person table
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {id}";
@@ -36,7 +32,7 @@ namespace H1_ERP.DataBase
             reader = command.ExecuteReader();
             while (reader.Read())
             {
-                address.AdressID =Convert.ToUInt32(reader.GetInt32(0));
+                address.AdressID = Convert.ToUInt32(reader.GetInt32(0));
                 address.RoadName = reader.GetString(1);
                 address.StreetNumber = reader.GetString(2);
                 address.ZipCode = reader.GetString(3);
@@ -122,13 +118,15 @@ namespace H1_ERP.DataBase
             Customer customercustomer = GetCustomerFromID(ID);
             string sqlgetrfkid = $"SELECT OrderID FROM [dbo].[Sales.Orders] WHERE CustomerID = {customercustomer.CustomerId}";
             SqlCommand command = new SqlCommand(sqlgetrfkid, connection);
-            int OrderID = 0; 
+            int OrderID = 0;
             SqlDataReader reader = command.ExecuteReader();
-            while(reader.Read())
+            while (reader.Read())
             {
                 OrderID = Convert.ToInt32(reader[0]);
             }
-            reader.Close(); 
+            reader.Close();
+
+            if (OrderID == 0) return;
 
             command = new SqlCommand($"DELETE FROM [dbo].[Sales.Orderlines] WHERE OrderID = {OrderID}", connection);
             command.ExecuteNonQuery();
@@ -138,7 +136,7 @@ namespace H1_ERP.DataBase
             command.ExecuteNonQuery();
             command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {customercustomer.PersonID}", connection);
             command.ExecuteNonQuery();
-            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {customercustomer.Address.AdressID}",connection);
+            command = new SqlCommand($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {customercustomer.Address.AdressID}", connection);
             command.ExecuteNonQuery();
             connection.Close();
         }
@@ -151,10 +149,10 @@ namespace H1_ERP.DataBase
         {
             uint AddressID = 0;
             SqlConnection connection = getConnection();
-            connection.Open(); 
-            SqlCommand command = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ('{address.RoadName}','{address.StreetNumber}','{address.ZipCode}','{address.City}','{address.Country}')",connection);
+            connection.Open();
+            SqlCommand command = new SqlCommand($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ('{address.RoadName}','{address.StreetNumber}','{address.ZipCode}','{address.City}','{address.Country}')", connection);
             command.ExecuteNonQuery();
-            command = new SqlCommand("SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;",connection);
+            command = new SqlCommand("SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;", connection);
             SqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
