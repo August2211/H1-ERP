@@ -1,5 +1,6 @@
 ﻿using H1_ERP.DomainModel;
 using Org.BouncyCastle.Asn1.Mozilla;
+using Org.BouncyCastle.Crypto.Engines;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,21 +14,47 @@ namespace H1_ERP.Display
 {
     public class SalesList
     {
-        //Title property to hold the sales order data.
-        public string Title { get; set; } = "";
         //IntBoxOutput property to select the OrderLineID.
         public int IntBoxOutput { get; set; } = -1;
-
-        //Constructor to set the title.
-        public SalesList(string title)
+        public string OrderID { get; set; } = "";
+        public string DateOfOrder { get; set; } = "";
+        public string ExpectedDeliveryDate { get; set; } = "";
+        public string CustomerID { get; set; } = "";
+        public string CustomerFullName { get; set; } = "";
+        public string TotalOrderPrice { get; set; } = "";
+        public SalesList(string orderID, string dateOfOrder, string expectedDeliveryDate, string customerID, string customerFullName, string totalOrderPrice)
         {
-            Title = title + " ";
+            OrderID = orderID;
+            DateOfOrder = dateOfOrder;
+            ExpectedDeliveryDate = expectedDeliveryDate;
+            CustomerID = customerID;
+            CustomerFullName = customerFullName;
+            TotalOrderPrice = totalOrderPrice;
         }
     }
     public class DisplaySalesScreen : Screen
     {
         //Header that says Sales Orders over the screen.
-        public override string Title { get; set; } = "Sales Orders ";
+        public override string Title { get; set; } = "Title ";
+
+
+        private class SalesListDetails
+        {
+            public string OrderID { get; set; }
+            public string DateOfOrder { get; set; }
+            public string ExpectedDeliveryDate { get; set; }
+            public string CustomerID { get; set; }
+            public string CustomerFullName { get; set; }
+
+            public SalesListDetails(string orderID, string dateOfOrder, string expectedDeliveryDate, string customerID, string customerFullName)
+            {
+                OrderID = orderID;
+                DateOfOrder = dateOfOrder;
+                ExpectedDeliveryDate = expectedDeliveryDate;
+                CustomerID = customerID;
+                CustomerFullName = customerFullName;
+            }
+        }
         protected override void Draw()
         {
             //Clear the current screen.
@@ -36,13 +63,13 @@ namespace H1_ERP.Display
             //Create a list with SalesOrders to show on the screen.
             ListPage<SalesList> list = new ListPage<SalesList>();
 
-            SalesList SalesList = new SalesList("SalesList");
+            SalesList SalesList = new SalesList("Order ID", "Date Of Order", "Expected Delivery Date", "Customer ID", "Customer Full Name", "Total Order Price");
 
             //Editor to select the OrderLineID to get the order details.
             Form<SalesList> editor = new Form<SalesList>();
 
             //Int box to select the OrderLineID to get the order details.
-            editor.IntBox("OrderlineID: ", "IntBoxOutput");
+            editor.IntBox("Order Line ID: ", "IntBoxOutput");
 
             DataBase.DataBase db = new DataBase.DataBase();
 
@@ -60,18 +87,26 @@ namespace H1_ERP.Display
                 string CustomerFullName = OrderCustomer.FullName();
 
                 //Add all the SalesOrder data to the list.
-                list.Add(new SalesList($"Order Line ID: {OrderHeader.OrderID} | " +
-                    $"Date Of Order: {OrderHeader.Creationtime} | " +
-                    $"Expected Delivery Date: {OrderHeader.CompletionTime} | " +
-                    $"Customer ID: {OrderHeader.CustomerID} " +
-                    $"Full Name: {CustomerFullName} " +
-                    $"Total Price: {OrderHeader.TotalOrderPrice()} |"));
+                list.Add(new SalesList($"{OrderHeader.OrderID}",
+                    $"{OrderHeader.Creationtime}",
+                    $"{OrderHeader.CompletionTime}",
+                    $"{OrderHeader.CustomerID}",
+                    $"{CustomerFullName}",
+                    $"{OrderHeader.TotalOrderPrice()}"));
             });
 
+
+
             //Create a coumn called Sales Orders and add the Title property to it.
-            list.AddColumn("Sales Orders ", "Title");
+            list.AddColumn("Order ID ", "OrderID");
+            list.AddColumn("Date Of Order ", "DateOfOrder", 25);
+            list.AddColumn("Expected Delivery Date ", "ExpectedDeliveryDate", 25);
+            list.AddColumn("Customer ID ", "CustomerID");
+            list.AddColumn("Customer Full Name ", "CustomerFullName", 25);
+            list.AddColumn("Total Order Price", "TotalOrderPrice", 17);
 
             //Draw the list.
+            Clear(this);
             list.Draw();
 
             //Try on editor to prevent crash when leaving it.
@@ -85,7 +120,7 @@ namespace H1_ERP.Display
             //Clear everything currently on screen to make space for the orderline details.
             Clear(this);
 
-            list = new ListPage<SalesList>();
+            ListPage<SalesListDetails> SalesDetailsListPage = new ListPage<SalesListDetails>();
 
             SalesOrderHeader OrderHeader = db.GetSalesOrderHeaderFromID(SalesList.IntBoxOutput);
 
@@ -97,12 +132,18 @@ namespace H1_ERP.Display
                 string CustomerFullName = OrderCustomer.FullName();
 
                 //Add details to the list.
-                list.Add(new SalesList($"Order ID: {OrderHeader.OrderID} | Date Of Order: {OrderHeader.Creationtime} | Expected Delivery Date {OrderHeader.CompletionTime} | Customer ID: {OrderHeader.CustomerID} | Full Name: {CustomerFullName}"));
+                SalesDetailsListPage.Add(new SalesListDetails($"{OrderHeader.OrderID}", 
+                    $"{OrderHeader.Creationtime}", $"{OrderHeader.CompletionTime}", 
+                    $"{OrderHeader.CustomerID}", 
+                    $"{CustomerFullName}"));
 
-                list.AddColumn("Sales Order ", "Title");
+                SalesDetailsListPage.AddColumn("Sales Order ", "OrderID");
+                SalesDetailsListPage.AddColumn("Sales Order ", "DateOfOrder", 25);
+                SalesDetailsListPage.AddColumn("Sales Order ", "ExpectedDeliveryDate", 25);
+                SalesDetailsListPage.AddColumn("Sales Order ", "CustomerFullName");
 
                 //Show the list.
-                list.Draw();
+                SalesDetailsListPage.Draw();
             }
             else
             {
