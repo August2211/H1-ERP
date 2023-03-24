@@ -11,12 +11,8 @@ namespace H1_ERP
     {
         static void Main(string[] args)
         {
-
-            DisplayCustomer display = new DisplayCustomer();
-
-            Screen.Display(display);
-
-
+            Test test = new Test();
+            test.start();
         }
     }
 }
