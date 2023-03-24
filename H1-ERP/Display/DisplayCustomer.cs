@@ -31,7 +31,6 @@ namespace H1_ERP.Display
                 Title3 = phoneNumber;   
                 Title4 = email;                
             }
-
             public CustomerDisplay(string fullname,string Roadname, string Country,string City,string Postalcode,DateTime? LastPruchaseTime)
             {
                 Title1 = fullname;
@@ -42,7 +41,9 @@ namespace H1_ERP.Display
                 Title6 = LastPruchaseTime.ToString();
             }
         } 
-
+        /// <summary>
+        /// main way of displaying customers
+        /// </summary>
         protected override void Draw()
         {
             Clear(this); 
