@@ -60,6 +60,7 @@ namespace H1_ERP.DataBase
             SqlConnection connection = getConnection();
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person]";
             List<int> ids = new List<int>();
+            connection.Open();
             SqlCommand command = new SqlCommand(sql, connection);
             SqlDataReader sqlreader = command.ExecuteReader();
             List<Customer> result = new List<Customer>();
@@ -72,6 +73,7 @@ namespace H1_ERP.DataBase
                 Customer tempcustomer = GetCustomerFromID(id);
                 result.Add(tempcustomer);
             }
+            connection.Close();
             return result;
         }
 
