@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace H1_ERP
+namespace H1_ERP.Display
 {
-    public class Company
+    internal class DisplayCompany
     {
-
-
     }
 }
