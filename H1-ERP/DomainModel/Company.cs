@@ -9,7 +9,7 @@ namespace H1_ERP.DomainModel
 {
     internal class Company
     {
-        ErrorHandling.ErrorHandling errorHandling = new(); //ins for ErrorHandling Class
+        ErrorHandling.ErrorHandling errorHandling = new(); //instance for ErrorHandling Class
 
         private string _companyName;
         private string _street;

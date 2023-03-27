@@ -15,7 +15,7 @@ namespace H1_ERP.DomainModel
         private int _productId;
         private string _Name;
         private string _description;
-        private decimal _salePrice;
+        private decimal _sellingPrice;
         private decimal _purchasePrice;
         private string _location;
         private int _productQuantity;
@@ -66,15 +66,15 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public decimal SalePrice
+        public decimal SellingPrice
         {
             get
             { 
-                return errorHandling.IsNull (_salePrice); 
+                return errorHandling.IsNull (_sellingPrice); 
             }
             set 
             {
-                _salePrice = errorHandling.IsNull (value);
+                _sellingPrice = errorHandling.IsNull (value);
             }
         }
         /*---------------------------------*/
@@ -130,5 +130,14 @@ namespace H1_ERP.DomainModel
             }
         }
         /*---------------------------------*/
+        public decimal CalculateProfit()
+        {
+            return SellingPrice - PurchasePrice;
+        }
+
+        public decimal CalculateProfitPercentage()
+        {
+            return (CalculateProfit() / SellingPrice) * 100;
+        }
     }
 }

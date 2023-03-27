@@ -57,7 +57,7 @@ namespace H1_ERP.Display
                 listPage.Add(new CustomerDisplay(customer.CustomerId, customer.FullName(), customer.PhoneNumber, customer.Email)); 
             }
             listPage.AddColumn("ReferenceNumber", "Title1", 15);
-            listPage.AddColumn("Fullname", "Title2", customers.Select(x => x.FullName().Length).Max());
+            listPage.AddColumn("Fullname", "Title 2", customers.Select(x => x.FullName().Length).Max());
             listPage.AddColumn("PhoneNumber", "Title3", customers.Select(x => x.PhoneNumber.Length).Max());
             listPage.AddColumn("Email", "Title4",customers.Select(x => x.Email.Length).Max());
             

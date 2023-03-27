@@ -11,8 +11,11 @@ namespace H1_ERP
     {
         static void Main(string[] args)
         {
-            Test test = new Test();
-            test.start();
+            
+            
+            test Test = new test();
+            Test.start();
+
         }
     }
 }
