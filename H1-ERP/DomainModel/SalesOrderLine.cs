@@ -27,7 +27,7 @@ namespace H1_ERP.DomainModel
        public SalesOrderLine(Product product, ushort quantity) 
        {
             _quantity = quantity;
-            SingleUnitPrice = product.SalePrice;
+            SingleUnitPrice = product.SellingPrice;
             TotalPrice = (decimal)(SingleUnitPrice * Quantity);
             Product = product;
 
