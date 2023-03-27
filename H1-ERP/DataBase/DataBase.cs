@@ -10,8 +10,6 @@ namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
-
-
         private SqlConnection getConnection()
         {
             SqlConnectionStringBuilder sb = new();
@@ -23,7 +21,6 @@ namespace H1_ERP.DataBase
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open(); 
             return connection;
-
         }
         /// <summary>
         /// Gets the data from a given SQL statement 
@@ -31,22 +28,32 @@ namespace H1_ERP.DataBase
         /// <param name="Sql"> Wrtie your SQL statement in this</param>
         /// <param name="connection">Your connection to a given DB</param>
         /// <returns></returns>
-        private List<object> GetData(string Sql, SqlConnection connection)
+        private Dictionary<object,List<object>> GetData(string Sql, SqlConnection connection)
         {
-            List<object> list = new List<object>();
+            Dictionary <object,List<object>> Rows = new Dictionary<object, List<object>>();
             SqlCommand sqlCommand = new SqlCommand(Sql, connection);
             SqlDataReader reader = sqlCommand.ExecuteReader();
             int rows = 0;
-            int cols = 0;
+            
             while (reader.Read())
             {
-                while(reader.FieldCount > rows)
+                rows = 0; 
+                List<object> list = new List<object>();
+                while (reader.FieldCount > rows)
                 {
+                    list.Add(reader[rows]);
                     rows++;
                 }
+                
+                Rows.Add(reader.GetValue(0), list); 
             }
-            reader.Close(); 
-            return list; 
+            reader.Close();
+
+            if (Rows.Count  <= 0)
+            {
+                return null; 
+            }
+            return Rows; 
 
         }
         /// <summary>
