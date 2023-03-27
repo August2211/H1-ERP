@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.DomainModel
 {
-    internal class Company
+    public class Company
     {
         ErrorHandling.ErrorHandling errorHandling = new(); //instance for ErrorHandling Class
+        private int _Companyid;
+
+       
 
         private string _companyName;
         private string _street;
@@ -19,6 +22,12 @@ namespace H1_ERP.DomainModel
         private string _country;
         private string _currency;
 
+        public int CompanyID
+        {
+            get { return errorHandling.IsNull(_Companyid); }
+            set { _Companyid = errorHandling.IsNull(value); }
+        }
+        /*---------------------------------*/
 
         public string CompanyName
         {

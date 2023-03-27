@@ -13,7 +13,6 @@ namespace H1_ERP.Display
     public class DisplayCompany : Screen
     {
 
-
         public override string Title { get; set; } = "Company";
 
 
@@ -54,15 +53,27 @@ namespace H1_ERP.Display
             DataBase.DataBase db = new DataBase.DataBase();
 
             ListPage<CompanyDisplay> listPage = new ListPage<CompanyDisplay>();
-        
 
-            List<Company> companies = new List<Company>();
+            //Company company = new Company();
+            
+            //company.Country = "test";
+            //company.HouseNumber = "123";
+            //company.Street = "213";
+            //company.CompanyName = "tesetstt";
+            //company.City = "test";
+            //company.Currency = "test";
+            //company.ZipCode = "test";
+
+            //companies.Add(company);
+
+
+            List<Company> companies = db.GetAllCompany();
             foreach (var Company in companies)
             {
                 listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Country, Company.Currency));
             }
             listPage.AddColumn("CompanyName", "Title1", 20);
-            listPage.AddColumn("City", "Title2", 10);
+            listPage.AddColumn("Country", "Title2", 10);
             listPage.AddColumn("Currency", "Title3", 10);
 
 
