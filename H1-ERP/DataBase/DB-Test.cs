@@ -12,11 +12,11 @@ namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
-        public void BulkAddData()
+        public void BulkAddData(int AmountToAdd)
         {
             int uniqueNumber = 0;
             int condition = 0;
-            for (int i = 0; i < 25; i++) {
+            for (int i = 0; i < AmountToAdd; i++) {
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES('Nej Vej{uniqueNumber}', '123{uniqueNumber}', '321{uniqueNumber}', 'NejCity{uniqueNumber}', 'NejCountry{uniqueNumber}')");
                 var AddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('John{uniqueNumber}', 'Doe{uniqueNumber}', 'johndoe@example.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})");
@@ -52,7 +52,7 @@ namespace H1_ERP.DataBase
         public void RefreshData()
         {
             DeleteAllData();
-            BulkAddData();
+            BulkAddData(100);
         }
     }
 }
