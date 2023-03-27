@@ -12,11 +12,12 @@ namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
-        public void BulkAddData(int AmountToAdd)
+        public void BulkAddData(int amountToAdd)
         {
             int uniqueNumber = 0;
             int condition = 0;
-            for (int i = 0; i < AmountToAdd; i++) {
+            for (int i = 0; i < amountToAdd; i++)
+            {
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES('Nej Vej{uniqueNumber}', '123{uniqueNumber}', '321{uniqueNumber}', 'NejCity{uniqueNumber}', 'NejCountry{uniqueNumber}')");
                 var AddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('John{uniqueNumber}', 'Doe{uniqueNumber}', 'johndoe@example.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})");
@@ -31,7 +32,7 @@ namespace H1_ERP.DataBase
                 Exec_SQL_Command($"INSERT INTO [dbo].[Company] (CompanyName, Street, HouseNumber, zipCode, City, Country, Currency) VALUES ('CompanyName{uniqueNumber}', 'Street{uniqueNumber}', {uniqueNumber}, 'zipCode{uniqueNumber}', 'City{uniqueNumber}', 'Country{uniqueNumber}', 'Currency{uniqueNumber}')");
                 uniqueNumber++;
                 condition++;
-                if(condition > 4u)
+                if (condition > 4)
                 {
                     condition = 0;
                 }
@@ -49,10 +50,10 @@ namespace H1_ERP.DataBase
             Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product]");
         }
 
-        public void RefreshData()
+        public void RefreshData(int amountToAdd)
         {
             DeleteAllData();
-            BulkAddData(100);
+            BulkAddData(amountToAdd);
         }
     }
 }
