@@ -28,13 +28,16 @@ namespace H1_ERP.DataBase
             SqlCommand commando = new SqlCommand(sql, conn);
             SqlDataReader sqlDataReader = commando.ExecuteReader();
             int rows = 0;
-          Product product = new Product();
+         
+            Product product = new Product(); //obj 
+          
             while (sqlDataReader.Read())
             {
                 if (rows < sqlDataReader.FieldCount)
                 {
                     
                     sqlDataReader.GetValue(rows);
+                  
                     var prod = sqlDataReader;
 
                     product.ProductId = (int)prod[0];
