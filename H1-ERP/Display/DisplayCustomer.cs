@@ -76,9 +76,8 @@ namespace H1_ERP.Display
                 Customer SelectedCustomer = customers.Select(x => x).Where(x => x.CustomerId == Convert.ToInt32(SelectedRow.Title1)).FirstOrDefault(); 
                 SelectedCustomerDisplay.Add(new CustomerDisplay(SelectedCustomer.FullName(), SelectedCustomer.Address.RoadName, SelectedCustomer.Address.Country, SelectedCustomer.Address.City, SelectedCustomer.Address.ZipCode, SelectedCustomer.LastPurchaseDate));
                 SelectedCustomerDisplay.Draw(); 
-
              }
-            var alleheaders = data.GetAll(); 
+              var alleheaders = data.GetAll(); 
              if(SelectedRow.Title1 == null) {
                 listPage.Draw();
             }
