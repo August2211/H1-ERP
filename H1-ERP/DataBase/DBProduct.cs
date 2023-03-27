@@ -68,7 +68,7 @@ namespace H1_ERP.DataBase
             return result;
         }
         
-        //Insert the product and put it in dataBase
+        //InsertSalesOrderHeader the product and put it in dataBase
         public void InputProduct(Product Input)
         {
             SqlConnection connection = getConnection();
@@ -88,7 +88,7 @@ namespace H1_ERP.DataBase
             sqlCommand.ExecuteNonQuery();
             connection.Close();
         }
-        //Delete the product from dataBase
+        //DeleteSalesOrderHeaderFromID the product from dataBase
 
         public void DeleteProduct(Product Input)
         {

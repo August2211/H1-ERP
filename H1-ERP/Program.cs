@@ -15,6 +15,12 @@ namespace H1_ERP
             
             test Test = new test();
             Test.start();
+            DisplayCustomer customer= new DisplayCustomer();    
+            DisplayCompany companies= new DisplayCompany();
+
+
+            Screen.Display(companies);   
+
 
         }
     }
