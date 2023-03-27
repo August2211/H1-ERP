@@ -40,7 +40,7 @@ namespace H1_ERP.DataBase
                     product.ProductId = (int)prod[0];
                     product.Name = (string)prod[1];
                     product.Description = (string)prod[2];
-                    product.SalePrice = (decimal)prod[3];
+                    product.SellingPrice = (decimal)prod[3];
                     product.PurchasePrice = (decimal)prod[4];
                     product.Location = (string)prod[5];
                     product.ProductQuantity = (int)prod[6];
@@ -73,7 +73,7 @@ namespace H1_ERP.DataBase
         {
             SqlConnection connection = getConnection();
             connection.Open();
-            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Product](ProductName,ProductDescription,ProductSalePrice,ProductPurchasePrice,ProductLocation,ProductQuantity,ProductUnit) VALUES ('{Input.Name}','{Input.Description}','{Input.SalePrice}','{Input.PurchasePrice}','{Input.Location}','{Input.ProductQuantity}','{Input.Unit}')";
+            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Product](ProductName,ProductDescription,ProductSalePrice,ProductPurchasePrice,ProductLocation,ProductQuantity,ProductUnit) VALUES ('{Input.Name}','{Input.Description}','{Input.SellingPrice}','{Input.PurchasePrice}','{Input.Location}','{Input.ProductQuantity}','{Input.Unit}')";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
@@ -83,7 +83,7 @@ namespace H1_ERP.DataBase
         {
             SqlConnection connection = getConnection();
             connection.Open();
-            string sql = $"UPDATA [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.Name}', ProductDescription = '{Input.Description}',ProductSalePrice = '{Input.SalePrice}',ProductPurchasePrice = '{Input.PurchasePrice}', ProductLocation ='{Input.Location}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.Unit}')";
+            string sql = $"UPDATA [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.Name}', ProductDescription = '{Input.Description}',ProductSalePrice = '{Input.SellingPrice}',ProductPurchasePrice = '{Input.PurchasePrice}', ProductLocation ='{Input.Location}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.Unit}')";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();

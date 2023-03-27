@@ -9,11 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Company\**" />
+    <EmbeddedResource Remove="Company\**" />
+    <None Remove="Company\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="TECHCOOL" Version="1.3.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Company\" />
     <Folder Include="UI\" />
   </ItemGroup>
 
