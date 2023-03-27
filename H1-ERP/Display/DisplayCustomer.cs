@@ -78,6 +78,7 @@ namespace H1_ERP.Display
                 SelectedCustomerDisplay.Draw(); 
 
              }
+            var alleheaders = data.GetAll(); 
              if(SelectedRow.Title1 == null) {
                 listPage.Draw();
             }
