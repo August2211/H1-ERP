@@ -56,18 +56,56 @@ namespace H1_ERP.DataBase
             return Rows; 
 
         }
+        public Dictionary<object, List<object>> GetData(string Sql)
+        {
+            var connection = getConnection();
+            Dictionary<object, List<object>> Rows = new Dictionary<object, List<object>>();
+            SqlCommand sqlCommand = new SqlCommand(Sql, connection);
+            SqlDataReader reader = sqlCommand.ExecuteReader();
+            int rows = 0;
+
+            while (reader.Read())
+            {
+                rows = 0;
+                List<object> list = new List<object>();
+                while (reader.FieldCount > rows)
+                {
+                    list.Add(reader[rows]);
+                    rows++;
+                }
+
+                Rows.Add(reader.GetValue(0), list);
+            }
+            reader.Close();
+
+            if (Rows.Count <= 0)
+            {
+                return null;
+            }
+            connection.Close();
+            return Rows;
+
+        }
         /// <summary>
         /// Executes a SQL command with a connection
         /// </summary>
         /// <param name="SQL"></param>
         /// <param name="connection"></param>
-        private void Exec_SQL_Command(string SQL, SqlConnection connection)
+        public void Exec_SQL_Command(string SQL, SqlConnection connection)
         {
             SqlCommand command = new SqlCommand(SQL, connection);
             command.ExecuteNonQuery();  
         }
-        
-          
+
+        public void Exec_SQL_Command(string SQL)
+        {
+            var connection = getConnection();
+            SqlCommand command = new SqlCommand(SQL, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+
     }
 
 }
