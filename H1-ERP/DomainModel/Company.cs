@@ -12,7 +12,7 @@ namespace H1_ERP.DomainModel
         ErrorHandling.ErrorHandling errorHandling = new(); //instance for ErrorHandling Class
         private int _Companyid;
 
-       
+
 
         private string _companyName;
         private string _street;
@@ -20,7 +20,12 @@ namespace H1_ERP.DomainModel
         private string _zipCode;
         private string _city;
         private string _country;
-        private string _currency;
+        public enum currency { DKK = 0, USD = 1, EUR = 2 }
+        public currency Currency { get; set; }
+
+
+
+    
 
         public int CompanyID
         {
@@ -113,19 +118,6 @@ namespace H1_ERP.DomainModel
             }
         }
         /*---------------------------------*/
-        public string Currency
-        {
-            
-            get
-            {
-                return errorHandling.IsNull(_currency);
-            }
-            set
-            {
-                _currency = errorHandling.IsNull(value);
-
-            }
-        }
-        /*---------------------------------*/
+      
     }
 }

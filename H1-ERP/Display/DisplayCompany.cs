@@ -20,30 +20,30 @@ namespace H1_ERP.Display
         {
             public string Title1 { get; set; }
             public string Title2 { get; set; }
-            public string Title3 { get; set; }
+            public Company.currency Title3 { get; set; }
             public string Title4 { get; set; }
             public string Title5 { get; set; }
             public string Title6 { get; set; }
             public string Title7 { get; set; }
 
 
-            public CompanyDisplay(string CompanyName, string Country, string Currency)
+            public CompanyDisplay(string CompanyName, string Country, Company.currency currency)
             {
                 Title1 = CompanyName;
                 Title2 = Country;
-                Title3 = Currency;
+                Title3 = currency;
             }
 
 
-            public CompanyDisplay(string CompanyName, string Street, string HouseNumber, string ZipCode, string City, string Country, string Currency)
+            public CompanyDisplay(string CompanyName, string Street, Company.currency currency, string ZipCode, string City, string Country, string HouseNumber)
             {
                 Title1 = CompanyName;
                 Title2 = Street;
-                Title3 = HouseNumber;
+                Title3 = currency;
                 Title4 = ZipCode;
                 Title5 = City;
                 Title6 = Country;
-                Title7 = Currency;
+                Title7 = HouseNumber;
             }
         }
 
@@ -54,17 +54,7 @@ namespace H1_ERP.Display
 
             ListPage<CompanyDisplay> listPage = new ListPage<CompanyDisplay>();
 
-            //Company company = new Company();
-            
-            //company.Country = "test";
-            //company.HouseNumber = "123";
-            //company.Street = "213";
-            //company.CompanyName = "tesetstt";
-            //company.City = "test";
-            //company.Currency = "test";
-            //company.ZipCode = "test";
-
-            //companies.Add(company);
+         
 
 
             List<Company> companies = db.GetAllCompany();
@@ -83,6 +73,7 @@ namespace H1_ERP.Display
             {
                 Clear(this);
                 Console.Clear();
+
                 ListPage<CompanyDisplay> SelectedCompanyDisplay = new ListPage<CompanyDisplay>();
                 SelectedCompanyDisplay.AddColumn("CompanyName", "Title1");
                 SelectedCompanyDisplay.AddColumn("Street", "Title2");
@@ -93,20 +84,14 @@ namespace H1_ERP.Display
                 SelectedCompanyDisplay.AddColumn("Currency", "Title7");
 
                 Company SelectedCompany = companies.Select(x => x).Where(x => x.CompanyName == SelectedRow.Title1).FirstOrDefault();
-                SelectedCompanyDisplay.Add(new CompanyDisplay(SelectedCompany.CompanyName, SelectedCompany.Street, SelectedCompany.HouseNumber, SelectedCompany.ZipCode, SelectedCompany.City, SelectedCompany.Country, SelectedCompany.Currency));
+                SelectedCompanyDisplay.Add(new CompanyDisplay(SelectedCompany.CompanyName, SelectedCompany.Street, SelectedCompany.Currency, SelectedCompany.ZipCode, SelectedCompany.City, SelectedCompany.Country, SelectedCompany.HouseNumber));
 
+                SelectedCompanyDisplay.Draw();
                 if (SelectedRow.Title1 == null)
                 {
                     listPage.Draw();
 
                 }
-
-
-
-
-
-
-
 
             }
         }

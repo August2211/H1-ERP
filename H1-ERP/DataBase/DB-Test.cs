@@ -12,11 +12,13 @@ namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
-        public void BulkAddData()
+        public void BulkAddData(int amountToAdd)
         {
+            int Currency = 0; 
             int uniqueNumber = 0;
             int condition = 0;
-            for (int i = 0; i < 25; i++) {
+            for (int i = 0; i < amountToAdd; i++)
+            {
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES('Nej Vej{uniqueNumber}', '123{uniqueNumber}', '321{uniqueNumber}', 'NejCity{uniqueNumber}', 'NejCountry{uniqueNumber}')");
                 var AddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('John{uniqueNumber}', 'Doe{uniqueNumber}', 'johndoe@example.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})");
@@ -28,12 +30,16 @@ namespace H1_ERP.DataBase
                 Exec_SQL_Command($"INSERT INTO [dbo].[Product] (ProductName, ProductDescription, ProductSalePrice, ProductPurchasePrice, ProductLocation, ProductQuantity, ProductUnit) VALUES ('Product{uniqueNumber}', 'Description{uniqueNumber}', 2{uniqueNumber}, 3{uniqueNumber}, 'Location{uniqueNumber}', 5{uniqueNumber}, {uniqueNumber})");
                 var ProductID = GetData($"SELECT TOP(1) ProductID FROM [dbo].[Product] ORDER BY ProductID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})");
-                Exec_SQL_Command($"INSERT INTO [dbo].[Company] (CompanyName, Street, HouseNumber, zipCode, City, Country, Currency) VALUES ('CompanyName{uniqueNumber}', 'Street{uniqueNumber}', {uniqueNumber}, 'zipCode{uniqueNumber}', 'City{uniqueNumber}', 'Country{uniqueNumber}', 'Currency{uniqueNumber}')");
+                Exec_SQL_Command($"INSERT INTO [dbo].[Company] (CompanyName, Street, HouseNumber, zipCode, City, Country, Currency) VALUES ('CompanyName{uniqueNumber}', 'Street{uniqueNumber}', {uniqueNumber}, 'zipCode{uniqueNumber}', 'City{uniqueNumber}', 'Country{uniqueNumber}', {Currency})");
                 uniqueNumber++;
                 condition++;
-                if(condition > 4u)
+                if (condition > 4)
                 {
                     condition = 0;
+                }
+                else if (Currency  > 4) 
+                {
+                    Currency = 0;
                 }
             }
         }
@@ -49,10 +55,10 @@ namespace H1_ERP.DataBase
             Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product]");
         }
 
-        public void RefreshData()
+        public void RefreshData(int amountToAdd)
         {
             DeleteAllData();
-            BulkAddData();
+            BulkAddData(amountToAdd);
         }
     }
 }
