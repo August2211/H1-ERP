@@ -1,6 +1,7 @@
 ﻿using H1_ERP.DomainModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace H1_ERP.Display
         public override string Title { get; set; } = "Company";
 
 
-        private class CompanyDisplay
+        public class CompanyDisplay
         {
             public string Title1 { get; set; }
             public string Title2 { get; set; }
@@ -92,6 +93,31 @@ namespace H1_ERP.Display
                     listPage.Draw();
 
                 }
+
+            }
+        }
+        public class EditCompanyDisplay : Screen
+        {
+            public override string Title { get; set; } = "Edit Company";
+            protected override void Draw()
+            {
+                Clear(this);
+               Company company = new Company("new Company");
+               
+                Form<Company> editor = new Form<Company>();
+                    
+                editor.TextBox("Company", "Title");
+                editor.IntBox("CompanyName", "Priority");
+                editor.IntBox("Street", "Priority");
+                editor.IntBox("HouseNumber", "Priority");
+                editor.IntBox("ZipCode", "Priority");
+                editor.IntBox("City", "Priority");
+                editor.IntBox("Country", "Priority");
+                editor.SelectBox("Currency", "Priority");
+
+                editor.Edit(company);
+                Clear(this);
+
 
             }
         }
