@@ -14,7 +14,7 @@ namespace H1_ERP.DomainModel
 
 
 
-        private string _companyName;
+        public string _companyName;
         private string _street;
         private string _houseNumber;
         private string _zipCode;
@@ -22,10 +22,7 @@ namespace H1_ERP.DomainModel
         private string _country;
         public enum currency { DKK = 0, USD = 1, EUR = 2 }
         public currency Currency { get; set; }
-
-
-
-    
+       
 
         public int CompanyID
         {
@@ -33,8 +30,16 @@ namespace H1_ERP.DomainModel
             set { _Companyid = errorHandling.IsNull(value); }
         }
         /*---------------------------------*/
+        public Company(string name)
+        {
+            CompanyName = name; 
+        }
+        public Company()
+        {
 
-        public string CompanyName
+        }
+
+        public string CompanyName 
         {
 
             get
