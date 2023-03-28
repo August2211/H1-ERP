@@ -70,11 +70,11 @@ namespace H1_ERP.DomainModel
         {
             get
             { 
-                return errorHandling.IsNull (_sellingPrice); 
+                return errorHandling.IsNegative (_sellingPrice); 
             }
             set 
             {
-                _sellingPrice = errorHandling.IsNull (value);
+                _sellingPrice = errorHandling.IsNegative (value);
             }
         }
         /*---------------------------------*/
@@ -83,11 +83,11 @@ namespace H1_ERP.DomainModel
         {
             get
             {
-                return errorHandling.IsNull(_purchasePrice);
+                return errorHandling.IsNegative(_purchasePrice);
             }
             set 
             {
-                _purchasePrice = errorHandling.IsNull (value); 
+                _purchasePrice = errorHandling.IsNegative (value); 
             }
         }
         /*---------------------------------*/
