@@ -20,7 +20,6 @@ namespace H1_ERP.DataBase
         public SalesOrderHeader GetSalesOrderHeaderFromID(int id)
         {
             SqlConnection conn = getConnection(); 
-            conn.Open();
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}"; 
             SqlCommand commando = new SqlCommand(sql, conn);
             SqlDataReader sqlDataReader = commando.ExecuteReader();
@@ -67,7 +66,6 @@ namespace H1_ERP.DataBase
         {
 
             SqlConnection connection = getConnection();
-            connection.Open();
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders]";
             List<SalesOrderHeader> res = new List<SalesOrderHeader>();
             SqlCommand command = new SqlCommand(sql, connection); 

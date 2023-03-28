@@ -30,7 +30,6 @@ namespace H1_ERP.DomainModel
             SingleUnitPrice = product.SellingPrice;
             TotalPrice = (decimal)(SingleUnitPrice * Quantity);
             Product = product;
-
        }
 
         public decimal SingleUnitPrice {   

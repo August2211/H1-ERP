@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.DomainModel
 {
-    public class Person
+    public abstract class Person
     {
         //A new instance of ErrorHandling.
         ErrorHandling.ErrorHandling ErrorHandler = new();

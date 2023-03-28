@@ -21,7 +21,6 @@ namespace H1_ERP.DataBase
         {
 
             SqlConnection conn = getConnection();
-            conn.Open();
 
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {id}";
           
@@ -53,19 +52,25 @@ namespace H1_ERP.DataBase
         }
         //Get all product and return it to the list 
         public List<Product> GetAllProduct() 
-        { SqlConnection connection = getConnection();
-            string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]";
-            List<int> Id = new List<int>();
-            SqlCommand command = new SqlCommand(sql, connection);
-            SqlDataReader sqlDataReader = command.ExecuteReader();
-            List<Product> result = new List<Product>();
-            
-            while (sqlDataReader.Read())
+        {
+            List<Product> list = new List<Product>();
+            var listofproducst = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]");
+            foreach(var s in listofproducst.Values)
             {
-                Id.Add(sqlDataReader.GetInt32(0));
+                Product product = new Product();
+                product.ProductId = (int)s[0];
+                product.Name = (string)s[1];
+                product.Description = (string)s[2];
+                product.PurchasePrice = (decimal)s[3];
+                product.SellingPrice = (decimal)s[4];
+                product.Location = (string)s[5];
+                product.ProductQuantity= (int)s[6];
+                product.Unit = (int)s[7];
+                list.Add(product);
             }
-            
-            return result;
+
+
+            return list;
         }
         
         //InsertSalesOrderHeader the product and put it in dataBase

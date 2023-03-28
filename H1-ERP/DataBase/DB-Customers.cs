@@ -13,18 +13,17 @@ namespace H1_ERP.DataBase
             Address address = new Address();
             SqlConnection connection = getConnection();
             //Get the details of the Customer from the person table
-            string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {id}";
             var SelectedCustomer = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] WHERE CustomerID = {id}", connection);
-
-          
             result.PersonID = Convert.ToUInt32(SelectedCustomer.ElementAt(0).Value[2]);
-            foreach (var row in SelectedCustomer.Values)
+            string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {result.PersonID}";
+            var SelectedCustomer1 = GetData(sql, connection);
+            foreach (var row in SelectedCustomer1.Values)
             {
-                result.CustomerId = Convert.ToInt32(row.ElementAt(0));
-                result.FirstName = row.ElementAt(1).ToString();
-                result.LastName = row.ElementAt(2).ToString();
-                result.Email = row.ElementAt(3).ToString();
-                result.PhoneNumber = row.ElementAt(4).ToString();
+                result.CustomerId = Convert.ToInt32(SelectedCustomer.ElementAt(0).Value[0]);
+                result.FirstName = row[1].ToString();
+                result.LastName = row[2].ToString();
+                result.Email = row[3].ToString();
+                result.PhoneNumber = row[4].ToString();
             }
             var addressID = GetData($"SELECT AdressID FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {result.PersonID}", connection); 
             //Get's the details of the adress which the customer is connected to
@@ -50,17 +49,26 @@ namespace H1_ERP.DataBase
         public List<Customer> GetAllCustomers()
         {
             SqlConnection connection = getConnection();
-            string sql = $"SELECT PersonID FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person]";
-            List<int> ids = new List<int>();
-            SqlCommand command = new SqlCommand(sql, connection);
-            SqlDataReader sqlreader = command.ExecuteReader();
-            sqlreader.Close(); 
             List<Customer> result = new List<Customer>();
-            var Ids = GetData(sql, connection); 
-
-            foreach (var id in Ids.Values)
+            var Allcustomers = GetData("SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] INNER JOIN [dbo].[Customers.Person] ON [dbo].[Customers.Person].PersonID = [dbo].[Customer.Customers].PersonID INNER JOIN [dbo].[Customer.Adress] ON [dbo].[Customers.Person].AdressID = [dbo].[Customer.Adress].AdressID");
+            foreach (var Customerrow in Allcustomers.Values)
             {
-                Customer tempcustomer = GetCustomerFromID(Convert.ToInt32(id[0]));
+                Customer tempcustomer = new Customer();
+                tempcustomer.CustomerId = Convert.ToInt32(Customerrow[0]);
+                tempcustomer.LastPurchaseDate = Convert.ToDateTime(Customerrow[1]);
+                tempcustomer.PersonID = Convert.ToUInt32(Customerrow[2]);
+                tempcustomer.FirstName = Customerrow[4].ToString();
+                tempcustomer.LastName = Customerrow[5].ToString();
+                tempcustomer.Email = Customerrow[6].ToString();
+                tempcustomer.PhoneNumber = Customerrow[7].ToString();
+                Address adress = new Address();
+                adress.AdressID = Convert.ToUInt32(Customerrow[8]);
+                adress.RoadName = Customerrow[10].ToString();
+                adress.StreetNumber = Customerrow[11].ToString();
+                adress.ZipCode = Customerrow[12].ToString();
+                adress.City = Customerrow[13].ToString();
+                adress.Country = Customerrow[14].ToString();
+                tempcustomer.Address = adress; 
                 result.Add(tempcustomer);
             }
             connection.Close();
@@ -119,7 +127,6 @@ namespace H1_ERP.DataBase
                 }
                 Exec_SQL_Command($"DELETE FROM [dbo].[Sales.Orders] WHERE CustomerID = {ID}", connection);
             }
-           
             Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] WHERE CustomerID ={customercustomer.CustomerId}", connection);
             Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {customercustomer.PersonID}", connection);
             Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {customercustomer.Address.AdressID}", connection); 
