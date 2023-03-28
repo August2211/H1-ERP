@@ -43,7 +43,7 @@ namespace H1_ERP.ErrorHandling
             }
             else return input;
         }
-        public decimal IsNull(decimal input)
+        public decimal IsNegative(decimal input)
         {
             if (input < 0)
             {
