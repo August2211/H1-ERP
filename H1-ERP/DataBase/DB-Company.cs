@@ -36,7 +36,7 @@ namespace H1_ERP.DataBase
                     company.ZipCode = (string)prod[4];
                     company.City = (string)prod[5];
                     company.Country = (string)prod[6];
-                    company.Currency = (string)prod[7];
+                    company.Currency = (Company.currency)(int)prod[7];
 
                     rows++;
                 }
@@ -62,7 +62,7 @@ namespace H1_ERP.DataBase
                 company.ZipCode=sqlDataReader.GetString(3);
                 company.City=sqlDataReader.GetString(4);
                 company.Country=sqlDataReader.GetString(5);
-                company.Currency=sqlDataReader.GetString(6);
+                company.Currency= (Company.currency)sqlDataReader.GetInt32(6);
                 result.Add(company);
             }
 

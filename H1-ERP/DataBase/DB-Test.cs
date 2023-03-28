@@ -14,6 +14,7 @@ namespace H1_ERP.DataBase
     {
         public void BulkAddData(int amountToAdd)
         {
+            int Currency = 0; 
             int uniqueNumber = 0;
             int condition = 0;
             for (int i = 0; i < amountToAdd; i++)
@@ -29,12 +30,16 @@ namespace H1_ERP.DataBase
                 Exec_SQL_Command($"INSERT INTO [dbo].[Product] (ProductName, ProductDescription, ProductSalePrice, ProductPurchasePrice, ProductLocation, ProductQuantity, ProductUnit) VALUES ('Product{uniqueNumber}', 'Description{uniqueNumber}', 2{uniqueNumber}, 3{uniqueNumber}, 'Location{uniqueNumber}', 5{uniqueNumber}, {uniqueNumber})");
                 var ProductID = GetData($"SELECT TOP(1) ProductID FROM [dbo].[Product] ORDER BY ProductID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})");
-                Exec_SQL_Command($"INSERT INTO [dbo].[Company] (CompanyName, Street, HouseNumber, zipCode, City, Country, Currency) VALUES ('CompanyName{uniqueNumber}', 'Street{uniqueNumber}', {uniqueNumber}, 'zipCode{uniqueNumber}', 'City{uniqueNumber}', 'Country{uniqueNumber}', 'Currency{uniqueNumber}')");
+                Exec_SQL_Command($"INSERT INTO [dbo].[Company] (CompanyName, Street, HouseNumber, zipCode, City, Country, Currency) VALUES ('CompanyName{uniqueNumber}', 'Street{uniqueNumber}', {uniqueNumber}, 'zipCode{uniqueNumber}', 'City{uniqueNumber}', 'Country{uniqueNumber}', {Currency})");
                 uniqueNumber++;
                 condition++;
                 if (condition > 4)
                 {
                     condition = 0;
+                }
+                else if (Currency  > 4) 
+                {
+                    Currency = 0;
                 }
             }
         }
