@@ -52,10 +52,10 @@ namespace H1_ERP.DataBase
             SqlDataReader sqlDataReader = command.ExecuteReader();
             List<Company> result = new List<Company>();
 
-           Company company = new Company();
 
             while (sqlDataReader.Read())
             {
+                 Company company = new Company(); 
                 company.CompanyName=sqlDataReader.GetString(0);
                 company.Street=sqlDataReader.GetString(1);
                 company.HouseNumber=sqlDataReader.GetString(2);
