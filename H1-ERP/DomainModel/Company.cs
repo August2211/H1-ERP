@@ -15,11 +15,7 @@ namespace H1_ERP.DomainModel
 
 
         public string _companyName;
-        private string _street;
-        private string _houseNumber;
-        private string _zipCode;
-        private string _city;
-        private string _country;
+        private Address _address;
         public enum currency { DKK = 0, USD = 1, EUR = 2 }
         public currency Currency { get; set; }
        
@@ -52,77 +48,18 @@ namespace H1_ERP.DomainModel
 
             }
         }
-        /*---------------------------------*/
-        public string Street
-        {
-
+        public Address Address {
             get
             {
-                return errorHandling.IsNull(_street);
+                return errorHandling.IsNull(_address);
             }
             set
             {
-                _street = errorHandling.IsNull(value);
+                _address = errorHandling.IsNull(value);
 
             }
         }
         /*---------------------------------*/
-        public string HouseNumber
-        {
-
-            get
-            {
-                return errorHandling.IsNull(_houseNumber);
-            }
-            set
-            {
-                _houseNumber = errorHandling.IsNull(value);
-
-            }
-        }
-        /*---------------------------------*/
-        public string ZipCode
-        {
-
-            get
-            {
-                return errorHandling.IsNull(_zipCode);
-            }
-            set
-            {
-                _zipCode = errorHandling.IsNull(value);
-
-            }
-        }
-        /*---------------------------------*/
-        public string City
-        {
-
-            get
-            {
-                return errorHandling.IsNull(_city);
-            }
-            set
-            {
-                _city = errorHandling.IsNull(value);
-
-            }
-        }
-        /*---------------------------------*/
-        public string Country
-        {
-
-            get
-            {
-                return errorHandling.IsNull(_country);
-            }
-            set
-            {
-                _country = errorHandling.IsNull(value);
-
-            }
-        }
-        /*---------------------------------*/
-      
+       
     }
 }

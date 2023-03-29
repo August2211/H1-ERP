@@ -61,7 +61,7 @@ namespace H1_ERP.Display
             List<Company> companies = db.GetAllCompany();
             foreach (var Company in companies)
             {
-                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Country, Company.Currency));
+                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency));
             }
             listPage.AddColumn("CompanyName", "Title1", 20);
             listPage.AddColumn("Country", "Title2", 10);
@@ -77,15 +77,15 @@ namespace H1_ERP.Display
 
                 ListPage<CompanyDisplay> SelectedCompanyDisplay = new ListPage<CompanyDisplay>();
                 SelectedCompanyDisplay.AddColumn("CompanyName", "Title1");
-                SelectedCompanyDisplay.AddColumn("Street", "Title2");
-                SelectedCompanyDisplay.AddColumn("HouseNumber", "Title3");
+                SelectedCompanyDisplay.AddColumn("RoadName", "Title2");
+                SelectedCompanyDisplay.AddColumn("StreetNumber", "Title3");
                 SelectedCompanyDisplay.AddColumn("ZipCode", "Title4");
                 SelectedCompanyDisplay.AddColumn("City", "Title5");
                 SelectedCompanyDisplay.AddColumn("Country", "Title6");
                 SelectedCompanyDisplay.AddColumn("Currency", "Title7");
 
                 Company SelectedCompany = companies.Select(x => x).Where(x => x.CompanyName == SelectedRow.Title1).FirstOrDefault();
-                SelectedCompanyDisplay.Add(new CompanyDisplay(SelectedCompany.CompanyName, SelectedCompany.Street, SelectedCompany.Currency, SelectedCompany.ZipCode, SelectedCompany.City, SelectedCompany.Country, SelectedCompany.HouseNumber));
+                SelectedCompanyDisplay.Add(new CompanyDisplay(SelectedCompany.CompanyName, SelectedCompany.Address.RoadName, SelectedCompany.Currency, SelectedCompany.Address.ZipCode, SelectedCompany.Address.City, SelectedCompany.Address.Country, SelectedCompany.Address.StreetNumber));
 
                 SelectedCompanyDisplay.Draw();
                 if (SelectedRow.Title1 == null)
