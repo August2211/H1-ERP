@@ -56,12 +56,14 @@ namespace H1_ERP.Display
             {
                 listPage.Add(new CustomerDisplay(customer.CustomerId, customer.FullName(), customer.PhoneNumber, customer.Email)); 
             }
+            //we add the length of the columns by taking the longest possible string and then we size the column by that number 
             listPage.AddColumn("ReferenceNumber", "Title1", 15);
             listPage.AddColumn("Fullname", "Title2", customers.Select(x => x.FullName().Length).Max());
             listPage.AddColumn("PhoneNumber", "Title3", customers.Select(x => x.PhoneNumber.Length).Max());
             listPage.AddColumn("Email", "Title4",customers.Select(x => x.Email.Length).Max());
             
             Form<CustomerDisplay> form = new Form<CustomerDisplay>();
+              //User get's to press enter on 1 of our lines and afterwards they can se the details with a new customerdisplay of one customer.
              var SelectedRow= listPage.Select();             
              if(SelectedRow.Title1 != null)
              {

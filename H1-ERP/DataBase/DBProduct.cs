@@ -51,6 +51,7 @@ namespace H1_ERP.DataBase
                     rows++;
                 }
             }
+            conn.Close(); 
             return product;
         }
         //Get all product and return it to the list 

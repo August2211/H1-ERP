@@ -4,6 +4,7 @@ using H1_ERP.DomainModel;
 using System.Data.Entity;
 using System.Runtime.Loader;
 using TECHCOOL.UI;
+using H1_ERP.DataBase;
 
 namespace H1_ERP
 {
@@ -13,30 +14,14 @@ namespace H1_ERP
         {
 
 
-            test Test = new test();
-            Test.start();
-            DisplayCustomer customer = new DisplayCustomer();
-            DisplayCompany companies = new DisplayCompany();
+             
+            MenuDisplay menu = new MenuDisplay();
 
+            Screen.Display(menu); 
 
-            Screen.Display(companies);
+            DisplayCustomer display = new DisplayCustomer();
+            Screen.Display(display);   
 
-
-            {
-                Console.WriteLine("Hello, World!");
-
-                DataBase.DataBase dataBase = new DataBase.DataBase();
-
-                Product product = dataBase.GetProductFromID(2);
-
-
-                SalesOrderLine orderLine = new SalesOrderLine(product, 4);
-                List<SalesOrderLine> orders = new List<SalesOrderLine>();
-                DataBase.DataBase hej = new DataBase.DataBase();
-                hej.GetProductFromID(2);
-                orders.Add(orderLine);
-                SalesOrderHeader hej2 = new SalesOrderHeader(orders);
-            }
         }
     }
 }

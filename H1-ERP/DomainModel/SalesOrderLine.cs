@@ -15,12 +15,11 @@ namespace H1_ERP.DomainModel
         public ushort Quantity { get { return _quantity;   }
             set 
             {
-                 if(Quantity == 0)
-                 {
-                        throw new Exception("u cannot have a 0 quantatiy of anything"); 
-                 } 
-
-                 _quantity = value;
+                if (Quantity == 0)
+                {
+                    throw new Exception("u cannot have a 0 quantatiy of anything");
+                }
+                else { _quantity = value; }
             } 
         }
 

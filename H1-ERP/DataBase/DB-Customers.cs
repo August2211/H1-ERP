@@ -14,7 +14,7 @@ namespace H1_ERP.DataBase
             SqlConnection connection = getConnection();
             //Get the details of the Customer from the person table
             var SelectedCustomer = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] WHERE CustomerID = {id}", connection);
-            result.PersonID = Convert.ToUInt32(SelectedCustomer.ElementAt(0).Value[2]);
+             result.PersonID = Convert.ToUInt32(SelectedCustomer.ElementAt(0).Value[2]);
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {result.PersonID}";
             var SelectedCustomer1 = GetData(sql, connection);
             foreach (var row in SelectedCustomer1.Values)
@@ -50,12 +50,14 @@ namespace H1_ERP.DataBase
         {
             SqlConnection connection = getConnection();
             List<Customer> result = new List<Customer>();
-            var Allcustomers = GetData("SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] INNER JOIN [dbo].[Customers.Person] ON [dbo].[Customers.Person].PersonID = [dbo].[Customer.Customers].PersonID INNER JOIN [dbo].[Customer.Adress] ON [dbo].[Customers.Person].AdressID = [dbo].[Customer.Adress].AdressID");
+            var Allcustomers = GetDatafast("SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] INNER JOIN [dbo].[Customers.Person] ON [dbo].[Customers.Person].PersonID = [dbo].[Customer.Customers].PersonID INNER JOIN [dbo].[Customer.Adress] ON [dbo].[Customers.Person].AdressID = [dbo].[Customer.Adress].AdressID");
+
             foreach (var Customerrow in Allcustomers.Values)
             {
                 Customer tempcustomer = new Customer();
                 tempcustomer.CustomerId = Convert.ToInt32(Customerrow[0]);
                 tempcustomer.LastPurchaseDate = Convert.ToDateTime(Customerrow[1]);
+
                 tempcustomer.PersonID = Convert.ToUInt32(Customerrow[2]);
                 tempcustomer.FirstName = Customerrow[4].ToString();
                 tempcustomer.LastName = Customerrow[5].ToString();

@@ -35,7 +35,7 @@ namespace H1_ERP.Display
     public class DisplaySalesScreen : Screen
     {
         //Header that says Sales Orders over the screen.
-        public override string Title { get; set; } = "Title ";
+        public override string Title { get; set; } = "Orders";
 
 
         private class SalesListDetails

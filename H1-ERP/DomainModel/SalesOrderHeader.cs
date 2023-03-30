@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.DomainModel
 {
-    internal enum Condtion
+    public enum Condtion
     {
         None = 0,
         Created = 1,
@@ -34,7 +34,7 @@ namespace H1_ERP.DomainModel
 
         public uint CustomerID { get; set; }
 
-        internal Condtion Condtion { get; set; }
+        public Condtion Condtion { get; set; }
 
          public List<SalesOrderLine> OrderLines { get;  private set; }
 

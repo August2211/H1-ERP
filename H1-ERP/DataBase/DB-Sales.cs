@@ -19,41 +19,33 @@ namespace H1_ERP.DataBase
         /// <returns></returns>
         public SalesOrderHeader GetSalesOrderHeaderFromID(int id)
         {
-            SqlConnection conn = getConnection(); 
-            string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}"; 
-            SqlCommand commando = new SqlCommand(sql, conn);
-            SqlDataReader sqlDataReader = commando.ExecuteReader();
-            int rows = 0; 
+            SqlConnection conn = getConnection();
 
-            
+            var querrydata = GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}"); 
+           
             List<SalesOrderLine> lines = new List<SalesOrderLine>();
             //Get's all of the orderlines which is connected to the current order. 
-            while(sqlDataReader.Read())
+            foreach(var s in querrydata.Values)
             {
-                int GetProdID = (int)sqlDataReader[1];
+                int GetProdID = (int)s[1];
                 //Calls the method getproductfromid thereby i can instancetiate my object so that i can create an order line.
                 Product temp = GetProductFromID(GetProdID);
-                SalesOrderLine tempsalesorderline = new SalesOrderLine(temp, Convert.ToUInt16(sqlDataReader[4]));
+                SalesOrderLine tempsalesorderline = new SalesOrderLine(temp, Convert.ToUInt16(s[4]));
                 lines.Add(tempsalesorderline);
 
             }
             // After we have all of the orderlines we can create an empty obejct as a representation of the object in the DB. 
             SalesOrderHeader res = new SalesOrderHeader(lines);
-            sqlDataReader.Close();
             // Lookup in the Order table for the remaning information. 
-            commando =new SqlCommand( $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id}",conn);
-            sqlDataReader = commando.ExecuteReader();
-            rows = 0; 
-            while(sqlDataReader.Read())
+
+            var querrydata2 = GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id}"); 
+
+            foreach(var s in querrydata2.Values)
             {
-                while(rows < sqlDataReader.FieldCount)
-                {
-                    res.OrderID = Convert.ToUInt32(sqlDataReader[0]);
-                    res.CustomerID = Convert.ToUInt32(sqlDataReader[1]);
-                    res.Creationtime = Convert.ToDateTime(sqlDataReader[3]);
-                    res.CompletionTime = Convert.ToDateTime(sqlDataReader[4]);
-                    rows++;
-                }
+                    res.OrderID = Convert.ToUInt32(s[0]);
+                    res.CustomerID = Convert.ToUInt32(s[1]);
+                    res.Creationtime = Convert.ToDateTime(s[3]);
+                    res.CompletionTime = Convert.ToDateTime(s[4]);
             }
             conn.Close(); 
             return res; 
@@ -67,21 +59,44 @@ namespace H1_ERP.DataBase
 
             SqlConnection connection = getConnection();
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders]";
+            var orderlines = GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines]");
+            var products = GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]"); 
             List<SalesOrderHeader> res = new List<SalesOrderHeader>();
-            SqlCommand command = new SqlCommand(sql, connection); 
-            SqlDataReader reader = command.ExecuteReader();
-            List<int> ints = new List<int>();
-                while (reader.Read())
+            var listofsalesorders = GetDatafast(sql);  
+            foreach(var orderheaderline in listofsalesorders.Values)
+            {   
+                List<SalesOrderLine> line = new List<SalesOrderLine>();
+                //get all of the orderlines with matching ID to the orderID 
+                var orderlineswithorderid = orderlines.Values.Select(x => x).Where(x => x.ElementAt(5).ToString() == orderheaderline[0].ToString()).ToList(); 
+                foreach(var orderline in orderlineswithorderid)
                 {
-                    ints.Add((int)reader[0]);
+
+                    var prod = products.Values.Select(x => x).Where(x => x.ElementAt(0).Equals(orderline[1])).FirstOrDefault();
+                    Product product = new Product();
+                    product.ProductId = Convert.ToInt32(prod[0]);
+                    product.Name = prod[1].ToString();
+                    product.Description = prod[2].ToString(); 
+                    product.SellingPrice = Convert.ToInt32(prod[3]);
+                    product.PurchasePrice = Convert.ToInt32(prod[4]);
+                    product.Location = prod[5].ToString(); 
+                    product.ProductQuantity= Convert.ToInt32(prod[6]);
+                    product.Unit = Convert.ToInt32(prod[7]);
+                    SalesOrderLine orderLine = new SalesOrderLine(product, Convert.ToUInt16(orderline[3]));
+                    orderLine.Id = Convert.ToUInt32(orderline[0]);
+                    orderLine.Quantity = Convert.ToUInt16(orderline[3]); 
+                    line.Add(orderLine);
                 }
-            foreach(var s in ints)
-            {
-               var orderheader = GetSalesOrderHeaderFromID(s); 
-               res.Add(orderheader);
+                SalesOrderHeader salesOrder = new SalesOrderHeader(line);
+                salesOrder.OrderID = Convert.ToUInt32(orderheaderline[0]);
+                salesOrder.CustomerID = Convert.ToUInt32(orderheaderline[1]);
+                salesOrder.TotalOrderPrice(); 
+                salesOrder.Creationtime = Convert.ToDateTime(orderheaderline[3]);
+                salesOrder.CompletionTime = Convert.ToDateTime((DateTime)orderheaderline[4]);
+                salesOrder.Condtion = (Condtion)Convert.ToInt32(orderheaderline[6]);
+               res.Add(salesOrder);
             }
              
-
+            connection.Close(); 
             return res; 
         }
         /// <summary>
