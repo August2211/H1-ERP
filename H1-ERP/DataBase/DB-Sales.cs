@@ -147,9 +147,9 @@ namespace H1_ERP.DataBase
         public void DeleteSalesOrderHeaderFromID(int id)
         {
             SqlConnection connection = getConnection();
-
+            Exec_SQL_Command("$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}, connection", connection);
             Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id}", connection);
-            Exec_SQL_Command("$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}, connection",connection);
+        
 
             connection.Close(); 
         }

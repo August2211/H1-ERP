@@ -28,11 +28,12 @@ namespace H1_ERP.Display
             public string Title7 { get; set; }
 
 
-            public CompanyDisplay(string CompanyName, string Country, Company.currency currency)
+            public CompanyDisplay(string CompanyName, string Country, Company.currency currency, int companyID)
             {
                 Title1 = CompanyName;
                 Title2 = Country;
                 Title3 = currency;
+                Title4 = companyID.ToString(); 
             }
 
 
@@ -61,15 +62,32 @@ namespace H1_ERP.Display
             List<Company> companies = db.GetAllCompany();
             foreach (var Company in companies)
             {
-                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency));
+                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency,Company.CompanyID));
             }
             listPage.AddColumn("CompanyName", "Title1", 20);
             listPage.AddColumn("Country", "Title2", 10);
             listPage.AddColumn("Currency", "Title3", 10);
+            Action<CompanyDisplay> action;
+            action =  delegate(CompanyDisplay display)
+            { 
+                listPage.Remove(display);
+                db.DeleteCompany(display);
+            };
+            listPage.AddKey(ConsoleKey.F5, action);
 
-
+            
             Form<CompanyDisplay> form = new Form<CompanyDisplay>();
             var SelectedRow = listPage.Select();
+            var company = companies.Select(x => x).Where(x => x.CompanyName == SelectedRow.Title1).FirstOrDefault();
+           
+                
+
+            if (SelectedRow == null)
+            {
+                Clear(this); 
+                MenuDisplay menu = new MenuDisplay();
+                Screen.Display(menu); 
+            }
             if (SelectedRow.Title1 != null)
             {
                 Clear(this);
