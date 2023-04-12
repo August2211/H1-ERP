@@ -26,8 +26,7 @@ namespace H1_ERP.Display
             {
                 listPage.Add(new ProductDisplay(product.Name, product.ProductId.ToString(), product.ProductQuantity.ToString(), product.PurchasePrice, product.SellingPrice,(double) product.PurchasePrice / (double)product.SellingPrice * 100)); 
 
-
-            }
+            } 
 
 
             listPage.AddColumn("Name", "Title1", 10);
@@ -38,6 +37,12 @@ namespace H1_ERP.Display
             listPage.AddColumn("Margin %", "Title6", 10);
 
             var SelectedRow = listPage.Select();
+            if (SelectedRow == null)
+            {
+                Clear(this);
+                MenuDisplay menu = new MenuDisplay();
+                Screen.Display(menu);
+            }
             if (SelectedRow.Title1 != null)
             {
                 Title = "Product Details"; 
