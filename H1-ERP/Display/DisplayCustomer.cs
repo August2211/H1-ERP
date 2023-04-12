@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using TECHCOOL.UI;
@@ -128,88 +129,100 @@ namespace H1_ERP.Display
                         NotDoneEditing = false;
                         Address adress1 = new Address();
                         Customer customer1 = new Customer();
-                        if (Columnsandvalues.ContainsKey(0))
+                        try
                         {
-                            customer1.FirstName = Columnsandvalues[0].ToString();
+                            if (Columnsandvalues.ContainsKey(0))
+                            {
+                                customer1.FirstName = Columnsandvalues[0].ToString();
 
-                        }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
-                        if (Columnsandvalues.ContainsKey(1))
-                        {
-                            customer1.LastName = Columnsandvalues[1].ToString();
-                        }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
-                        if (Columnsandvalues.ContainsKey(2))
-                        {
-                            customer1.Email = Columnsandvalues[2].ToString();
-                        }
-                        else { throw new DataException("You need to fill this field"); }
-                        if (Columnsandvalues.ContainsKey(3))
-                        {
+                            }
+                            else
+                            {
+                                throw new DataException(@"You need to fill the firstname field");
+                            }
+                            if (Columnsandvalues.ContainsKey(1))
+                            {
+                                customer1.LastName = Columnsandvalues[1].ToString();
+                            }
+                            else
+                            {
+                                throw new DataException(@"You need to fill the lastname field");
+                            }
+                            if (Columnsandvalues.ContainsKey(2))
+                            {
+                                customer1.Email = Columnsandvalues[2].ToString();
+                            }
+                            else { throw new DataException(@"You need to fill the Email field"); }
+                            if (Columnsandvalues.ContainsKey(3))
+                            {
 
-                            adress1.RoadName = Columnsandvalues[3].ToString();
-                        }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
+                                adress1.RoadName = Columnsandvalues[3].ToString();
+                            }
+                            else
+                            {
+                                throw new DataException(@"You need to fill the roadname field");
+                            }
 
-                        if (Columnsandvalues.ContainsKey(4))
-                        {
-                            adress1.ZipCode = Columnsandvalues[4].ToString();
-                        }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
+                            if (Columnsandvalues.ContainsKey(4))
+                            {
+                                adress1.ZipCode = Columnsandvalues[4].ToString();
+                            }
+                            else
+                            {
+                                throw new DataException(@"You need to fill the Zipcode field");
+                            }
 
-                        if (Columnsandvalues.ContainsKey(5))
-                        {
-                            adress1.StreetNumber = Columnsandvalues[5].ToString();
-                        }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
+                            if (Columnsandvalues.ContainsKey(5))
+                            {
+                                adress1.StreetNumber = Columnsandvalues[5].ToString();
+                            }
+                            else
+                            {
+                                throw new DataException(@"You need to fill the Streetnumber field");
+                            }
 
-                        if (Columnsandvalues.ContainsKey(6))
-                        {
-                            adress1.City = Columnsandvalues[6].ToString();
-                        }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
+                            if (Columnsandvalues.ContainsKey(6))
+                            {
+                                adress1.City = Columnsandvalues[6].ToString();
+                            }
+                            else
+                            {
+                                throw new DataException(@"You need to fill the City field");
+                            }
 
-                        if (Columnsandvalues.ContainsKey(7))
-                        {
-                            customer1.PhoneNumber = Columnsandvalues[7].ToString();
-                        }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
+                            if (Columnsandvalues.ContainsKey(7))
+                            {
+                                customer1.PhoneNumber = Columnsandvalues[7].ToString();
+                            }
+                            else
+                            {
+                                
+                                throw new DataException(@"You need to fill the Phonenumber field");
+                            }
 
-                        if (Columnsandvalues.ContainsKey(8))
+                            if (Columnsandvalues.ContainsKey(8))
+                            {
+                                adress1.Country = Columnsandvalues[8].ToString();
+                            }
+                            else
+                            {
+                                throw new DataException(@"You need to fill the country field");
+                            }
+                        } catch(DataException e)
                         {
-                           adress1.Country = Columnsandvalues[8].ToString();
+                            Console.Clear(); 
+                            Console.WriteLine("Y" + e.Message + " Press any key to countinue");
+                            Console.ReadKey(); 
+                            DisplayCustomer display = new DisplayCustomer();
+                            Screen.Display(display); 
                         }
-                        else
-                        {
-                            throw new DataException("You need to fill this field");
-                        }
-
                         customer1.Address = adress1;
                         data.InsertCustomer(customer1);
                         Console.Clear();
                         Console.WriteLine("you have sucessfully Created a customer! :) press any key to countinue");
                         Console.ReadKey();
+                        DisplayCustomer updatedScreen = new DisplayCustomer();
+                        Screen.Display(updatedScreen);
                     }
                 }
 
@@ -359,7 +372,9 @@ namespace H1_ERP.Display
                     }
                 }
 
-                listPage.Draw();
+                Console.Clear();
+                DisplayCustomer updatedScreen = new DisplayCustomer();
+                Screen.Display(updatedScreen);
             };
             listPage.AddKey(ConsoleKey.F3,Editfunction);
             listPage.AddKey(ConsoleKey.F5, Deletefunction);
