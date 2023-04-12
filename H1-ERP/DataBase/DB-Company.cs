@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using H1_ERP.Display;
-using static H1_ERP.Display.DisplayCompany;
 
 namespace H1_ERP.DataBase
 {
@@ -108,11 +106,6 @@ namespace H1_ERP.DataBase
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
-        }
-        public void DeleteCompany(CompanyDisplay Input)
-        {
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input.Title4}"); 
-
         }
     }
 }

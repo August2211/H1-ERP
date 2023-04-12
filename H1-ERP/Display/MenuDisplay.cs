@@ -23,7 +23,7 @@ namespace H1_ERP.Display
             menu.Add(displayProduct);
             menu.Add(displaySalesOrderDetails);
             menu.Start(this); 
-         
+
 
         }
     }

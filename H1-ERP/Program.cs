@@ -18,9 +18,9 @@ namespace H1_ERP
             MenuDisplay menu = new MenuDisplay();
 
             Screen.Display(menu); 
-            
 
-           
+            DisplayCustomer display = new DisplayCustomer();
+            Screen.Display(display);   
 
         }
     }

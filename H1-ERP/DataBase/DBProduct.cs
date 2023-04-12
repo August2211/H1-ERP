@@ -101,7 +101,13 @@ namespace H1_ERP.DataBase
 
         public void DeleteProduct(Product Input)
         {
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {Input.ProductId}"); 
+            SqlConnection connection = getConnection();
+            connection.Open();
+            string sql = $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {Input.ProductId}";
+
+            SqlCommand sqlCommand = new SqlCommand(sql, connection);
+            sqlCommand.ExecuteNonQuery();
+            connection.Close();
         }
     }
 }
