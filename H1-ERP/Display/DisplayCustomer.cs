@@ -87,12 +87,15 @@ namespace H1_ERP.Display
                 listPage.Add(new CustomerDisplay("PhoneNumber"));
                 listPage.Add(new CustomerDisplay("Country"));
                 form = new Form<CustomerDisplay>();
-                Console.WriteLine("Choose a row with the arrow keys and then press enter for going to change a row write a value then press enter");
-                listPage.Select(); 
+              
                 Hashtable Columnsandvalues = new Hashtable();
-                Clear(this);
                 var chosenvalue = listPage.Select();
+                
                 bool NotDoneEditing = true;
+                if (chosenvalue == null)
+                {
+                    NotDoneEditing= false;
+                }
                 while (NotDoneEditing == true)
                 {
 
@@ -102,7 +105,7 @@ namespace H1_ERP.Display
 
                         Console.SetCursorPosition(oldpos.Left + 1, oldpos.Top + 4);
 
-                        Console.Write("                              ");
+                        Console.Write("                                        ");
                         Console.SetCursorPosition(oldpos.Left + 1, oldpos.Top + 4);
 
                         var newval = Console.ReadLine();
@@ -225,9 +228,10 @@ namespace H1_ERP.Display
                         Screen.Display(updatedScreen);
                     }
                 }
-
+                Console.Clear();
+                DisplayCustomer updatedScreen1 = new DisplayCustomer();
+                Screen.Display(updatedScreen1);
             }; 
-
             //K7
             Action<CustomerDisplay> Deletefunction = delegate (CustomerDisplay customer)
             {
@@ -256,6 +260,10 @@ namespace H1_ERP.Display
                 Console.WriteLine("Choose a row with the arrow keys and then press enter for going to change a row write a value then press enter"); 
                 var chosenvalue = listPage.Select();
                 bool NotDoneEditing = true; 
+                if(chosenvalue == null)
+                {
+                    NotDoneEditing= false;
+                }
                 Hashtable Columnsandvalues = new Hashtable();
                 while (NotDoneEditing == true)
                 {
@@ -296,7 +304,6 @@ namespace H1_ERP.Display
                         if (Columnsandvalues.ContainsKey(0))
                         {
                             customer1.FirstName = Columnsandvalues[0].ToString();
-
                         }
                         else
                         {
@@ -340,6 +347,7 @@ namespace H1_ERP.Display
                         }
                         else 
                         {
+                            adress1.AdressID = tempcustomer.Address.AdressID;
                             adress1.StreetNumber= tempcustomer.Address.StreetNumber;
                         }
 
@@ -360,11 +368,13 @@ namespace H1_ERP.Display
                         {
                             customer1.PhoneNumber = tempcustomer.PhoneNumber;
                         }
-                        
+                      
                         customer1.PersonID = tempcustomer.PersonID;
                         customer1.CustomerId = tempcustomer.CustomerId;
                         adress1.Country= tempcustomer.Address.Country;
-                        customer1.Address = adress1; 
+                        
+                        customer1.Address = adress1;
+
                         data.UpdateCustomer(customer1);
                         Console.Clear();
                         Console.WriteLine("you have sucessfully updated a customer! :) press any key to countinue");
@@ -387,24 +397,28 @@ namespace H1_ERP.Display
                 Screen.Display(menu); 
             }
 
+            if (SelectedRow != null)
+            {
 
-             if(SelectedRow.Title1 != null)
-             {
-                Clear(this); 
-                Console.Clear();
-                ListPage<CustomerDisplay> SelectedCustomerDisplay = new ListPage<CustomerDisplay>();
-                SelectedCustomerDisplay.AddColumn("Fullname", "Title1");
-                SelectedCustomerDisplay.AddColumn("RoadName", "Title2");
-                SelectedCustomerDisplay.AddColumn("Country", "Title3");
-                SelectedCustomerDisplay.AddColumn("City", "Title4");
-                SelectedCustomerDisplay.AddColumn("PostalCode", "Title5");
-                Customer SelectedCustomer = customers.Select(x => x).Where(x => x.CustomerId == Convert.ToInt32(SelectedRow.Title1)).FirstOrDefault(); 
-                SelectedCustomerDisplay.Add(new CustomerDisplay(SelectedCustomer.FullName(), SelectedCustomer.Address.RoadName, SelectedCustomer.Address.Country, SelectedCustomer.Address.City, SelectedCustomer.Address.ZipCode, SelectedCustomer.LastPurchaseDate));
-                SelectedCustomerDisplay.Draw(); 
-             }
-              var alleheaders = data.GetAll(); 
-             if(SelectedRow.Title1 == null) {
-                listPage.Draw();
+                if (SelectedRow.Title1 != null)
+                {
+                    Clear(this);
+                    Console.Clear();
+                    ListPage<CustomerDisplay> SelectedCustomerDisplay = new ListPage<CustomerDisplay>();
+                    SelectedCustomerDisplay.AddColumn("Fullname", "Title1");
+                    SelectedCustomerDisplay.AddColumn("RoadName", "Title2");
+                    SelectedCustomerDisplay.AddColumn("Country", "Title3");
+                    SelectedCustomerDisplay.AddColumn("City", "Title4");
+                    SelectedCustomerDisplay.AddColumn("PostalCode", "Title5");
+                    Customer SelectedCustomer = customers.Select(x => x).Where(x => x.CustomerId == Convert.ToInt32(SelectedRow.Title1)).FirstOrDefault();
+                    SelectedCustomerDisplay.Add(new CustomerDisplay(SelectedCustomer.FullName(), SelectedCustomer.Address.RoadName, SelectedCustomer.Address.Country, SelectedCustomer.Address.City, SelectedCustomer.Address.ZipCode, SelectedCustomer.LastPurchaseDate));
+                    SelectedCustomerDisplay.Draw();
+                }
+                var alleheaders = data.GetAll();
+                if (SelectedRow.Title1 == null)
+                {
+                    listPage.Draw();
+                }
             }
         } 
     }
