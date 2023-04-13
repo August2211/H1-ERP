@@ -95,7 +95,75 @@ namespace H1_ERP.Display
                     $"{OrderHeader.TotalOrderPrice()}"));
             });
 
+            Action<SalesListDetails> action = delegate (SalesListDetails salesOrderDetails)
+            {
+                string path = "../../.././InvoiceTemplate/template.html"; 
+                StreamReader reader = new StreamReader(path);
+                List<string> lines = new List<string>();
+                string html = ""; 
+                while (!reader.EndOfStream)
+                {
 
+
+                     html += reader.ReadLine();
+                }
+                html = html.Replace("${Your company}", "Working Architects National Knowledge");
+                html = html.Replace("${CompanyAddress}", "Tyrchit 30");
+                html = html.Replace("${CompanyZipCode}", "736000");
+                html = html.Replace("${CompanyCity}", "Khorog");
+                html = html.Replace("${Receiver}", salesOrderDetails.CustomerFullName);
+              var data =  db.GetDatafast($"SELECT * FROM [dbo].[Customer.Customers] INNER JOIN " +
+                  $"[dbo].[Customers.Person] ON " +
+                  $"[Customer.Customers].PersonID = [Customers.Person].PersonID INNER JOIN " +
+                  $"[dbo].[Customer.Adress] ON " +
+                  $"[Customer.Adress].AdressID = [Customers.Person].AdressID INNER JOIN " +
+                  $"[dbo].[Sales.Orders] ON" +
+                  $"[Sales.Orders].CustomerID = [Customer.Customers].CustomerID WHERE [dbo].[Customer.Customers].CustomerID = {salesOrderDetails.CustomerID}");
+                var data2 = db.GetDatafast($"SELECT * FROM [dbo].[Sales.OrderLines]" +
+                    $"INNER JOIN [dbo].[Product] ON " +
+                    $"[Product].ProductID = [Sales.OrderLines].ProductID " +
+                    $"WHERE [Sales.OrderLines].OrderID = {salesOrderDetails.OrderID}"); 
+                string address = data.ElementAt(0).Value[10] + " "+ data.ElementAt(0).Value[11];
+                string zipcode = data.ElementAt(0).Value[12].ToString();
+                string city = data.ElementAt(0).Value[13].ToString();
+                string country = data.ElementAt(0).Value[14].ToString();
+                html = html.Replace("${Address}", address);
+                html = html.Replace("${ZipCode}", zipcode);
+                html = html.Replace("${City}", city);
+                html = html.Replace("${Country}", country);
+                html = html.Replace("${InvoiceNumber}", salesOrderDetails.OrderID);
+                html = html.Replace("${InvoiceDate}",salesOrderDetails.DateOfOrder);
+                html = html.Replace("${DueDate}",salesOrderDetails.ExpectedDeliveryDate);
+                html = html.Replace("${Price}", data.ElementAt(0).Value[17].ToString());
+                string ordertable = ""; 
+                foreach(var s in data2.Values)
+                {
+                    ordertable += "<tr style=\"1px solid black;\"><td> ";
+                    ordertable += s[8].ToString();
+                    ordertable += "</td><td>";
+                    ordertable += s[3].ToString();
+                    ordertable += "</td><td>";
+                    ordertable += s[13].ToString();
+                    ordertable += "</td><td>";
+                    ordertable += s[9].ToString();
+                    ordertable += "</td><td>";
+                    ordertable += s[12].ToString();
+                    ordertable += "</td></tr>";
+                }
+                decimal withoutVAT = (decimal)data.ElementAt(0).Value[17] * 0.8m;
+                html = html.Replace("${PriceWithoutVat}", withoutVAT.ToString("N2"));
+                html = html.Replace("${OrderTable}", ordertable);
+                string fileName = $"Invoice {salesOrderDetails.OrderID}.html";
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+                File.WriteAllText(filePath, html);
+
+                Process.Start(new ProcessStartInfo()
+                {
+                    UseShellExecute = true,
+                    FileName = filePath
+                });
+
+            };
 
             //Create a coumn called Sales Orders and add the Title property to it.
             list.AddColumn("Order ID ", "OrderID");
@@ -129,8 +197,10 @@ namespace H1_ERP.Display
             //Only pull the customer data if his id is not 0 (He doesn't exist)
             if (OrderCustomer.CustomerId != 0)
             {
-                string CustomerFullName = OrderCustomer.FullName();
 
+                SalesDetailsListPage.AddKey(ConsoleKey.F1, action);
+
+                string CustomerFullName = OrderCustomer.FullName();
                 //Add details to the list.
                 SalesDetailsListPage.Add(new SalesListDetails($"{OrderHeader.OrderID}", 
                     $"{OrderHeader.Creationtime}", $"{OrderHeader.CompletionTime}", 
@@ -143,7 +213,7 @@ namespace H1_ERP.Display
                 SalesDetailsListPage.AddColumn("Sales Order ", "CustomerFullName");
 
                 //Show the list.
-                SalesDetailsListPage.Draw();
+                SalesDetailsListPage.Select(); 
             }
             else
             {
