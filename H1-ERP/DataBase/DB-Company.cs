@@ -96,11 +96,11 @@ namespace H1_ERP.DataBase
         public void UpdateCompany(Company Input)
         {
             SqlConnection connection = getConnection();
-           string sql2 = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] set RoadName = '{Input.Address.RoadName}',  StreetNumber='{Input.Address.StreetNumber}', ZipCode='{Input.Address.ZipCode}', City= '{Input.Address.City}', Country='{Input.Address.Country}' WHERE AdressID='{Input.Address.AdressID}')";
+           string sql2 = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] set RoadName = '{Input.Address.RoadName}',  StreetNumber='{Input.Address.StreetNumber}', ZipCode='{Input.Address.ZipCode}', City= '{Input.Address.City}', Country='{Input.Address.Country}' WHERE AdressID='{Input.Address.AdressID}'";
             SqlCommand sqlCommand2 = new SqlCommand(sql2, connection);
             sqlCommand2.ExecuteNonQuery();
 
-            string sql = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Company] set CompanyName = '{Input.CompanyName}',  Currency='{((int)Input.Currency)}', AdressID='{Input.Address.AdressID}'WHERE CompanyID='{Input.CompanyID}')";
+            string sql = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Company] set CompanyName = '{Input.CompanyName}',  Currency='{((int)Input.Currency)}', AdressID='{Input.Address.AdressID}'WHERE CompanyID='{Input.CompanyID}'";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();

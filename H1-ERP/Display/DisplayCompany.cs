@@ -56,19 +56,17 @@ namespace H1_ERP.Display
 
         public void newLine()
         {
-
-
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-
+            Console.WriteLine();
         }
         protected override void Draw()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
             Clear(this);
+            Console.ForegroundColor = ConsoleColor.Blue;
             DataBase.DataBase db = new DataBase.DataBase();
 
             ListPage<CompanyDisplay> listPage = new ListPage<CompanyDisplay>();
@@ -85,7 +83,7 @@ namespace H1_ERP.Display
             listPage.AddColumn("Country", "Country", 20);
             listPage.AddColumn("Currency", "Currency", 10);
 
-            ConsoleKeyInfo keyInfo = Console.ReadKey();
+  
 
             Form<CompanyDisplay> form = new Form<CompanyDisplay>();
             try
@@ -94,7 +92,7 @@ namespace H1_ERP.Display
 
                 if (SelectedRow.CompanyName != null)
                 {
-                    Clear(this);
+                    Clear();
                     Console.Clear();
 
                     ListPage<CompanyDisplay> SelectedCompanyDisplay = new ListPage<CompanyDisplay>();
@@ -105,7 +103,6 @@ namespace H1_ERP.Display
                     SelectedCompanyDisplay.AddColumn("City", "City");
                     SelectedCompanyDisplay.AddColumn("Country", "Country");
                     SelectedCompanyDisplay.AddColumn("Currency", "Currency");
-
                     Company SelectedCompany = companies.Select(x => x).Where(x => x.CompanyName == SelectedRow.CompanyName).FirstOrDefault();
                     SelectedCompanyDisplay.Add(new CompanyDisplay(SelectedCompany.CompanyName, SelectedCompany.Address.RoadName, SelectedCompany.Currency, SelectedCompany.Address.ZipCode, SelectedCompany.Address.City, SelectedCompany.Address.Country, SelectedCompany.Address.StreetNumber));
 
@@ -117,10 +114,13 @@ namespace H1_ERP.Display
 
                     }
 
-
+                    ConsoleKeyInfo keyInfo = Console.ReadKey();
+                       
                     if (keyInfo.Key == ConsoleKey.F1)
                     {
                         newLine();
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine("-----Edit Company details-----");
                         Console.ForegroundColor = ConsoleColor.Blue;
 
                         Form<CompanyDisplay> editor = new Form<CompanyDisplay>();
@@ -165,7 +165,7 @@ namespace H1_ERP.Display
 
                                 newLine();
                                 Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine("New company setup saved.");
+                                Console.WriteLine("Company edit saved.");
                                 Console.ResetColor();
                                 break;
 
@@ -174,21 +174,22 @@ namespace H1_ERP.Display
                             {
                                 newLine();
                                 Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("New company setup cancelled.");
+                                Console.WriteLine("cCompany edit cancelled.");
                                 Console.ResetColor();
                                 break;
 
                             }
                         }
                     }
+                    ConsoleKeyInfo keyInfo2 = Console.ReadKey();
 
-
-
-                    if (keyInfo.Key == ConsoleKey.F2)
+                    if (keyInfo2.Key == ConsoleKey.F2)
                     {
                         newLine();
-                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine("-----Add a new Company-----");
 
+                        Console.ForegroundColor = ConsoleColor.Blue;
                         Form<CompanyDisplay> editor = new Form<CompanyDisplay>();
                         editor.TextBox("CompanyName", "CompanyName");
                         editor.TextBox("RoadName", "RoadName");
@@ -239,7 +240,7 @@ namespace H1_ERP.Display
                             {
                                 newLine();
                                 Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("New company setup cancelled.");
+                                Console.WriteLine("nNew company setup cancelled.");
                                 Console.ResetColor();
                                 break;
 
@@ -248,7 +249,7 @@ namespace H1_ERP.Display
                     }
                 }
             }
- catch { }
+            catch { }
         }
 
     }
