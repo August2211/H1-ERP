@@ -98,13 +98,15 @@ namespace H1_ERP.Display
                     Company SelectedCompany = companies.Select(x => x).Where(x => x.CompanyName == SelectedRow.CompanyName).FirstOrDefault();
                     SelectedCompanyDisplay.Add(new CompanyDisplay(SelectedCompany.CompanyName, SelectedCompany.Address.RoadName, SelectedCompany.Currency, SelectedCompany.Address.ZipCode, SelectedCompany.Address.City, SelectedCompany.Address.Country, SelectedCompany.Address.StreetNumber));
 
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine("Click 'F1' to edit company.");
                     Console.WriteLine("Click 'F2' to add a new company.");
                     Console.WriteLine("---------------------------------");
                     Console.WriteLine("Click 'Enter' to save.");
                     Console.WriteLine("Click 'Escape' to cancel.");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     SelectedCompanyDisplay.Draw();
-                   
+                  
 
                     ConsoleKeyInfo keyInfo = Console.ReadKey();
                        
