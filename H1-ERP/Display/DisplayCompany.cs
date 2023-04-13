@@ -79,7 +79,7 @@ namespace H1_ERP.Display
             List<Company> companies = db.GetAllCompany();
             foreach (var Company in companies)
             {
-                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency));
+                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency,Company.CompanyID));
             }
             listPage.AddColumn("CompanyName", "CompanyName", 20);
             listPage.AddColumn("Country", "Country", 20);

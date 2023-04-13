@@ -42,10 +42,10 @@ namespace H1_ERP.DataBase
 
             foreach(var s in querrydata2.Values)
             {
-                                                                                     res.OrderID = Convert.ToUInt32(s[0]);
-                            res.CustomerID = Convert.ToUInt32(s[1]);
-                           res.Creationtime = Convert.ToDateTime(s[3]);
-                        res.CompletionTime = Convert.ToDateTime(s[4]);
+                  res.OrderID = Convert.ToUInt32(s[0]);
+                  res.CustomerID = Convert.ToUInt32(s[1]);
+                  res.Creationtime = Convert.ToDateTime(s[3]);
+                  res.CompletionTime = Convert.ToDateTime(s[4]);
             }
             conn.Close(); 
             return res; 
@@ -147,9 +147,9 @@ namespace H1_ERP.DataBase
         public void DeleteSalesOrderHeaderFromID(int id)
         {
             SqlConnection connection = getConnection();
-
+            Exec_SQL_Command("$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}, connection", connection);
             Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id}", connection);
-            Exec_SQL_Command("$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}, connection",connection);
+        
 
             connection.Close(); 
         }
