@@ -80,6 +80,14 @@ namespace H1_ERP.DomainModel
             }
         }
 
+        public Address address
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
         //Function that returns the full name of a person in "".
         public string FullName()
         {

@@ -45,6 +45,13 @@ namespace H1_ERP.DomainModel
         public decimal TotalPrice { get; private set; }
 
         public Product Product { get;private set; }
-                    
+
+        public Product product
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }
