@@ -56,7 +56,7 @@ namespace H1_ERP.Display
 
         public void newLine()
         {
-            
+
 
             Console.WriteLine();
             Console.WriteLine();
@@ -67,7 +67,7 @@ namespace H1_ERP.Display
         }
         protected override void Draw()
         {
-        Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Clear(this);
             DataBase.DataBase db = new DataBase.DataBase();
 
@@ -75,11 +75,11 @@ namespace H1_ERP.Display
 
             CompanyDisplay displayCopmany = new CompanyDisplay("CompanyName", "Country", Company.currency.DKK, "ZipCode", "City", "RoadName", "StreetNumber");
 
-          
+
             List<Company> companies = db.GetAllCompany();
             foreach (var Company in companies)
             {
-                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency,Company.CompanyID));
+                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency));
             }
             listPage.AddColumn("CompanyName", "CompanyName", 20);
             listPage.AddColumn("Country", "Country", 20);
@@ -130,7 +130,7 @@ namespace H1_ERP.Display
                         editor.TextBox("ZipCode", "ZipCode");
                         editor.TextBox("City", "City");
                         editor.TextBox("Currency", "TempCurrency");
-                        
+
                         try
                         {
                             editor.Edit(displayCopmany);
@@ -153,7 +153,7 @@ namespace H1_ERP.Display
                                 newAddress.RoadName = displayCopmany.RoadName;
 
                                 newCompany.CompanyName = displayCopmany.CompanyName;
-                              
+
                                 newCompany.Currency = (Company.currency)Enum.Parse(typeof(Company.currency), displayCopmany.TempCurrency);
 
 
@@ -168,7 +168,7 @@ namespace H1_ERP.Display
                                 Console.WriteLine("New company setup saved.");
                                 Console.ResetColor();
                                 break;
-                              
+
                             }
                             else if (saveKeyInfo.Key == ConsoleKey.Escape)
                             {
@@ -181,13 +181,75 @@ namespace H1_ERP.Display
                             }
                         }
                     }
-                  
+
+
+
+                    if (keyInfo.Key == ConsoleKey.F2)
+                    {
+                        newLine();
+                        Console.ForegroundColor = ConsoleColor.Blue;
+
+                        Form<CompanyDisplay> editor = new Form<CompanyDisplay>();
+                        editor.TextBox("CompanyName", "CompanyName");
+                        editor.TextBox("RoadName", "RoadName");
+                        editor.TextBox("StreetNumber", "StreetNumber");
+                        editor.TextBox("ZipCode", "ZipCode");
+                        editor.TextBox("City", "City");
+                        editor.TextBox("Currency", "TempCurrency");
+
+                        try
+                        {
+                            editor.Edit(displayCopmany);
+                        }
+                        catch (Exception ex) { }
+
+
+                        while (true)
+                        {
+                            ConsoleKeyInfo saveKeyInfo = Console.ReadKey();
+                            if (saveKeyInfo.Key == ConsoleKey.Enter)
+                            {
+                                Company newCompany = new Company();
+                                Address newAddress = new Address();
+
+                                newAddress.StreetNumber = displayCopmany.StreetNumber;
+                                newAddress.City = displayCopmany.City;
+                                newAddress.Country = displayCopmany.Country;
+                                newAddress.ZipCode = displayCopmany.ZipCode;
+                                newAddress.RoadName = displayCopmany.RoadName;
+
+                                newCompany.CompanyName = displayCopmany.CompanyName;
+
+                                newCompany.Currency = (Company.currency)Enum.Parse(typeof(Company.currency), displayCopmany.TempCurrency);
+
+
+                                newCompany.Address = newAddress;
+                               
+
+                                db.InputCompany(newCompany);
+
+                                newLine();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("New company setup saved.");
+                                Console.ResetColor();
+                                break;
+
+                            }
+                            else if (saveKeyInfo.Key == ConsoleKey.Escape)
+                            {
+                                newLine();
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("New company setup cancelled.");
+                                Console.ResetColor();
+                                break;
+
+                            }
+                        }
+                    }
                 }
             }
-            catch { }
-
+ catch { }
         }
-            
-       
+
     }
 }
