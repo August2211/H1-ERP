@@ -42,10 +42,10 @@ namespace H1_ERP.DataBase
 
             foreach(var s in querrydata2.Values)
             {
-                                                                                     res.OrderID = Convert.ToUInt32(s[0]);
-                            res.CustomerID = Convert.ToUInt32(s[1]);
-                           res.Creationtime = Convert.ToDateTime(s[3]);
-                        res.CompletionTime = Convert.ToDateTime(s[4]);
+                  res.OrderID = Convert.ToUInt32(s[0]);
+                  res.CustomerID = Convert.ToUInt32(s[1]);
+                  res.Creationtime = Convert.ToDateTime(s[3]);
+                  res.CompletionTime = Convert.ToDateTime(s[4]);
             }
             conn.Close(); 
             return res; 
