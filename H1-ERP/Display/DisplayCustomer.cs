@@ -210,7 +210,7 @@ namespace H1_ERP.Display
                             }
                         } catch(DataException e)
                         {
-                            Console.Clear(); 
+                            Console.Clear();
                             Console.WriteLine("Y" + e.Message + " Press any key to countinue");
                             Console.ReadKey(); 
                             DisplayCustomer display = new DisplayCustomer();
