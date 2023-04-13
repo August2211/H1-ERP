@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using H1_ERP.Display;
-using static H1_ERP.Display.DisplayCompany;
 
 namespace H1_ERP.DataBase
 {
@@ -82,12 +80,14 @@ namespace H1_ERP.DataBase
         public void InputCompany(Company Input)
         {
             SqlConnection connection = getConnection();
-            string sql2 = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES ('{Input.Address.RoadName}','{Input.Address.StreetNumber}', '{Input.Address.ZipCode}','{Input.Address.City}', ='{Input.Address.Country}'";
+            string sql2 = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES ('{Input.Address.RoadName}','{Input.Address.StreetNumber}', '{Input.Address.ZipCode}','{Input.Address.City}', '{Input.Address.Country}')";
             SqlCommand sqlCommand2 = new SqlCommand(sql2, connection);
             sqlCommand2.ExecuteNonQuery();
 
+            var AddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
+
             SqlConnection connection2 = getConnection();
-            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Company](CompanyName,Currency) VALUES ('{Input.CompanyName}','{Input.Currency}')";
+            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Company](CompanyName,Currency,AdressID) VALUES ('{Input.CompanyName}','{(int)Input.Currency}','{AddressID}')";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
@@ -96,11 +96,11 @@ namespace H1_ERP.DataBase
         public void UpdateCompany(Company Input)
         {
             SqlConnection connection = getConnection();
-           string sql2 = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] set RoadName = '{Input.Address.RoadName}',  StreetNumber='{Input.Address.StreetNumber}', ZipCode='{Input.Address.ZipCode}', City= '{Input.Address.City}', Country='{Input.Address.Country}' WHERE AdressID='{Input.Address.AdressID}'";
+           string sql2 = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] set RoadName = '{Input.Address.RoadName}',  StreetNumber='{Input.Address.StreetNumber}', ZipCode='{Input.Address.ZipCode}', City= '{Input.Address.City}', Country='{Input.Address.Country}' WHERE AdressID='{Input.Address.AdressID}')";
             SqlCommand sqlCommand2 = new SqlCommand(sql2, connection);
             sqlCommand2.ExecuteNonQuery();
 
-            string sql = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Company] set CompanyName = '{Input.CompanyName}',  Currency='{((int)Input.Currency)}', AdressID='{Input.Address.AdressID}'WHERE CompanyID='{Input.CompanyID}'";
+            string sql = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Company] set CompanyName = '{Input.CompanyName}',  Currency='{((int)Input.Currency)}', AdressID='{Input.Address.AdressID}'WHERE CompanyID='{Input.CompanyID}')";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
@@ -116,11 +116,6 @@ namespace H1_ERP.DataBase
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
-        }
-        public void DeleteCompany(CompanyDisplay Input)
-        {
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input.Title4}"); 
-
         }
     }
 }
