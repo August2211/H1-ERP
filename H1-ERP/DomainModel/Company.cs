@@ -60,6 +60,14 @@ namespace H1_ERP.DomainModel
 
             }
         }
+
+        public Address address
+        {
+            get => default;
+            set
+            {
+            }
+        }
         /*---------------------------------*/
 
     }

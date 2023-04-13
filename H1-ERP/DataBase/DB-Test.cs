@@ -29,7 +29,7 @@ namespace H1_ERP.DataBase
                 var CustomerID = GetData("SELECT TOP(1) CustomerID FROM [dbo].[Customer.Customers] ORDER BY CustomerID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Sales.Orders] (CustomerID, TotalPriceOfOrder, DateOfOrder, ExpectedDeliveryDate, Comments, Condition) VALUES ({CustomerID}, 5{uniqueNumber}.99, '2023-03-23 16:03:00', '2023-03-30 16:03:00', 'Please deliver to the front door{uniqueNumber}.', {condition})");
                 var OrderID = GetData("SELECT TOP(1) OrderID FROM [dbo].[Sales.Orders] ORDER BY OrderID desc").Values.ElementAt(0)[0];
-                Exec_SQL_Command($"INSERT INTO [dbo].[Product] (ProductName, ProductDescription, ProductSalePrice, ProductPurchasePrice, ProductLocation, ProductQuantity, ProductUnit) VALUES ('Product{uniqueNumber}', 'Description{uniqueNumber}', 2{uniqueNumber}, 3{uniqueNumber}, 'Location{uniqueNumber}', 5{uniqueNumber}, {uniqueNumber})");
+                Exec_SQL_Command($"INSERT INTO [dbo].[Product] (ProductName, ProductDescription, ProductSalePrice, ProductPurchasePrice, ProductLocation, ProductQuantity, ProductUnit) VALUES ('Product{uniqueNumber}', 'Description{uniqueNumber}', 2{uniqueNumber}, 3{uniqueNumber}, 'lll{uniqueNumber}', 5{uniqueNumber}, {uniqueNumber})");
                 var ProductID = GetData($"SELECT TOP(1) ProductID FROM [dbo].[Product] ORDER BY ProductID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})");
                 uniqueNumber++;
@@ -41,6 +41,10 @@ namespace H1_ERP.DataBase
                 else if (Currency  > 4) 
                 {
                     Currency = 0;
+                }
+                if (uniqueNumber > 9)
+                {
+                    uniqueNumber = 0;
                 }
             }
         }

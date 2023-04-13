@@ -12,16 +12,8 @@ namespace H1_ERP
     {
         static void Main(string[] args)
         {
-
-
-             
-            MenuDisplay menu = new MenuDisplay();
-
-            Screen.Display(menu); 
-            
-
-           
-
+            MenuDisplay menuDisplay = new MenuDisplay();
+            Screen.Display(menuDisplay);
         }
     }
 }
