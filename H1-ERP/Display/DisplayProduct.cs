@@ -76,15 +76,18 @@ namespace H1_ERP.Display
                     Console.WriteLine("You cannot edit the ID");
                     Console.ReadKey();
                 }
+                else
+                {
 
-                values[Console.GetCursorPosition().Top - 5] = newValue;
+                    values[Console.GetCursorPosition().Top - 5] = newValue;
 
-                dataBase.Exec_SQL_Command($"UPDATE [dbo].[Product] SET ProductName = '{values[1]}', ProductDescription = '{values[2]}', ProductSalePrice = '{values[3]}', ProductPurchasePrice = '{values[4]}', ProductLocation = '{values[5]}', ProductQuantity = '{values[6]}', ProductUnit = '{values[7]}' WHERE ProductID = '{values[0]}'");
-                dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.OrderLines] SET TotalQuantityPrice = (SinglePrice * OrderQuantity) WHERE ProductID = '{values[0]}'");
-                dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.Orders] SET TotalPriceOfOrder = (SELECT SUM(Total) FROM [dbo].[Sales.OrderLines] WHERE OrderID = {values[0]}) WHERE OrderID = {values[0]}");
-                Clear(this);
-                Console.WriteLine("Product edited");
-                Console.ReadKey();
+                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Product] SET ProductName = '{values[1]}', ProductDescription = '{values[2]}', ProductSalePrice = '{values[3]}', ProductPurchasePrice = '{values[4]}', ProductLocation = '{values[5]}', ProductQuantity = '{values[6]}', ProductUnit = '{values[7]}' WHERE ProductID = '{values[0]}'");
+                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.OrderLines] SET TotalQuantityPrice = (SinglePrice * OrderQuantity) WHERE ProductID = '{values[0]}'");
+                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.Orders] SET TotalPriceOfOrder = (SELECT SUM(Total) FROM [dbo].[Sales.OrderLines] WHERE OrderID = {values[0]}) WHERE OrderID = {values[0]}");
+                    Clear(this);
+                    Console.WriteLine("Product edited");
+                    Console.ReadKey();
+                }
             };
 
             Action<ProductDisplay> removeFunction = delegate (ProductDisplay product)
