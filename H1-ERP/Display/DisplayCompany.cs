@@ -54,15 +54,7 @@ namespace H1_ERP.Display
             }
         }
 
-        public void newLine()
-        {
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-        }
+      
         protected override void Draw()
         {
             Clear(this);
@@ -106,23 +98,21 @@ namespace H1_ERP.Display
                     Company SelectedCompany = companies.Select(x => x).Where(x => x.CompanyName == SelectedRow.CompanyName).FirstOrDefault();
                     SelectedCompanyDisplay.Add(new CompanyDisplay(SelectedCompany.CompanyName, SelectedCompany.Address.RoadName, SelectedCompany.Currency, SelectedCompany.Address.ZipCode, SelectedCompany.Address.City, SelectedCompany.Address.Country, SelectedCompany.Address.StreetNumber));
 
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("Click 'F1' to edit company.");
+                    Console.WriteLine("Click 'F2' to add a new company.");
+                    Console.WriteLine("---------------------------------");
+                    Console.WriteLine("Click 'Enter' to save.");
+                    Console.WriteLine("Click 'Escape' to cancel.");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     SelectedCompanyDisplay.Draw();
-                    if (SelectedRow.CompanyName == null)
-                    {
-                        listPage.Draw();
-
-
-                    }
+                  
 
                     ConsoleKeyInfo keyInfo = Console.ReadKey();
                        
                     if (keyInfo.Key == ConsoleKey.F1)
                     {
-                        newLine();
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.WriteLine("-----Edit Company details-----");
-                        Console.ForegroundColor = ConsoleColor.Blue;
-
+                                       
                         Form<CompanyDisplay> editor = new Form<CompanyDisplay>();
                         editor.TextBox("CompanyName", "CompanyName");
                         editor.TextBox("RoadName", "RoadName");
@@ -133,7 +123,14 @@ namespace H1_ERP.Display
 
                         try
                         {
+                            Console.SetCursorPosition(42, 10);
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.WriteLine("-----Edit Company details-----");
+                            Console.SetCursorPosition(38, 12);
+                            Console.ForegroundColor = ConsoleColor.Blue;
                             editor.Edit(displayCopmany);
+                        
+
                         }
                         catch (Exception ex) { }
 
@@ -163,7 +160,7 @@ namespace H1_ERP.Display
 
                                 db.UpdateCompany(newCompany);
 
-                                newLine();
+                                Console.SetCursorPosition(45, 21);
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("Company edit saved.");
                                 Console.ResetColor();
@@ -172,24 +169,21 @@ namespace H1_ERP.Display
                             }
                             else if (saveKeyInfo.Key == ConsoleKey.Escape)
                             {
-                                newLine();
+                                Console.SetCursorPosition(45, 21);
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("cCompany edit cancelled.");
-                                Console.ResetColor();
+                                Console.ResetColor();                               
                                 break;
 
                             }
                         }
                     }
+
                     ConsoleKeyInfo keyInfo2 = Console.ReadKey();
 
                     if (keyInfo2.Key == ConsoleKey.F2)
                     {
-                        newLine();
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.WriteLine("-----Add a new Company-----");
-
-                        Console.ForegroundColor = ConsoleColor.Blue;
+                                                                    
                         Form<CompanyDisplay> editor = new Form<CompanyDisplay>();
                         editor.TextBox("CompanyName", "CompanyName");
                         editor.TextBox("RoadName", "RoadName");
@@ -200,6 +194,11 @@ namespace H1_ERP.Display
 
                         try
                         {
+                            Console.SetCursorPosition(42,10);
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.WriteLine("-----Add a new Company-----");
+                            Console.SetCursorPosition(38, 12);
+                            Console.ForegroundColor = ConsoleColor.Blue;
                             editor.Edit(displayCopmany);
                         }
                         catch (Exception ex) { }
@@ -220,16 +219,12 @@ namespace H1_ERP.Display
                                 newAddress.RoadName = displayCopmany.RoadName;
 
                                 newCompany.CompanyName = displayCopmany.CompanyName;
-
                                 newCompany.Currency = (Company.currency)Enum.Parse(typeof(Company.currency), displayCopmany.TempCurrency);
 
-
-                                newCompany.Address = newAddress;
-                               
-
+                                newCompany.Address = newAddress;                              
                                 db.InputCompany(newCompany);
 
-                                newLine();
+                                Console.SetCursorPosition(45, 20);
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("New company setup saved.");
                                 Console.ResetColor();
@@ -238,7 +233,8 @@ namespace H1_ERP.Display
                             }
                             else if (saveKeyInfo.Key == ConsoleKey.Escape)
                             {
-                                newLine();
+                                
+                                Console.SetCursorPosition(45, 20);
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("nNew company setup cancelled.");
                                 Console.ResetColor();
