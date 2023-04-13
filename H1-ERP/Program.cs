@@ -12,8 +12,8 @@ namespace H1_ERP
     {
         static void Main(string[] args)
         {
-            Test test = new Test();
-            test.start();
+            MenuDisplay menuDisplay = new MenuDisplay();
+            Screen.Display(menuDisplay);
         }
     }
 }

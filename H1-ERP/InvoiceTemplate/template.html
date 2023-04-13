@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p style="display: inline-flex; top:0; color:gray">
+        ${Your company}
+    </p>
+    <p style="display: inline; padding-left:30%; top:0; color:gray">
+        ${CompanyAddress} ${CompanyZipCode} (${CompanyCity})
+    </p>
+    <br>
+    <b>
+        ${Receiver}
+    </b>
+    <p>
+        ${Address}
+    </p>
+    <p>
+        ${ZipCode} ${City}
+    </p>
+    <p>
+        ${Country}
+    </p>
+    <b style="display:inline-flex; padding-left: 70%">
+        Invoice
+    </b>
+    <br>
+    <br>
+    <img src="./green.png" style="display:inline-flex; width:20%; padding-left:70%; height: 1px;">
+    <p style="display:inline-flex; padding-left:70%">
+        Invoice Number ${InvoiceNumber}
+    </p>
+    <br>
+    <p style="display:inline-flex; padding-left:70%">
+        Invoice Date ${InvoiceDate}
+    </p>
+    <br>
+    <p style="display:inline-flex; padding-left:70%">
+        Due Date ${DueDate}
+    </p>
+    <br>
+    <p style="display:inline-flex; padding:1%; margin-left:70%; background-color: yellowgreen; width: 19%;">
+        To pay: ${Price}
+    </p>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <table style="width:40%;text-align:left;border-collapse:collapse;">
+        <tr style="background-color:yellowgreen;">
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Price</th>
+            <th>Amount</th>
+        </tr>
+        <tr>
+            ${OrderedProducts}
+        </tr>
+    </table>
+    <br>
+    <br>
+    <br>
+    <b>Subtotal without VAT</b>
+    <p>Vat 25% of ${PriceWithoutVat}</p>
+    <p>Total {Currency} ${Price}</p>
+</body>
+
+</html>
