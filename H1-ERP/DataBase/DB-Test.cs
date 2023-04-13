@@ -2,6 +2,7 @@
 using Org.BouncyCastle.Utilities.Collections;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Reflection.Emit;
@@ -50,8 +51,8 @@ namespace H1_ERP.DataBase
             Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders]");
             Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers]");
             Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person]");
+            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] " );
             Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company]");
             Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product]");
         }
 
