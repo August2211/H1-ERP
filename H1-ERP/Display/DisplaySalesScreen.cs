@@ -122,7 +122,12 @@ namespace H1_ERP.Display
                 var data2 = db.GetDatafast($"SELECT * FROM [dbo].[Sales.OrderLines]" +
                     $"INNER JOIN [dbo].[Product] ON " +
                     $"[Product].ProductID = [Sales.OrderLines].ProductID " +
-                    $"WHERE [Sales.OrderLines].OrderID = {salesOrderDetails.OrderID}"); 
+                    $"WHERE [Sales.OrderLines].OrderID = {salesOrderDetails.OrderID}");
+                var data3 = db.GetDatafast($"SELECT CONCAT(FirstName,' ',LastName) AS FullName FROM [Company.Employees] INNER JOIN" +
+                    $" [Customers.Person] ON" +
+                    $" [Customers.Person].PersonID = [Company.Employees].PersonID INNER JOIN" +
+                    $" [Sales.Orders] ON" +
+                    $" [Sales.Orders].SalesPerson = [Company.Employees].Id WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}"); 
                 string address = data.ElementAt(0).Value[10] + " "+ data.ElementAt(0).Value[11];
                 string zipcode = data.ElementAt(0).Value[12].ToString();
                 string city = data.ElementAt(0).Value[13].ToString();
@@ -153,6 +158,7 @@ namespace H1_ERP.Display
                 decimal withoutVAT = (decimal)data.ElementAt(0).Value[17] * 0.8m;
                 html = html.Replace("${PriceWithoutVat}", withoutVAT.ToString("N2"));
                 html = html.Replace("${OrderTable}", ordertable);
+                html = html.Replace("${EmployeeName}", data3.ElementAt(0).Value[0].ToString());
                 string fileName = $"Invoice {salesOrderDetails.OrderID}.html";
                 string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
                 File.WriteAllText(filePath, html);
