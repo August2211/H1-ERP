@@ -19,7 +19,6 @@ namespace H1_ERP.DataBase
         /// <returns></returns>
         public SalesOrderHeader GetSalesOrderHeaderFromID(int id)
         {
-            SqlConnection conn = getConnection();
 
             var querrydata = GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}"); 
            
@@ -47,7 +46,6 @@ namespace H1_ERP.DataBase
                   res.Creationtime = Convert.ToDateTime(s[3]);
                   res.CompletionTime = Convert.ToDateTime(s[4]);
             }
-            conn.Close(); 
             return res; 
         }  
         /// <summary>
@@ -56,8 +54,6 @@ namespace H1_ERP.DataBase
         /// <returns></returns>
         public List<SalesOrderHeader> GetAll()
         {
-
-            SqlConnection connection = getConnection();
             string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders]";
             var orderlines = GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines]");
             var products = GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]"); 
@@ -70,7 +66,6 @@ namespace H1_ERP.DataBase
                 var orderlineswithorderid = orderlines.Values.Select(x => x).Where(x => x.ElementAt(5).ToString() == orderheaderline[0].ToString()).ToList(); 
                 foreach(var orderline in orderlineswithorderid)
                 {
-
                     var prod = products.Values.Select(x => x).Where(x => x.ElementAt(0).Equals(orderline[1])).FirstOrDefault();
                     Product product = new Product();
                     product.ProductId = Convert.ToInt32(prod[0]);
@@ -95,8 +90,6 @@ namespace H1_ERP.DataBase
                 salesOrder.Condtion = (Condtion)Convert.ToInt32(orderheaderline[6]);
                res.Add(salesOrder);
             }
-             
-            connection.Close(); 
             return res; 
         }
         /// <summary>
@@ -104,24 +97,19 @@ namespace H1_ERP.DataBase
         /// </summary>
         /// <param name="input"></param>
         public void InsertSalesOrderHeader(SalesOrderHeader input)
-        {
-            SqlConnection connection = getConnection();
-            //insert the header
-            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.Orders] (CustomerID,TotalPriceOfOrder,DateOfOrder,ExpectedDeliveryDate) VALUES({input.CustomerID},{input.TotalOrderPrice()},{input.Creationtime},{input.CompletionTime})",connection);           
-            //find the id of the inserted header by looking at the highest ID 
-          SqlCommand command = new SqlCommand("SELECT TOP (1) [OrderID] FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] ORDER BY [OrderID] desc;", connection);
-            command.ExecuteNonQuery(); 
-            SqlDataReader reader= command.ExecuteReader();
+        { 
+            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.Orders] (CustomerID,TotalPriceOfOrder,DateOfOrder,ExpectedDeliveryDate) VALUES({input.CustomerID},{input.TotalOrderPrice()},{input.Creationtime},{input.CompletionTime})");
+            //find the id of the inserted header by looking at the highest ID
+            var Data = GetData("SELECT TOP (1) [OrderID] FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] ORDER BY [OrderID] desc;");
             int OrderID = 1; 
-            while (reader.Read())
+            foreach (var Row in Data.Values)
             {
-                OrderID = Convert.ToInt32(reader[0]);
-
+                OrderID = Convert.ToInt32(Row[0]);
             }
             //InsertSalesOrderHeader all of the Orderlines in the table orderlines
             foreach (var OrderLine in input.OrderLines)
             {
-                Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] (SinglePrice,OrderQuantity,TotalQuantityPrice,OrderID,ProductID) VALUES({OrderLine.SingleUnitPrice},{OrderLine.Quantity},{OrderLine.TotalPrice},{OrderID},{OrderLine.Product.ProductId})", connection);
+                Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] (SinglePrice,OrderQuantity,TotalQuantityPrice,OrderID,ProductID) VALUES({OrderLine.SingleUnitPrice},{OrderLine.Quantity},{OrderLine.TotalPrice},{OrderID},{OrderLine.Product.ProductId})");
             }
         }
         /// <summary>
@@ -131,14 +119,11 @@ namespace H1_ERP.DataBase
         /// <param name="NewsalesHeader"></param>
         public void UpdateSalesorderHeader(int ID, SalesOrderHeader NewsalesHeader)
         {
-            SqlConnection connection = getConnection();
-            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {NewsalesHeader.TotalOrderPrice()}, ExpectedDeliveryDate = {NewsalesHeader.CompletionTime} WHERE OrderID = {ID}", connection);
-            
+            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {NewsalesHeader.TotalOrderPrice()}, ExpectedDeliveryDate = {NewsalesHeader.CompletionTime} WHERE OrderID = {ID}");
             foreach (var OrderLines in NewsalesHeader.OrderLines)
             {
-                Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SingleUnitPrice}, OrderQuantity = {OrderLines.Quantity}, TotalQuantityPrice = {OrderLines.TotalPrice} WHERE OrderID = {ID} AND OrderLineID ={OrderLines.Id}", connection); 
+                Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SingleUnitPrice}, OrderQuantity = {OrderLines.Quantity}, TotalQuantityPrice = {OrderLines.TotalPrice} WHERE OrderID = {ID} AND OrderLineID ={OrderLines.Id}"); 
             }
-            connection.Close();
         }
         /// <summary>
         /// Deletes a instance from the DB with the given ID
@@ -146,12 +131,8 @@ namespace H1_ERP.DataBase
         /// <param name="id"></param>
         public void DeleteSalesOrderHeaderFromID(int id)
         {
-            SqlConnection connection = getConnection();
-            Exec_SQL_Command("$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}, connection", connection);
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id}", connection);
-        
-
-            connection.Close(); 
+            Exec_SQL_Command("$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id}, connection");
+            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id}");
         }
     }
 }
