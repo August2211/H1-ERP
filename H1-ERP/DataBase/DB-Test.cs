@@ -15,7 +15,7 @@ namespace H1_ERP.DataBase
     {
         public void BulkAddData(int amountToAdd)
         {
-            int Currency = 0; 
+            int Currency = 0;
             int uniqueNumber = 0;
             int condition = 0;
 
@@ -47,11 +47,11 @@ namespace H1_ERP.DataBase
             {
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES('Nej Vej{uniqueNumber}', '123{uniqueNumber}', '321{uniqueNumber}', 'NejCity{uniqueNumber}', 'NejCountry{uniqueNumber}')");
                 var AddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
-                Exec_SQL_Command($"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('John{uniqueNumber}', 'Doe{uniqueNumber}', 'johndoe@gmail.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})");
-                Exec_SQL_Command($"INSERT INTO [dbo].[Company] (CompanyName, Currency, AdressID) VALUES ('CompanyName{uniqueNumber}', {Currency}, {AddressID})");
+                Exec_SQL_Command($"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('John{uniqueNumber}', 'Doe{uniqueNumber}', 'johndoe@gmail.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})" +
+                $"INSERT INTO [dbo].[Company] (CompanyName, Currency, AdressID) VALUES ('CompanyName{uniqueNumber}', {Currency}, {AddressID})");
                 var PersonID = GetData("SELECT TOP(1) PersonID FROM [dbo].[Customers.Person] ORDER BY PersonID desc").Values.ElementAt(0)[0];
-                Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Customers] (LastPurchaseDate, PersonID) VALUES ('2023-03-23 16:03:00', {PersonID})");
-                Exec_SQL_Command($"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('{SalesNames[uniqueNumber]}', '{SalesSurNames[uniqueNumber]}', '{SalesNames[uniqueNumber]}{SalesSurNames[uniqueNumber]}@WANK.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})");
+                Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Customers] (LastPurchaseDate, PersonID) VALUES ('2023-03-23 16:03:00', {PersonID})" +
+                $"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('{SalesNames[uniqueNumber]}', '{SalesSurNames[uniqueNumber]}', '{SalesNames[uniqueNumber]}{SalesSurNames[uniqueNumber]}@WANK.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})");
                 var EmployeePersonID = GetData("SELECT TOP(1) PersonID FROM [dbo].[Customers.Person] ORDER BY PersonID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Company.Employees] VALUES (GETDATE(), GETDATE()+3000, {uniqueNumber * 1000}, {EmployeePersonID})");
                 var CustomerID = GetData("SELECT TOP(1) CustomerID FROM [dbo].[Customer.Customers] ORDER BY CustomerID desc").Values.ElementAt(0)[0];
@@ -60,16 +60,16 @@ namespace H1_ERP.DataBase
                 var OrderID = GetData("SELECT TOP(1) OrderID FROM [dbo].[Sales.Orders] ORDER BY OrderID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Product] (ProductName, ProductDescription, ProductSalePrice, ProductPurchasePrice, ProductLocation, ProductQuantity, ProductUnit) VALUES ('Product{uniqueNumber}', 'Description{uniqueNumber}', 2{uniqueNumber}, 3{uniqueNumber}, 'lll{uniqueNumber}', 5{uniqueNumber}, {uniqueNumber})");
                 var ProductID = GetData($"SELECT TOP(1) ProductID FROM [dbo].[Product] ORDER BY ProductID desc").Values.ElementAt(0)[0];
-                Exec_SQL_Command($"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})");
-                Exec_SQL_Command($"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})");
-                Exec_SQL_Command($"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})");
+                Exec_SQL_Command($"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})" +
+                $"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})" +
+                $"INSERT INTO [dbo].[Sales.OrderLines] (ProductID, SinglePrice, OrderQuantity, TotalQuantityPrice, OrderID) VALUES ({ProductID}, 1{uniqueNumber}.99, '5{uniqueNumber}', 5{uniqueNumber}.95, {OrderID})");
                 uniqueNumber++;
                 condition++;
                 if (condition > 4)
                 {
                     condition = 0;
                 }
-                else if (Currency  > 4) 
+                else if (Currency > 4)
                 {
                     Currency = 0;
                 }
@@ -82,14 +82,14 @@ namespace H1_ERP.DataBase
 
         public void DeleteAllData()
         {
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company.Employees]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress]");
-            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product]");
+            Exec_SQL_Command("DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines];" +
+                "DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders];" +
+                "DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers];" +
+                "DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company.Employees];" +
+                "DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person];" +
+                "DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company];" +
+                "DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress];" +
+                "DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product];");
         }
 
         public void RefreshData(int amountToAdd)
