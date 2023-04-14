@@ -47,11 +47,15 @@ namespace H1_ERP.DataBase
             {
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES('Nej Vej{uniqueNumber}', '123{uniqueNumber}', '321{uniqueNumber}', 'NejCity{uniqueNumber}', 'NejCountry{uniqueNumber}')");
                 var AddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
+                Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES('Nej Vej{uniqueNumber}', '123{uniqueNumber}', '321{uniqueNumber}', 'NejCity{uniqueNumber}', 'NejCountry{uniqueNumber}')");
+                var CompanyAddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
+                Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES('Nej Vej{uniqueNumber}', '123{uniqueNumber}', '321{uniqueNumber}', 'NejCity{uniqueNumber}', 'NejCountry{uniqueNumber}')");
+                var EmployeeAddressID = GetData("SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('John{uniqueNumber}', 'Doe{uniqueNumber}', 'johndoe@gmail.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})" +
-                $"INSERT INTO [dbo].[Company] (CompanyName, Currency, AdressID) VALUES ('CompanyName{uniqueNumber}', {Currency}, {AddressID})");
+                $"INSERT INTO [dbo].[Company] (CompanyName, Currency, AdressID) VALUES ('CompanyName{uniqueNumber}', {Currency}, {CompanyAddressID})");
                 var PersonID = GetData("SELECT TOP(1) PersonID FROM [dbo].[Customers.Person] ORDER BY PersonID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Customer.Customers] (LastPurchaseDate, PersonID) VALUES ('2023-03-23 16:03:00', {PersonID})" +
-                $"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('{SalesNames[uniqueNumber]}', '{SalesSurNames[uniqueNumber]}', '{SalesNames[uniqueNumber]}{SalesSurNames[uniqueNumber]}@WANK.com{uniqueNumber}', '+123456789{uniqueNumber}', {AddressID})");
+                $"INSERT INTO [dbo].[Customers.Person] (FirstName, LastName, Email, PhoneNumber, AdressID) VALUES ('{SalesNames[uniqueNumber]}', '{SalesSurNames[uniqueNumber]}', '{SalesNames[uniqueNumber]}{SalesSurNames[uniqueNumber]}@WANK.com{uniqueNumber}', '+123456789{uniqueNumber}', {EmployeeAddressID})");
                 var EmployeePersonID = GetData("SELECT TOP(1) PersonID FROM [dbo].[Customers.Person] ORDER BY PersonID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Company.Employees] VALUES (GETDATE(), GETDATE()+3000, {uniqueNumber * 1000}, {EmployeePersonID})");
                 var CustomerID = GetData("SELECT TOP(1) CustomerID FROM [dbo].[Customer.Customers] ORDER BY CustomerID desc").Values.ElementAt(0)[0];
