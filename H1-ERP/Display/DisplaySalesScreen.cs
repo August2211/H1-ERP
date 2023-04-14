@@ -76,12 +76,15 @@ namespace H1_ERP.Display
             //Get all the sales orders from the database.
             List<SalesOrderHeader> SalesOrderHeaders = db.GetAll();
 
+            //Get all customers
+            List<Customer> Customers = db.GetAllCustomers();
+
             SalesOrderHeaders.ForEach(OrderHeader =>
             {
                 List<SalesOrderLine> OrderLines = OrderHeader.OrderLines;
 
-                //Get the customer from the current orderheader.
-                Customer OrderCustomer = db.GetCustomerFromID((int)OrderHeader.CustomerID);
+                //Get the customer that made the order.
+                Customer OrderCustomer = Customers.Find(Customer => Customer.CustomerId == OrderHeader.CustomerID);
 
                 //Get the customers full name.
                 string CustomerFullName = OrderCustomer.FullName();
