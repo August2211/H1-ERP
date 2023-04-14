@@ -71,7 +71,7 @@ namespace H1_ERP.Display
             
             Form<CustomerDisplay> form = new Form<CustomerDisplay>();
             //User get's to press enter on 1 of our lines and afterwards they can se the details with a new customerdisplay of one customer.
-            //K6
+            //Takes a customerdisplay and afterwards does nothing with it becuase they create a customer from scratch
             Action<CustomerDisplay> AddcustomerFunction = delegate (CustomerDisplay customer)
             {
                 Clear(this);
@@ -132,12 +132,12 @@ namespace H1_ERP.Display
                         NotDoneEditing = false;
                         Address adress1 = new Address();
                         Customer customer1 = new Customer();
+                        // if the user whishes to exit our add customer screen they have to have all the columns filled otherwise we throw an error and the display it to the customer 
                         try
                         {
                             if (Columnsandvalues.ContainsKey(0))
                             {
                                 customer1.FirstName = Columnsandvalues[0].ToString();
-
                             }
                             else
                             {
@@ -232,14 +232,14 @@ namespace H1_ERP.Display
                 DisplayCustomer updatedScreen1 = new DisplayCustomer();
                 Screen.Display(updatedScreen1);
             }; 
-            //K7
+            //when this action is fired we take the current customerdisplay ID and delete it in the database 
             Action<CustomerDisplay> Deletefunction = delegate (CustomerDisplay customer)
             {
                 int idnumber = Convert.ToInt32(customer.Title1);              
                 data.DeleteCustomer(idnumber);           
                 Draw(); 
             };
-            //K5 
+            //Take's the current ID on display and edits the chosen values and update's it in the database 
             Action<CustomerDisplay> Editfunction = delegate (CustomerDisplay customer)
             {
                 Console.Clear();    
@@ -301,6 +301,7 @@ namespace H1_ERP.Display
                         NotDoneEditing= false;
                         Address adress1 = new Address(); 
                         Customer customer1 = new Customer();
+                        //if the customer in the edit screen wishes to edit something we look at what we have as changed values
                         if (Columnsandvalues.ContainsKey(0))
                         {
                             customer1.FirstName = Columnsandvalues[0].ToString();
@@ -368,7 +369,7 @@ namespace H1_ERP.Display
                         {
                             customer1.PhoneNumber = tempcustomer.PhoneNumber;
                         }
-                      
+                        // we take the remaning info and update it with the new 1 
                         customer1.PersonID = tempcustomer.PersonID;
                         customer1.CustomerId = tempcustomer.CustomerId;
                         adress1.Country= tempcustomer.Address.Country;
@@ -386,6 +387,7 @@ namespace H1_ERP.Display
                 DisplayCustomer updatedScreen = new DisplayCustomer();
                 Screen.Display(updatedScreen);
             };
+            //adds all of the functionality and the keys accordingly 
             listPage.AddKey(ConsoleKey.F3,Editfunction);
             listPage.AddKey(ConsoleKey.F5, Deletefunction);
             listPage.AddKey(ConsoleKey.F2,AddcustomerFunction);
