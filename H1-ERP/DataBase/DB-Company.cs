@@ -107,11 +107,10 @@ namespace H1_ERP.DataBase
         }
         //DeleteSalesOrderHeaderFromID the Company from dataBase
 
-        public void DeleteCompany(Company Input)
+        public void DeleteCompany(int Input)
         {
             SqlConnection connection = getConnection();
-            connection.Open();
-            string sql = $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input.CompanyID}";
+            string sql = $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input}";
 
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
