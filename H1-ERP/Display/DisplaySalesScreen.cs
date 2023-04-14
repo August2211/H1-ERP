@@ -97,28 +97,28 @@ namespace H1_ERP.Display
 
             Action<SalesListDetails> action = delegate (SalesListDetails salesOrderDetails)
             {
-                string path = "../../.././InvoiceTemplate/template.html"; 
+                string path = "../../.././InvoiceTemplate/template.html";
                 StreamReader reader = new StreamReader(path);
                 List<string> lines = new List<string>();
-                string html = ""; 
+                string html = "";
                 while (!reader.EndOfStream)
                 {
 
 
-                     html += reader.ReadLine();
+                    html += reader.ReadLine();
                 }
                 html = html.Replace("${Your company}", "Working Architects National Knowledge");
                 html = html.Replace("${CompanyAddress}", "Tyrchit 30");
                 html = html.Replace("${CompanyZipCode}", "736000");
                 html = html.Replace("${CompanyCity}", "Khorog");
                 html = html.Replace("${Receiver}", salesOrderDetails.CustomerFullName);
-              var data =  db.GetDatafast($"SELECT * FROM [dbo].[Customer.Customers] INNER JOIN " +
-                  $"[dbo].[Customers.Person] ON " +
-                  $"[Customer.Customers].PersonID = [Customers.Person].PersonID INNER JOIN " +
-                  $"[dbo].[Customer.Adress] ON " +
-                  $"[Customer.Adress].AdressID = [Customers.Person].AdressID INNER JOIN " +
-                  $"[dbo].[Sales.Orders] ON" +
-                  $"[Sales.Orders].CustomerID = [Customer.Customers].CustomerID WHERE [dbo].[Customer.Customers].CustomerID = {salesOrderDetails.CustomerID}");
+                var data = db.GetDatafast($"SELECT * FROM [dbo].[Customer.Customers] INNER JOIN " +
+                    $"[dbo].[Customers.Person] ON " +
+                    $"[Customer.Customers].PersonID = [Customers.Person].PersonID INNER JOIN " +
+                    $"[dbo].[Customer.Adress] ON " +
+                    $"[Customer.Adress].AdressID = [Customers.Person].AdressID INNER JOIN " +
+                    $"[dbo].[Sales.Orders] ON" +
+                    $"[Sales.Orders].CustomerID = [Customer.Customers].CustomerID WHERE [dbo].[Customer.Customers].CustomerID = {salesOrderDetails.CustomerID}");
                 var data2 = db.GetDatafast($"SELECT * FROM [dbo].[Sales.OrderLines]" +
                     $"INNER JOIN [dbo].[Product] ON " +
                     $"[Product].ProductID = [Sales.OrderLines].ProductID " +
@@ -127,8 +127,8 @@ namespace H1_ERP.Display
                     $" [Customers.Person] ON" +
                     $" [Customers.Person].PersonID = [Company.Employees].PersonID INNER JOIN" +
                     $" [Sales.Orders] ON" +
-                    $" [Sales.Orders].SalesPerson = [Company.Employees].Id WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}"); 
-                string address = data.ElementAt(0).Value[10] + " "+ data.ElementAt(0).Value[11];
+                    $" [Sales.Orders].SalesPerson = [Company.Employees].Id WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}");
+                string address = data.ElementAt(0).Value[10] + " " + data.ElementAt(0).Value[11];
                 string zipcode = data.ElementAt(0).Value[12].ToString();
                 string city = data.ElementAt(0).Value[13].ToString();
                 string country = data.ElementAt(0).Value[14].ToString();
@@ -137,11 +137,11 @@ namespace H1_ERP.Display
                 html = html.Replace("${City}", city);
                 html = html.Replace("${Country}", country);
                 html = html.Replace("${InvoiceNumber}", salesOrderDetails.OrderID);
-                html = html.Replace("${InvoiceDate}",salesOrderDetails.DateOfOrder);
-                html = html.Replace("${DueDate}",salesOrderDetails.ExpectedDeliveryDate);
+                html = html.Replace("${InvoiceDate}", salesOrderDetails.DateOfOrder);
+                html = html.Replace("${DueDate}", salesOrderDetails.ExpectedDeliveryDate);
                 html = html.Replace("${Price}", data.ElementAt(0).Value[17].ToString());
-                string ordertable = ""; 
-                foreach(var s in data2.Values)
+                string ordertable = "";
+                foreach (var s in data2.Values)
                 {
                     ordertable += "<tr style=\"1px solid black;\"><td> ";
                     ordertable += s[8].ToString();
@@ -196,7 +196,18 @@ namespace H1_ERP.Display
 
             ListPage<SalesListDetails> SalesDetailsListPage = new ListPage<SalesListDetails>();
 
-            SalesOrderHeader OrderHeader = db.GetSalesOrderHeaderFromID(SalesList.IntBoxOutput);
+            SalesOrderHeader OrderHeader = null;
+            try
+            {
+                OrderHeader = db.GetSalesOrderHeaderFromID(SalesList.IntBoxOutput);
+            } catch (Exception e) { }
+
+            if (OrderHeader == null)
+            {
+                Console.WriteLine("Not Found!");
+                return;
+            };
+
 
             Customer OrderCustomer = db.GetCustomerFromID((int)OrderHeader.CustomerID);
 
