@@ -30,14 +30,16 @@ namespace H1_ERP.Display
             public string StreetNumber { get; set; }
             public string TempCurrency { get; set; }
 
+            public string TempID { get; set; }
 
-            public CompanyDisplay(string companyName, string country, Company.currency currency)
+
+            public CompanyDisplay(string companyName, string country, Company.currency currency, string tempID)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 CompanyName = companyName;
                 Country = country;
                 Currency = currency;
-
+                TempID = tempID;
             }
 
 
@@ -69,13 +71,20 @@ namespace H1_ERP.Display
             List<Company> companies = db.GetAllCompany();
             foreach (var Company in companies)
             {
-                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency));
+                listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency,Company.CompanyID.ToString()));
             }
             listPage.AddColumn("CompanyName", "CompanyName", 20);
             listPage.AddColumn("Country", "Country", 20);
             listPage.AddColumn("Currency", "Currency", 10);
+            Action<CompanyDisplay> Deletefunction = delegate (CompanyDisplay company)
+            {
+                int id = Convert.ToInt32(company.TempID);
+                db.DeleteCompany(id);
+                DisplayCompany display = new DisplayCompany();
+                Screen.Display(display); 
+            };
+            listPage.AddKey(ConsoleKey.F5, Deletefunction);      
 
-  
 
             Form<CompanyDisplay> form = new Form<CompanyDisplay>();
             try

@@ -85,12 +85,15 @@ namespace H1_ERP.Display
             //Get all the sales orders from the database.
             List<SalesOrderHeader> SalesOrderHeaders = db.GetAll();
 
+            //Get all customers
+            List<Customer> Customers = db.GetAllCustomers();
+
             SalesOrderHeaders.ForEach(OrderHeader =>
             {
                 List<SalesOrderLine> OrderLines = OrderHeader.OrderLines;
 
-                //Get the customer from the current orderheader.
-                Customer OrderCustomer = db.GetCustomerFromID((int)OrderHeader.CustomerID);
+                //Get the customer that made the order.
+                Customer OrderCustomer = Customers.Find(Customer => Customer.CustomerId == OrderHeader.CustomerID);
 
                 //Get the customers full name.
                 string CustomerFullName = OrderCustomer.FullName();
@@ -106,6 +109,7 @@ namespace H1_ERP.Display
 
             Action<SalesListDetails> action = delegate (SalesListDetails salesOrderDetails)
             {
+                //we take the path of the invocie template
                 string path = "../../.././InvoiceTemplate/template.html";
                 StreamReader reader = new StreamReader(path);
                 List<string> lines = new List<string>();
@@ -116,11 +120,13 @@ namespace H1_ERP.Display
 
                     html += reader.ReadLine();
                 }
+                //switch the certaint text int the html file with our address and the invoice information 
                 html = html.Replace("${Your company}", "Working Architects National Knowledge");
                 html = html.Replace("${CompanyAddress}", "Tyrchit 30");
                 html = html.Replace("${CompanyZipCode}", "736000");
                 html = html.Replace("${CompanyCity}", "Khorog");
                 html = html.Replace("${Receiver}", salesOrderDetails.CustomerFullName);
+                //get alle information regarding the invoice
                 var data = db.GetDatafast($"SELECT * FROM [dbo].[Customer.Customers] INNER JOIN " +
                     $"[dbo].[Customers.Person] ON " +
                     $"[Customer.Customers].PersonID = [Customers.Person].PersonID INNER JOIN " +
@@ -132,6 +138,11 @@ namespace H1_ERP.Display
                     $"INNER JOIN [dbo].[Product] ON " +
                     $"[Product].ProductID = [Sales.OrderLines].ProductID " +
                     $"WHERE [Sales.OrderLines].OrderID = {salesOrderDetails.OrderID}");
+                var data3 = db.GetDatafast($"SELECT CONCAT(FirstName,' ',LastName) AS FullName FROM [Company.Employees] INNER JOIN" +
+                    $" [Customers.Person] ON" +
+                    $" [Customers.Person].PersonID = [Company.Employees].PersonID INNER JOIN" +
+                    $" [Sales.Orders] ON" +
+                    $" [Sales.Orders].SalesPerson = [Company.Employees].Id WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}");
                 string address = data.ElementAt(0).Value[10] + " " + data.ElementAt(0).Value[11];
                 string zipcode = data.ElementAt(0).Value[12].ToString();
                 string city = data.ElementAt(0).Value[13].ToString();
@@ -145,6 +156,7 @@ namespace H1_ERP.Display
                 html = html.Replace("${DueDate}", salesOrderDetails.ExpectedDeliveryDate);
                 html = html.Replace("${Price}", data.ElementAt(0).Value[17].ToString());
                 string ordertable = "";
+                //foreach orderline we have we add a new table row and 5 column's accordingly 
                 foreach (var s in data2.Values)
                 {
                     ordertable += "<tr style=\"1px solid black;\"><td> ";
@@ -162,10 +174,11 @@ namespace H1_ERP.Display
                 decimal withoutVAT = (decimal)data.ElementAt(0).Value[17] * 0.8m;
                 html = html.Replace("${PriceWithoutVat}", withoutVAT.ToString("N2"));
                 html = html.Replace("${OrderTable}", ordertable);
+                html = html.Replace("${EmployeeName}", data3.ElementAt(0).Value[0].ToString());
                 string fileName = $"Invoice {salesOrderDetails.OrderID}.html";
                 string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
                 File.WriteAllText(filePath, html);
-
+                //opens a browser window with the invoice 
                 Process.Start(new ProcessStartInfo()
                 {
                     UseShellExecute = true,
@@ -199,7 +212,18 @@ namespace H1_ERP.Display
 
             ListPage<SalesListDetails> SalesDetailsListPage = new ListPage<SalesListDetails>();
 
-            SalesOrderHeader OrderHeader = db.GetSalesOrderHeaderFromID(SalesList.IntBoxOutput);
+            SalesOrderHeader OrderHeader = null;
+            try
+            {
+                OrderHeader = db.GetSalesOrderHeaderFromID(SalesList.IntBoxOutput);
+            } catch (Exception e) { }
+
+            if (OrderHeader == null)
+            {
+                Console.WriteLine("Not Found!");
+                return;
+            };
+
 
             Customer OrderCustomer = db.GetCustomerFromID((int)OrderHeader.CustomerID);
 

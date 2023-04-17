@@ -137,6 +137,42 @@ namespace H1_ERP.DataBase
             }
         }
 
+
+        public Dictionary<object, object[]> GetdataFastFromJoinsWithouttheKeyvalueparoftheId(string sql)
+        {
+            var connection = getConnection();
+            Dictionary<object, object[]> Rows = new Dictionary<object, object[]>();
+            int i = 0; 
+            using (var sqlCommand = new SqlCommand(sql, connection))
+            {
+                using (var reader = sqlCommand.ExecuteReader())
+                {
+                    int rows = 0;
+
+                    while (reader.Read())
+                    {
+                        rows = 0;
+                        object[] list = new object[reader.FieldCount];
+
+                        reader.GetValues(list);
+
+
+                        Rows.Add(i, list);
+                        ++i; 
+                    }
+                    reader.Close();
+
+                    if (Rows.Count <= 0)
+                    {
+                        return null;
+                    }
+                    connection.Close();
+                    return Rows;
+                }
+            }
+
+        }
+
         /// <summary>
         /// Executes a SQL command with a connection
         /// </summary>

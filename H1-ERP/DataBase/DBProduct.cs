@@ -20,38 +20,22 @@ namespace H1_ERP.DataBase
         public Product GetProductFromID(int id)
         {
 
-            SqlConnection conn = getConnection();
-
-            string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {id}";
-          
-            SqlCommand commando = new SqlCommand(sql, conn);
-            SqlDataReader sqlDataReader = commando.ExecuteReader();
-            int rows = 0;
-         
+            var data =  GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {id}"); 
+            
             Product product = new Product(); //obj 
           
-            while (sqlDataReader.Read())
+            foreach (var s in data.Values)
             {
-                if (rows < sqlDataReader.FieldCount)
-                {
-                    
-                    sqlDataReader.GetValue(rows);
-                  
-                    var prod = sqlDataReader;
-
-                    product.ProductId = (int)prod[0];
-                    product.Name = (string)prod[1];
-                    product.Description = (string)prod[2];
-                    product.SellingPrice = (decimal)prod[3];
-                    product.PurchasePrice = (decimal)prod[4];
-                    product.Location = (string)prod[5];
-                    product.ProductQuantity = (int)prod[6];
-                    product.Unit = (int)prod[7];
-
-                    rows++;
-                }
+                    product.ProductId = (int)s[0];
+                    product.Name = (string)s[1];
+                    product.Description = (string)s[2];
+                    product.SellingPrice = (decimal)s[3];
+                    product.PurchasePrice = (decimal)s[4];
+                    product.Location = (string)s[5];
+                    product.ProductQuantity = (int)s[6];
+                    product.Unit = (int)s[7];                
             }
-            conn.Close(); 
+            
             return product;
         }
         //Get all product and return it to the list 
@@ -92,7 +76,7 @@ namespace H1_ERP.DataBase
         {
             SqlConnection connection = getConnection();
             connection.Open();
-            string sql = $"UPDATA [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.Name}', ProductDescription = '{Input.Description}',ProductSalePrice = '{Input.SellingPrice}',ProductPurchasePrice = '{Input.PurchasePrice}', ProductLocation ='{Input.Location}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.Unit}')";
+            string sql = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.Name}', ProductDescription = '{Input.Description}',ProductSalePrice = '{Input.SellingPrice}',ProductPurchasePrice = '{Input.PurchasePrice}', ProductLocation ='{Input.Location}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.Unit}')";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
