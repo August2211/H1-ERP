@@ -16,10 +16,19 @@
         </TypeIdentifier>
       </Enum>
     </NestedTypes>
+    <AssociationLine Name="address" Type="H1_ERP.DomainModel.Address" FixedFromPoint="true">
+      <Path>
+        <Point X="7.75" Y="2.438" />
+        <Point X="6" Y="2.438" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAQAAAAAIAAAAAAAEAAAAACAAEAAACAAACAEAAAAA=</HashCode>
+      <HashCode>AAAAQAAAAAIAAAAAAAEAAAAACAIEAAACAAACAEAAAAA=</HashCode>
       <FileName>DomainModel\Company.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="address" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="H1_ERP.DomainModel.Customer">
     <Position X="1.25" Y="4.75" Width="1.5" />
@@ -30,10 +39,19 @@
   </Class>
   <Class Name="H1_ERP.DomainModel.Person">
     <Position X="1.25" Y="0.5" Width="1.5" />
+    <AssociationLine Name="address" Type="H1_ERP.DomainModel.Address" FixedFromPoint="true">
+      <Path>
+        <Point X="2.75" Y="2.75" />
+        <Point X="4.5" Y="2.75" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>QAEBAEAAACAAAIAAAAEAQAAAAAAAAAACAAAAAUAAAAk=</HashCode>
+      <HashCode>QAEBAEAAACAAAIAAAAEAQAAAAAIAAAACAAAAAUAAAAk=</HashCode>
       <FileName>DomainModel\Person.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="address" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="H1_ERP.DomainModel.Product">
     <Position X="10.25" Y="0.5" Width="1.5" />
@@ -44,17 +62,43 @@
   </Class>
   <Class Name="H1_ERP.DomainModel.SalesOrderHeader">
     <Position X="3" Y="4.25" Width="1.5" />
+    <AssociationLine Name="salesOrderLine" Type="H1_ERP.DomainModel.SalesOrderLine" FixedFromPoint="true">
+      <Path>
+        <Point X="4.5" Y="6.562" />
+        <Point X="6.25" Y="6.562" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.529" Y="0.034" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>CAAEABAAEAAAAAAAAAIAAAAAEAAAAAQAAAAAgAAAAAA=</HashCode>
+      <HashCode>CAAEAJAAEIAAAAAAAAIAAAAAEAAAAAQAAAAAgAAAAAA=</HashCode>
       <FileName>DomainModel\SalesOrderHeader.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="condition" />
+      <Property Name="salesOrderLine" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="H1_ERP.DomainModel.SalesOrderLine">
     <Position X="6.25" Y="4.25" Width="1.5" />
+    <AssociationLine Name="product" Type="H1_ERP.DomainModel.Product" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.75" Y="5.938" />
+        <Point X="11" Y="5.938" />
+        <Point X="11" Y="5.776" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.06" Y="0.336" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAABAABAAAAAAAAAQAAAAAAAgAQAAAA=</HashCode>
+      <HashCode>AAACAAAAAgAAAAABAABAAAAAAAAAQAAAAAAAgAQAAAA=</HashCode>
       <FileName>DomainModel\SalesOrderLine.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="product" />
+    </ShowAsAssociation>
   </Class>
   <Enum Name="H1_ERP.DomainModel.Condtion">
     <Position X="4.75" Y="7.5" Width="1.5" />
