@@ -38,22 +38,6 @@ namespace H1_ERP.DomainModel
 
          public List<SalesOrderLine> OrderLines { get;  private set; }
 
-        public Condtion condition
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public SalesOrderLine salesOrderLine
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
         /// <summary>
         /// This is a method for calculating the total price of the wholde order
         /// </summary>
