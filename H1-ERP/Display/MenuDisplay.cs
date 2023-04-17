@@ -18,6 +18,8 @@ namespace H1_ERP.Display
             DisplayCompany displayCompany = new DisplayCompany();
             DisplayProduct displayProduct = new DisplayProduct();
             DisplaySalesScreen displaySalesOrderDetails = new DisplaySalesScreen();
+            DisplaySales displaySales = new DisplaySales();
+            menu.Add(displaySales);
             menu.Add(displayCustomer);
             menu.Add(displayCompany);
             menu.Add(displayProduct);
