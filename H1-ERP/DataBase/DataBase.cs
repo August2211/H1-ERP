@@ -13,7 +13,7 @@ namespace H1_ERP.DataBase
         private static SqlConnection getConnection()
         {
             SqlConnectionStringBuilder sb = new();
-            sb.DataSource = "docker.data.techcollege.dk";
+            sb.DataSource = "192.168.1.70";
             sb.InitialCatalog = "H1PD021123_Gruppe4";
             sb.UserID = "H1PD021123_Gruppe4";
             sb.Password = "H1PD021123_Gruppe4";
@@ -21,7 +21,7 @@ namespace H1_ERP.DataBase
             SqlConnection connection = new SqlConnection(connectionString);
             if (connection.State != System.Data.ConnectionState.Open)
             {
-                connection.Open();
+                    connection.Open();
             }
             return connection;
         }

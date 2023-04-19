@@ -90,6 +90,13 @@ namespace H1_ERP.Display
                 }
             };
 
+            Action<ProductDisplay> GoBackFunction = delegate (ProductDisplay display)
+            {
+                MenuDisplay menuDisplay = new MenuDisplay();
+                Screen.Display(menuDisplay);
+            };
+            listPage.AddKey(ConsoleKey.Q, GoBackFunction);
+
             Action<ProductDisplay> removeFunction = delegate (ProductDisplay product)
             {
                 var data = dataBase.GetDatafast($"DELETE FROM [dbo].[Product] WHERE ProductID = {product.Title2}");

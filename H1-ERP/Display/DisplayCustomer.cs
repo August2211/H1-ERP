@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using TECHCOOL.UI;
+using static H1_ERP.Display.DisplayCompany;
 
 namespace H1_ERP.Display
 {
@@ -231,7 +232,15 @@ namespace H1_ERP.Display
                 Console.Clear();
                 DisplayCustomer updatedScreen1 = new DisplayCustomer();
                 Screen.Display(updatedScreen1);
-            }; 
+            };
+
+            Action<CustomerDisplay> GoBackFunction = delegate (CustomerDisplay display)
+            {
+                MenuDisplay menuDisplay = new MenuDisplay();
+                Screen.Display(menuDisplay);
+            };
+            listPage.AddKey(ConsoleKey.Q, GoBackFunction);
+
             //when this action is fired we take the current customerdisplay ID and delete it in the database 
             Action<CustomerDisplay> Deletefunction = delegate (CustomerDisplay customer)
             {

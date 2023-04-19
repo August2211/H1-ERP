@@ -83,8 +83,14 @@ namespace H1_ERP.Display
                 DisplayCompany display = new DisplayCompany();
                 Screen.Display(display); 
             };
-            listPage.AddKey(ConsoleKey.F5, Deletefunction);      
+            listPage.AddKey(ConsoleKey.F5, Deletefunction);
 
+            Action<CompanyDisplay> GoBackFunction = delegate (CompanyDisplay display)
+            {
+                MenuDisplay menuDisplay = new MenuDisplay();
+                Screen.Display(menuDisplay);
+            };
+            listPage.AddKey(ConsoleKey.Q, GoBackFunction);
 
             Form<CompanyDisplay> form = new Form<CompanyDisplay>();
             try

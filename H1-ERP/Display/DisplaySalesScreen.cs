@@ -216,11 +216,15 @@ namespace H1_ERP.Display
             try
             {
                 OrderHeader = db.GetSalesOrderHeaderFromID(SalesList.IntBoxOutput);
-            } catch (Exception e) { }
+            }
+            catch (Exception e) { }
 
             if (OrderHeader == null)
             {
                 Console.WriteLine("Not Found!");
+                MenuDisplay menuDisplay = new MenuDisplay();
+                Console.ReadKey();
+                Screen.Display(menuDisplay);
                 return;
             };
 
@@ -266,7 +270,7 @@ namespace H1_ERP.Display
         }
     }
 
-   
+
     public partial class DisplaySales : Screen
     {
         public override string Title { get; set; } = "Sales";
@@ -294,7 +298,7 @@ namespace H1_ERP.Display
                 City = city;
                 PhoneNumber = phoneNumber;
                 Email = email;
-               
+
             }
             public SalesDisplay(string firstName, string lastName, string roadName, string streetNumber, string zipCode, string city, string phoneNumber, string email, string id)
             {
@@ -313,19 +317,19 @@ namespace H1_ERP.Display
 
         }
         protected override void Draw()
-            {
-                Clear(this);
-                Console.ForegroundColor = ConsoleColor.Blue;
-         
-                DataBase.DataBase db = new DataBase.DataBase();
+        {
+            Clear(this);
+            Console.ForegroundColor = ConsoleColor.Blue;
 
-                ListPage<SalesDisplay> listPage = new ListPage<SalesDisplay>();
-                SalesDisplay salesDisplay = new SalesDisplay("FirstName", "LastName", "RoadName", "StreetNumber", "ZipCode", "city", "PhoneNumber", "Email"); 
-               
+            DataBase.DataBase db = new DataBase.DataBase();
+
+            ListPage<SalesDisplay> listPage = new ListPage<SalesDisplay>();
+            SalesDisplay salesDisplay = new SalesDisplay("FirstName", "LastName", "RoadName", "StreetNumber", "ZipCode", "city", "PhoneNumber", "Email");
+
             List<Customer> customers = db.GetAllCustomers();
             foreach (var Customer in customers)
             {
-                listPage.Add(new SalesDisplay(Customer.FirstName, Customer.LastName, Customer.Address.RoadName,Customer.Address.StreetNumber,Customer.Address.ZipCode,Customer.Address.City,Customer.PhoneNumber,Customer.Email,Customer.CustomerId.ToString()));
+                listPage.Add(new SalesDisplay(Customer.FirstName, Customer.LastName, Customer.Address.RoadName, Customer.Address.StreetNumber, Customer.Address.ZipCode, Customer.Address.City, Customer.PhoneNumber, Customer.Email, Customer.CustomerId.ToString()));
             }
             listPage.AddColumn("FirstName", "FirstName", 10);
             listPage.AddColumn("LastName", "LastName", 10);
@@ -337,11 +341,18 @@ namespace H1_ERP.Display
             listPage.AddColumn("Email", "Email", 20);
 
 
-        Form<SalesDisplay> form = new Form<SalesDisplay>();
+            Form<SalesDisplay> form = new Form<SalesDisplay>();
+            try
+            {
+                Action<SalesDisplay> GoBackFunction = delegate (SalesDisplay display)
+                {
+                    MenuDisplay menuDisplay = new MenuDisplay();
+                    Screen.Display(menuDisplay);
+                };
+                listPage.AddKey(ConsoleKey.Q, GoBackFunction);
 
-        try{
-        var SelectedRow = listPage.Select();
-                if(SelectedRow.FirstName != null)
+                var SelectedRow = listPage.Select();
+                if (SelectedRow.FirstName != null)
                 {
                     Clear();
                     Console.Clear();
@@ -356,7 +367,7 @@ namespace H1_ERP.Display
                     SelectedSalesDisplay.AddColumn("PhoneNumber", "PhoneNumber", 15);
                     SelectedSalesDisplay.AddColumn("Email", "Email", 20);
                     Customer SelectedSales = customers.Select(x => x).Where(x => x.FirstName == SelectedRow.FirstName).FirstOrDefault();
-                    SelectedSalesDisplay.Add(new SalesDisplay(SelectedSales.FirstName, SelectedSales.LastName, SelectedSales.Address.RoadName, SelectedSales.Address.StreetNumber, SelectedSales.Address.ZipCode, SelectedSales.Address.City, SelectedSales.PhoneNumber, SelectedSales.Email,SelectedSales.Address.AdressID.ToString()));
+                    SelectedSalesDisplay.Add(new SalesDisplay(SelectedSales.FirstName, SelectedSales.LastName, SelectedSales.Address.RoadName, SelectedSales.Address.StreetNumber, SelectedSales.Address.ZipCode, SelectedSales.Address.City, SelectedSales.PhoneNumber, SelectedSales.Email, SelectedSales.Address.AdressID.ToString()));
 
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine("Click 'F1' to edit Sales.");
@@ -399,7 +410,7 @@ namespace H1_ERP.Display
 
                     while (true)
                     {
-                        
+
                         ConsoleKeyInfo saveKeyInfo = Console.ReadKey();
                         if (saveKeyInfo.Key == ConsoleKey.Enter)
                         {
@@ -410,12 +421,12 @@ namespace H1_ERP.Display
                             newAddress.City = salesDisplay.City;
                             newAddress.ZipCode = salesDisplay.ZipCode;
                             newAddress.RoadName = salesDisplay.RoadName;
-                            
+
                             var getdataFast = db.GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] Inner join [dbo].[Customers.Person] " +
                                 $"on [Customers.Person].PersonID = [Customer.Customers].PersonID inner join  [dbo].[Customer.Adress] " +
                                 $"on [Customers.Person].AdressID = [Customer.Adress].AdressID WHERE CustomerID = {SelectedRow.ID}");
                             newAddress.Country = getdataFast.ElementAt(0).Value[0].ToString();
-                            newAddress.AdressID = Convert.ToUInt32( getdataFast.ElementAt(0).Value[8]);
+                            newAddress.AdressID = Convert.ToUInt32(getdataFast.ElementAt(0).Value[8]);
 
                             newCustomer.FirstName = salesDisplay.FirstName;
                             newCustomer.LastName = salesDisplay.LastName;
@@ -448,7 +459,7 @@ namespace H1_ERP.Display
                     }
                 }
             }
-        catch{}
-    }
+            catch { }
         }
+    }
 }
