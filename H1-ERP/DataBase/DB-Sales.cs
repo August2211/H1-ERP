@@ -1,4 +1,5 @@
 ﻿using H1_ERP.DomainModel;
+using H1_ERP.Interfaces_s;
 using Org.BouncyCastle.Asn1;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace H1_ERP.DataBase
 {
-    public partial class DataBase
+    public partial class DataBase : IRepos<SalesOrderHeader>
     {
         /// <summary>
         /// This method returns a Object of SalesOrderheader type and it does so from the ID parameter of the database eqeuvelant
@@ -71,6 +72,7 @@ namespace H1_ERP.DataBase
                     var orderlineswithorderid = products.Values.Select(x => x).Where(x => x.ElementAt(13).ToString() == orderheaderline[0].ToString()).ToList();
                     foreach (var orderline in orderlineswithorderid)
                     {
+                        //we select the product with the matching ID 
                         var prod = products.Values.Select(x => x).Where(x => x.ElementAt(9).Equals(orderline[9])).FirstOrDefault();
                         Product product = new Product();
                         product.ProductId = Convert.ToInt32(prod[9]);
@@ -139,6 +141,32 @@ namespace H1_ERP.DataBase
         {
             Exec_SQL_Command($"$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id};" +
                 $" DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id};");
+        }
+
+        public SalesOrderHeader GetFromID(int id)
+        {
+            return GetSalesOrderHeaderFromID(id); 
+
+        }
+
+        public List<SalesOrderHeader> GetAll(int id)
+        {
+            return GetAll(); 
+        }
+
+        public void Delete(int id)
+        {
+            DeleteSalesOrderHeaderFromID(id);
+        }
+
+        public void Update(SalesOrderHeader enity)
+        {
+            UpdateSalesorderHeader((int)enity.OrderID, enity); 
+        }
+
+        public void Insert(SalesOrderHeader entity)
+        {
+            InsertSalesOrderHeader(entity); 
         }
     }
 }

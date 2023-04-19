@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H1-ERP", "H1-ERP\H1-ERP.csproj", "{3353BD06-C61E-4FEC-897F-88D605D89A3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WankAPI", "WankAPI\WankAPI.csproj", "{CFD23E73-E75F-4484-B32F-CEEB97CAA258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "W.A.N.K API", "WankAPI\W.A.N.K API.csproj", "{CFD23E73-E75F-4484-B32F-CEEB97CAA258}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

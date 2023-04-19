@@ -10,8 +10,8 @@ namespace H1_ERP.DomainModel
     public class Product
 
     {
-        ErrorHandling.ErrorHandling errorHandling =new(); //obj for ErrorHandling Class
-       
+        ErrorHandling.ErrorHandling errorHandling = new(); //obj for ErrorHandling Class
+
         private int _productId;
         private string _Name;
         private string _description;
@@ -24,15 +24,15 @@ namespace H1_ERP.DomainModel
         /*---------------------------------*/
 
 
-        public int ProductId        
+        public int ProductId
         {
             get
             {
                 return errorHandling.IsNull(_productId);
-               
+
             }
-            
-            set 
+
+            set
             {
                 _productId = errorHandling.IsNull(value);
 
@@ -43,25 +43,27 @@ namespace H1_ERP.DomainModel
         public string Name
         {
 
-            get 
-            { 
+            get
+            {
                 return errorHandling.IsNull(_Name);
             }
-            set { _Name = errorHandling.IsNull(value);  
-            
+            set
+            {
+                _Name = errorHandling.IsNull(value);
+
             }
         }
         /*---------------------------------*/
 
         public string Description
         {
-            get 
+            get
             {
-                return errorHandling.IsNull (_description);
+                return errorHandling.IsNull(_description);
             }
             set
             {
-                _description =errorHandling.IsNull (value);
+                _description = errorHandling.IsNull(value);
             }
         }
         /*---------------------------------*/
@@ -69,12 +71,12 @@ namespace H1_ERP.DomainModel
         public decimal SellingPrice
         {
             get
-            { 
-                return errorHandling.IsNegative (_sellingPrice); 
-            }
-            set 
             {
-                _sellingPrice = errorHandling.IsNegative (value);
+                return errorHandling.IsNegative(_sellingPrice);
+            }
+            set
+            {
+                _sellingPrice = errorHandling.IsNegative(value);
             }
         }
         /*---------------------------------*/
@@ -85,48 +87,48 @@ namespace H1_ERP.DomainModel
             {
                 return errorHandling.IsNegative(_purchasePrice);
             }
-            set 
+            set
             {
-                _purchasePrice = errorHandling.IsNegative (value); 
+                _purchasePrice = errorHandling.IsNegative(value);
             }
         }
         /*---------------------------------*/
 
         public string Location
         {
-            get 
-            { 
-                return errorHandling.IsNull (_location);
+            get
+            {
+                return errorHandling.IsNull(_location);
             }
             set
             {
-                _location = errorHandling.IsNull (value); 
+                _location = errorHandling.IsNull(value);
             }
         }
         /*---------------------------------*/
 
         public int ProductQuantity
         {
-            get 
+            get
             {
-                return errorHandling.IsNull (_productquantity);
+                return errorHandling.IsNull(_productquantity);
             }
             set
             {
-                _productquantity = errorHandling.IsNull (value);
+                _productquantity = errorHandling.IsNull(value);
             }
         }
         /*---------------------------------*/
 
         public int Unit
         {
-            get 
+            get
             {
-                return errorHandling.IsNull (_unit);
+                return errorHandling.IsNull(_unit);
             }
             set
             {
-                _unit = errorHandling.IsNull (value); 
+                _unit = errorHandling.IsNull(value);
             }
         }
         /*---------------------------------*/
