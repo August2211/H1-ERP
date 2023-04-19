@@ -31,6 +31,12 @@ namespace H1_ERP.DataBase
                 $"INNER JOIN [Customer.Adress] on " +
                 $"[Customer.Adress].AdressID = [Customers.Person].AdressID " +
                 $"WHERE CustomerID = {id}");
+
+            if(SelectedCustomer == null || SelectedCustomer.Count == 0)
+            {
+                return null;
+            }
+
             foreach (var row in SelectedCustomer.Values)
             {
                 result.CustomerId = Convert.ToInt32(SelectedCustomer.ElementAt(0).Value[0]);
@@ -146,6 +152,10 @@ namespace H1_ERP.DataBase
             Customer customercustomer = GetCustomerFromID(ID);
 
 
+            if(customercustomer == null)
+            {
+                return;
+            }
             var FindcustmertoDelete = GetData($"SELECT OrderID FROM [dbo].[Sales.Orders] WHERE CustomerID = {customercustomer.CustomerId}");
             //it means they dont have an order then we look them up in some other tables
             if (FindcustmertoDelete != null)

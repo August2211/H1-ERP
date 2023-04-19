@@ -46,6 +46,10 @@ namespace WankAPI.Controllers
         {
             try 
             { 
+                if(id == 0)
+                {
+                    return BadRequest("SWINE !");
+                }
                 _dataBase.DeleteCustomer(id);
                 return Ok("The customer with the id of " + id +" has been deleted sucessfully");
             }catch(Exception ex)
