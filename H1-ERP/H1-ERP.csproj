@@ -15,11 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="TECHCOOL" Version="1.3.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="InvoiceTemplate\" />
+    <Folder Include="DapperDB\" />
     <Folder Include="UI\" />
   </ItemGroup>
 

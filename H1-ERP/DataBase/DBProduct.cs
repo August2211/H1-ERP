@@ -85,7 +85,7 @@ namespace H1_ERP.DataBase
 
         public void DeleteProduct(int Input)
         {
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {Input.ProductId}"); 
+            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {Input}"); 
         }
     }
 }
