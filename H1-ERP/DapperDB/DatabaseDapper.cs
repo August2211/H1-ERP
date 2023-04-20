@@ -71,6 +71,12 @@ namespace H1_ERP.DapperDB
                 return res.ToList();
             }
         }
-
+        public T GetSingleEntityWithMultipleObectRef2<T, U>(string sql, Func<T, U, T> map, string splitOn)
+        {
+            using (var connection = getConnection())
+            {
+                return connection.Query<T, U, T>(sql, map, splitOn: splitOn).FirstOrDefault();
+            }
+        }
     }
 }
