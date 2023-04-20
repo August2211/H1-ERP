@@ -1,6 +1,7 @@
 ﻿using H1_ERP.DataBase;
 using H1_ERP.DomainModel;
 using Microsoft.AspNetCore.Mvc;
+using W.A.N.K_API.Repostoriy;
 
 namespace WankAPI.Controllers
 {
@@ -8,7 +9,7 @@ namespace WankAPI.Controllers
     [Route("[controller]")]
     public class ProductController : Controller
     {
-        private readonly DataBase _dataBase = new DataBase();
+        private readonly ProductrRpository _dataBase = new ProductrRpository();
 
         private readonly ILogger<ProductController> _logger;
         public ProductController(ILogger<ProductController> logger)
@@ -20,7 +21,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                var Product = _dataBase.GetAllProduct();
+                var Product = _dataBase.GetAll();
                 return Ok(Product);
             }
             catch(Exception ex)
@@ -34,7 +35,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                var Product = _dataBase.GetProductFromID(id);
+                var Product = _dataBase.GetFromID(id);
                 return Ok(Product);
             }
             catch (Exception ex)
@@ -47,8 +48,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                var product = _dataBase.GetProductFromID(id);
-                _dataBase.DeleteProduct(product);
+                _dataBase.Delete(id);
                 return Ok("The Product with the id of " + id + " has been deleted sucessfully");
             }
             catch (Exception ex)
@@ -66,7 +66,7 @@ namespace WankAPI.Controllers
             }
             else
             {
-                _dataBase.InputProduct(product);
+                _dataBase.Insert(product);
                 return Ok(product);
             }
         
@@ -76,7 +76,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                _dataBase.UpdataProduct(product);
+                _dataBase.Update(product);
                 return Ok(product.ProductId);
             }
             catch (Exception ex)

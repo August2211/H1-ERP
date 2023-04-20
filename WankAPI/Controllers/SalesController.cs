@@ -1,6 +1,7 @@
 ﻿using H1_ERP.DataBase;
 using H1_ERP.DomainModel;
 using Microsoft.AspNetCore.Mvc;
+using W.A.N.K_API.Repostoriy;
 
 namespace WankAPI.Controllers
 {
@@ -8,7 +9,7 @@ namespace WankAPI.Controllers
     [Route("[controller]")]
     public class SalesController : Controller
     {
-        private readonly DataBase _dataBase = new DataBase();
+        private readonly SalesRepository _dataBase = new SalesRepository();
 
         private readonly ILogger<SalesController> _logger;
         public SalesController(ILogger<SalesController> logger)
@@ -34,7 +35,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                var Order = _dataBase.GetSalesOrderHeaderFromID(id);
+                var Order = _dataBase.GetFromID(id);
                 return Ok(Order);
             }
             catch (Exception ex)
@@ -47,7 +48,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                _dataBase.DeleteSalesOrderHeaderFromID(id);
+                _dataBase.Delete(id);
                 return Ok("The Order with the id of " + id + " has been deleted sucessfully");
             }
             catch (Exception ex)
@@ -65,7 +66,7 @@ namespace WankAPI.Controllers
             }
             else
             {
-                _dataBase.InsertSalesOrderHeader(Order);
+                _dataBase.Insert(Order);
                 return Ok(Order.OrderID);
             }
 
@@ -75,7 +76,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                _dataBase.UpdateSalesorderHeader((int)Order.OrderID,Order);
+                _dataBase.Update(Order);
                 return Ok(Order.OrderID);
             }
             catch (Exception ex)

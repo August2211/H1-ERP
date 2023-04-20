@@ -1,6 +1,7 @@
 using H1_ERP.DataBase;
 using H1_ERP.DomainModel;
 using Microsoft.AspNetCore.Mvc;
+using W.A.N.K_API.Repostoriy;
 
 namespace WankAPI.Controllers
 {
@@ -8,7 +9,7 @@ namespace WankAPI.Controllers
     [Route("[controller]")]
     public class CustomerController : ControllerBase
     {
-        private readonly DataBase _dataBase = new DataBase();
+        private readonly CustomerRepos _dataBase = new CustomerRepos();
 
         private readonly ILogger<CustomerController> _logger;
 
@@ -19,13 +20,13 @@ namespace WankAPI.Controllers
         [HttpGet (Name ="GetCustomers")]
         public ActionResult<IEnumerable<Customer>> Get()
         {
-            var customer = _dataBase.GetAllCustomers(); 
+            var customer = _dataBase.GetAll(); 
             return Ok(customer); 
         }
         [HttpGet ("{id}",Name ="GetCustomerFromID")]
         public ActionResult GetCustomerFromID(int id)
         {
-            var res = _dataBase.GetCustomerFromID(id);
+            var res = _dataBase.GetFromID(id);
             return Ok(res);
         }
         [HttpPut (Name ="InsertCustomer")]
@@ -37,7 +38,7 @@ namespace WankAPI.Controllers
             }
             else
             {
-                _dataBase.InsertCustomer(customer);
+                _dataBase.Insert(customer);
                 return Ok(customer); 
             } 
         }
@@ -50,7 +51,7 @@ namespace WankAPI.Controllers
                 {
                     return BadRequest("SWINE !");
                 }
-                _dataBase.DeleteCustomer(id);
+                _dataBase.Delete(id);
                 return Ok("The customer with the id of " + id +" has been deleted sucessfully");
             }catch(Exception ex)
             {
@@ -62,7 +63,7 @@ namespace WankAPI.Controllers
         {
             try
             {
-                _dataBase.UpdateCustomer(customer);
+                _dataBase.Update(customer);
                 return Ok(customer.CustomerId);
             }
             catch (Exception ex)

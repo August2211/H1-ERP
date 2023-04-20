@@ -9,7 +9,7 @@ namespace H1_ERP.Interfaces_s
     public interface IRepos<T>
     {
         T GetFromID(int id);
-        List<T> GetAll(int id);
+        List<T> GetAll();
         void Delete(int id);
         void Update(T enity);
         void Insert(T entity); 
