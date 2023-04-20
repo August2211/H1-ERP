@@ -15,8 +15,8 @@ namespace H1_ERP
         {
             //MenuDisplay menuDisplay = new MenuDisplay();
             //Screen.Display(menuDisplay);
-            DatabaseDapper<Product> database = new DatabaseDapper<Product>();
-            Product nemt = database.GetEntity("SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProducID = 2");
+            DatabaseDapper<Customer> database = new DatabaseDapper<Customer>();
+            var nemt = database.GetAllSingleEntities<Customer>("SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers]"); 
 
         }
     }

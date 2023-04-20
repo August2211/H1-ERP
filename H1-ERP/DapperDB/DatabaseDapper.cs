@@ -1,6 +1,8 @@
 ﻿using Dapper;
+using H1_ERP.DomainModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -26,7 +28,7 @@ namespace H1_ERP.DapperDB
             return connection;
         }
 
-        public  T GetEntity(string sql)
+        public T GetSingleEntity(string sql)
         {
             using (var connenction = getConnection())
             {
@@ -36,6 +38,39 @@ namespace H1_ERP.DapperDB
             }
         }
 
+        public (T1, T2) GetSingleEntityWithMultipleObectRef<T1, T2>(string sql, Func<T1, T2, bool> predicate, string splitOn)
+        {
+            using (var connection = getConnection())
+            {
+                var results = connection.Query<T1, T2, (T1, T2)>(
+                    sql,
+                    (t1, t2) =>
+                    {
+                        return (t1, t2);
+                    },
+                    splitOn: splitOn
+                );
+
+                var filteredResults = results.FirstOrDefault(t => predicate(t.Item1, t.Item2));
+
+                connection.Close();
+
+                return (filteredResults.Item1, filteredResults.Item2);
+            }
+        }
+
+        public List<T> GetAllSingleEntities<T>(string sql)
+        {
+            using (var conn = getConnection())
+            {
+                var res = conn.Query<T>(sql, (Func<IDataReader, T>)(t1 =>
+                {
+                    return (T)t1;
+                }));
+
+                return res.ToList();
+            }
+        }
 
     }
 }

@@ -72,7 +72,7 @@ namespace H1_ERP.Display
             //Create a list with SalesOrders to show on the screen.
             ListPage<SalesList> list = new ListPage<SalesList>();
 
-            SalesList SalesList = new SalesList("Order ID", "Date Of Order", "Expected Delivery Date", "Customer ID", "Customer Full Name", "Total Order Price");
+            SalesList SalesList = new SalesList("Order ID", "Date Of Order", "Expected Delivery Date", "Customer ID", "Customer Full ProductName", "Total Order Price");
 
             //Editor to select the OrderLineID to get the order details.
             Form<SalesList> editor = new Form<SalesList>();
@@ -192,7 +192,7 @@ namespace H1_ERP.Display
             list.AddColumn("Date Of Order ", "DateOfOrder", 25);
             list.AddColumn("Expected Delivery Date ", "ExpectedDeliveryDate", 25);
             list.AddColumn("Customer ID ", "CustomerID");
-            list.AddColumn("Customer Full Name ", "CustomerFullName", 25);
+            list.AddColumn("Customer Full ProductName ", "CustomerFullName", 25);
             list.AddColumn("Total Order Price", "TotalOrderPrice", 17);
 
             //Draw the list.

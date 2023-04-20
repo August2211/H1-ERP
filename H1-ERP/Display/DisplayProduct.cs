@@ -25,13 +25,13 @@ namespace H1_ERP.Display
 
             foreach (Product product in products)
             {
-                listPage.Add(new ProductDisplay(product.Name, product.ProductId.ToString(), product.ProductQuantity.ToString(), product.PurchasePrice, product.SellingPrice, (double)product.PurchasePrice / (double)product.SellingPrice * 100));
+                listPage.Add(new ProductDisplay(product.ProductName, product.ProductId.ToString(), product.ProductQuantity.ToString(), product.ProductPurchasePrice, product.ProductSalePrice, (double)product.ProductPurchasePrice / (double)product.ProductSalePrice * 100));
 
             }
 
 
-            listPage.AddColumn("Name", "Title1", 10);
-            listPage.AddColumn("Itemnumber", "Title2", products.Select(x => x.Name.Length).Max());
+            listPage.AddColumn("ProductName", "Title1", 10);
+            listPage.AddColumn("Itemnumber", "Title2", products.Select(x => x.ProductName.Length).Max());
             listPage.AddColumn("Quantity", "Title3", 10);
             listPage.AddColumn("BuyPrice", "Title4", 10);
             listPage.AddColumn("SalePrice", "Title5", 10);
@@ -79,23 +79,14 @@ namespace H1_ERP.Display
                 else
                 {
 
-                    try
-                    {
-                        values[Console.GetCursorPosition().Top - 5] = newValue;
+                    values[Console.GetCursorPosition().Top - 5] = newValue;
 
-                        dataBase.Exec_SQL_Command($"UPDATE [dbo].[Product] SET ProductName = '{values[1]}', ProductDescription = '{values[2]}', ProductSalePrice = '{values[3]}', ProductPurchasePrice = '{values[4]}', ProductLocation = '{values[5]}', ProductQuantity = '{values[6]}', ProductUnit = '{values[7]}' WHERE ProductID = '{values[0]}' " +
-                        $"UPDATE [dbo].[Sales.OrderLines] SET TotalQuantityPrice = (SinglePrice * OrderQuantity) WHERE ProductID = '{values[0]}' " +
-                        $"UPDATE [dbo].[Sales.Orders] SET TotalPriceOfOrder = (SELECT SUM(TotalQuantityPrice) FROM [dbo].[Sales.OrderLines] WHERE OrderID = {values[0]}) WHERE OrderID = {values[0]}");
-                        Clear(this);
-                        Console.WriteLine("Product edited");
-                        Console.ReadKey();
-                    }
-                    catch
-                    {
-                        Clear(this);
-                        Console.WriteLine("Invalid value input!");
-                        Console.ReadKey();
-                    }
+                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Product] SET ProductName = '{values[1]}', ProductDescription = '{values[2]}', ProductSalePrice = '{values[3]}', ProductPurchasePrice = '{values[4]}', ProductLocation = '{values[5]}', ProductQuantity = '{values[6]}', ProductUnit = '{values[7]}' WHERE ProductID = '{values[0]}'");
+                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.OrderLines] SET TotalQuantityPrice = (SinglePrice * OrderQuantity) WHERE ProductID = '{values[0]}'");
+                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.Orders] SET TotalPriceOfOrder = (SELECT SUM(Total) FROM [dbo].[Sales.OrderLines] WHERE OrderID = {values[0]}) WHERE OrderID = {values[0]}");
+                    Clear(this);
+                    Console.WriteLine("Product edited");
+                    Console.ReadKey();
                 }
             };
 
@@ -155,24 +146,24 @@ namespace H1_ERP.Display
                 Console.Clear();
                 ListPage<ProductDisplay> SelectedCustomerDisplay = new ListPage<ProductDisplay>();
                 SelectedCustomerDisplay.AddColumn("Itemnumber", "Title1");
-                SelectedCustomerDisplay.AddColumn("Name", "Title2");
-                SelectedCustomerDisplay.AddColumn("Description", "Title3");
+                SelectedCustomerDisplay.AddColumn("ProductName", "Title2");
+                SelectedCustomerDisplay.AddColumn("ProductDescription", "Title3");
                 SelectedCustomerDisplay.AddColumn("SalesPrice", "Title4");
                 SelectedCustomerDisplay.AddColumn("BuyPrice", "Title5");
                 SelectedCustomerDisplay.AddColumn("Quantity", "Title6");
-                SelectedCustomerDisplay.AddColumn("Location", "Title7");
+                SelectedCustomerDisplay.AddColumn("ProductLocation", "Title7");
                 SelectedCustomerDisplay.AddColumn("Avance %", "Title8");
-                SelectedCustomerDisplay.AddColumn("Unit", "Title9");
+                SelectedCustomerDisplay.AddColumn("ProductUnit", "Title9");
                 SelectedCustomerDisplay.AddColumn("Avance KR", "Title10");
                 Product SelectedProduct = products.Select(x => x).Where(x => x.ProductId == Convert.ToInt32(SelectedRow.Title2)).FirstOrDefault();
                 SelectedCustomerDisplay.Add(new ProductDisplay(
                     SelectedProduct.ProductId.ToString(),
-                    SelectedProduct.Name,
-                    SelectedProduct.Description,
-                    SelectedProduct.SellingPrice,
-                    SelectedProduct.PurchasePrice, SelectedProduct.Location, (double)SelectedProduct.PurchasePrice / (double)SelectedProduct.SellingPrice * 100,
-                    SelectedProduct.Unit,
-                    ((double)SelectedProduct.PurchasePrice / (double)SelectedProduct.SellingPrice * 100) * (double)SelectedProduct.PurchasePrice,
+                    SelectedProduct.ProductName,
+                    SelectedProduct.ProductDescription,
+                    SelectedProduct.ProductSalePrice,
+                    SelectedProduct.ProductPurchasePrice, SelectedProduct.ProductLocation, (double)SelectedProduct.ProductPurchasePrice / (double)SelectedProduct.ProductSalePrice * 100,
+                    SelectedProduct.ProductUnit,
+                    ((double)SelectedProduct.ProductPurchasePrice / (double)SelectedProduct.ProductSalePrice * 100) * (double)SelectedProduct.ProductPurchasePrice,
                     SelectedProduct.ProductQuantity));
                 SelectedCustomerDisplay.Draw();
             }

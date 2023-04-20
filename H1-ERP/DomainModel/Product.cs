@@ -40,7 +40,7 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public string Name
+        public string ProductName
         {
 
             get
@@ -55,7 +55,7 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public string Description
+        public string ProductDescription
         {
             get
             {
@@ -68,7 +68,7 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public decimal SellingPrice
+        public decimal ProductSalePrice
         {
             get
             {
@@ -81,7 +81,7 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public decimal PurchasePrice
+        public decimal ProductPurchasePrice
         {
             get
             {
@@ -94,7 +94,7 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public string Location
+        public string ProductLocation
         {
             get
             {
@@ -120,7 +120,7 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public int Unit
+        public int ProductUnit
         {
             get
             {
@@ -134,12 +134,12 @@ namespace H1_ERP.DomainModel
         /*---------------------------------*/
         public decimal CalculateProfit()
         {
-            return SellingPrice - PurchasePrice;
+            return ProductSalePrice - ProductPurchasePrice;
         }
 
         public decimal CalculateProfitPercentage()
         {
-            return (CalculateProfit() / SellingPrice) * 100;
+            return (CalculateProfit() / ProductSalePrice) * 100;
         }
     }
 }
