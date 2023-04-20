@@ -79,14 +79,23 @@ namespace H1_ERP.Display
                 else
                 {
 
-                    values[Console.GetCursorPosition().Top - 5] = newValue;
+                    try
+                    {
+                        values[Console.GetCursorPosition().Top - 5] = newValue;
 
-                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Product] SET ProductName = '{values[1]}', ProductDescription = '{values[2]}', ProductSalePrice = '{values[3]}', ProductPurchasePrice = '{values[4]}', ProductLocation = '{values[5]}', ProductQuantity = '{values[6]}', ProductUnit = '{values[7]}' WHERE ProductID = '{values[0]}'");
-                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.OrderLines] SET TotalQuantityPrice = (SinglePrice * OrderQuantity) WHERE ProductID = '{values[0]}'");
-                    dataBase.Exec_SQL_Command($"UPDATE [dbo].[Sales.Orders] SET TotalPriceOfOrder = (SELECT SUM(Total) FROM [dbo].[Sales.OrderLines] WHERE OrderID = {values[0]}) WHERE OrderID = {values[0]}");
-                    Clear(this);
-                    Console.WriteLine("Product edited");
-                    Console.ReadKey();
+                        dataBase.Exec_SQL_Command($"UPDATE [dbo].[Product] SET ProductName = '{values[1]}', ProductDescription = '{values[2]}', ProductSalePrice = '{values[3]}', ProductPurchasePrice = '{values[4]}', ProductLocation = '{values[5]}', ProductQuantity = '{values[6]}', ProductUnit = '{values[7]}' WHERE ProductID = '{values[0]}' " +
+                        $"UPDATE [dbo].[Sales.OrderLines] SET TotalQuantityPrice = (SinglePrice * OrderQuantity) WHERE ProductID = '{values[0]}' " +
+                        $"UPDATE [dbo].[Sales.Orders] SET TotalPriceOfOrder = (SELECT SUM(TotalQuantityPrice) FROM [dbo].[Sales.OrderLines] WHERE OrderID = {values[0]}) WHERE OrderID = {values[0]}");
+                        Clear(this);
+                        Console.WriteLine("Product edited");
+                        Console.ReadKey();
+                    }
+                    catch
+                    {
+                        Clear(this);
+                        Console.WriteLine("Invalid value input!");
+                        Console.ReadKey();
+                    }
                 }
             };
 
