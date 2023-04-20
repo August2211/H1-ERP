@@ -127,11 +127,13 @@ namespace H1_ERP.DataBase
         /// <param name="NewsalesHeader"></param>
         public void UpdateSalesorderHeader(int ID, SalesOrderHeader NewsalesHeader)
         {
-            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {NewsalesHeader.TotalOrderPrice()}, ExpectedDeliveryDate = {NewsalesHeader.CompletionTime} WHERE OrderID = {ID}");
+            string sqlCommands = "";
             foreach (var OrderLines in NewsalesHeader.OrderLines)
             {
-                Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SingleUnitPrice}, OrderQuantity = {OrderLines.Quantity}, TotalQuantityPrice = {OrderLines.TotalPrice} WHERE OrderID = {ID} AND OrderLineID ={OrderLines.Id}"); 
+                sqlCommands += $"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SingleUnitPrice.ToString().Replace(',','.')}, OrderQuantity = {OrderLines.Quantity.ToString().Replace(',', '.')}, TotalQuantityPrice = {OrderLines.TotalPrice.ToString().Replace(',', '.')} WHERE OrderID = {ID} AND OrderLineID = {OrderLines.Id};\n";
             }
+            sqlCommands = $"SET DATEFORMAT dmy;\nUPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {NewsalesHeader.TotalOrderPrice().ToString().Replace(',', '.')}, ExpectedDeliveryDate = CONVERT(datetime,'{NewsalesHeader.CompletionTime}', 103) WHERE OrderID = {ID};\n" + sqlCommands;
+            Exec_SQL_Command(sqlCommands);
         }
         /// <summary>
         /// Deletes a instance from the DB with the given ID
