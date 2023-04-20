@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="InvoiceTemplate\" />
-    <Folder Include="DapperDB\" />
     <Folder Include="UI\" />
   </ItemGroup>
 
