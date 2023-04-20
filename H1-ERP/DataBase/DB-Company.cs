@@ -13,35 +13,27 @@ namespace H1_ERP.DataBase
 
         public Company GetCompanyFromID(int id)
         {
-    
+
             Company company = new Company();
             company.CompanyID = id;
             Address address = new Address();
             SqlConnection conn = getConnection();
-            var SelectedCompany = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {id}", conn);
-             company.CompanyID = Convert.ToInt32(SelectedCompany.ElementAt(0).Value[2]);
-             company.Currency = (Company.currency)Convert.ToInt32(SelectedCompany.ElementAt(2).Value[2]);
-            string sql = $"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {company.CompanyID}";
-            var SelectedCompanies = GetData(sql, conn);
-            foreach ( var row in SelectedCompanies.Values)
-                {
-                    company.CompanyID = Convert.ToInt32(SelectedCompany.ElementAt(0).Value[0]);
-                    company.CompanyName = row[1].ToString();                 
-                    company.Currency = (Company.currency)Convert.ToInt32(SelectedCompany.ElementAt(2).Value[2]);             
-           
-            }
-            var addressID = GetData($"SELECT AdressID FROM[H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {company.CompanyID}", conn);
-            var TheAdress = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {addressID.ElementAt(0).Value[0]}", conn);
-          foreach( var adress in TheAdress.Values) 
-            {
-                address.AdressID = Convert.ToUInt32(adress.ElementAt(0));
-                address.RoadName = adress.ElementAt(1).ToString();
-                address.StreetNumber = adress.ElementAt(2).ToString();
-                address.ZipCode = adress.ElementAt(3).ToString();
-                address.City = adress.ElementAt(4).ToString();
-                address.Country = adress.ElementAt(5).ToString();
+            var SelectedCompany = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Company] INNER JOIN [Customer.Adress] ON " +
+                $"[Customer.Adress].AdressID = Company.AdressID " +
+                $"WHERE CompanyID = {id}", conn);
+            company.CompanyID = Convert.ToInt32(SelectedCompany.ElementAt(0).Value[0]);
+            company.CompanyName = SelectedCompany.ElementAt(0).Value[1].ToString();
+            company.Currency = (Company.currency)Convert.ToInt32(SelectedCompany.ElementAt(0).Value[2]);
 
-            }
+
+            address.AdressID = Convert.ToUInt32(SelectedCompany.ElementAt(0).Value[3]);
+            address.RoadName = SelectedCompany.ElementAt(0).Value[5].ToString();
+            address.StreetNumber = SelectedCompany.ElementAt(0).Value[6].ToString();
+            address.ZipCode = SelectedCompany.ElementAt(0).Value[7].ToString();
+            address.City = SelectedCompany.ElementAt(0).Value[8].ToString();
+            address.Country = SelectedCompany.ElementAt(0).Value[9].ToString();
+
+
             if (address.AdressID != 0)
             {
                 company.Address = address;
@@ -55,9 +47,9 @@ namespace H1_ERP.DataBase
             SqlConnection connection = getConnection();
             List<Company> result = new List<Company>();
             var AllCompanies = GetData("SELECT * FROM [dbo].[Company] INNER JOIN [dbo].[Customer.Adress] ON [dbo].[Company].AdressID = [dbo].[Customer.Adress].AdressID");
-               
-                foreach(var row in AllCompanies.Values) 
-            { 
+
+            foreach (var row in AllCompanies.Values)
+            {
                 Company companies = new Company();
                 companies.CompanyID = Convert.ToInt32(row[0]);
                 companies.CompanyName = row[1].ToString();
@@ -69,11 +61,11 @@ namespace H1_ERP.DataBase
                 address.ZipCode = row[7].ToString();
                 address.City = row[8].ToString();
                 address.Country = row[9].ToString();
-              
+
                 companies.Address = address;
                 result.Add(companies);
             }
-                connection.Close();
+            connection.Close();
             return result;
 
         }  //InsertSalesOrderHeader the Company and put it in dataBase
@@ -96,7 +88,7 @@ namespace H1_ERP.DataBase
         public void UpdateCompany(Company Input)
         {
             SqlConnection connection = getConnection();
-           string sql2 = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] set RoadName = '{Input.Address.RoadName}',  StreetNumber='{Input.Address.StreetNumber}', ZipCode='{Input.Address.ZipCode}', City= '{Input.Address.City}', Country='{Input.Address.Country}' WHERE AdressID='{Input.Address.AdressID}'";
+            string sql2 = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] set RoadName = '{Input.Address.RoadName}',  StreetNumber='{Input.Address.StreetNumber}', ZipCode='{Input.Address.ZipCode}', City= '{Input.Address.City}', Country='{Input.Address.Country}' WHERE AdressID='{Input.Address.AdressID}'";
             SqlCommand sqlCommand2 = new SqlCommand(sql2, connection);
             sqlCommand2.ExecuteNonQuery();
 
