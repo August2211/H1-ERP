@@ -45,14 +45,5 @@ namespace H1_ERP.DapperDB
             }
 
         }
-
-        public SalesOrderHeader GetSalesOrderHeader()
-        {
-            using (var conn = getConnection())
-            {
-
-            }
-        }
-
     }
 }
