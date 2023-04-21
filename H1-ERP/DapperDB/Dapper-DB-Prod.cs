@@ -47,6 +47,7 @@ namespace H1_ERP.DapperDB
 
         }
 
+
         public void UpdateProduct(Product Input)
         {
             using (var conn = getConnection())
@@ -54,14 +55,6 @@ namespace H1_ERP.DapperDB
                 conn.Execute($"UPDATE [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.ProductName}', ProductDescription = '{Input.ProductDescription}',ProductSalePrice = '{Input.ProductSalePrice}',ProductPurchasePrice = '{Input.ProductPurchasePrice}', ProductLocation ='{Input.ProductLocation}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.ProductUnit}') WHERE ProductID = {Input.ProductID}"); 
             }
         }
-
-        //public SalesOrderHeader GetSalesOrderHeader()
-        //{
-        //    using (var conn = getConnection())
-        //    {
-
-        //    }
-        //}
 
     }
 }

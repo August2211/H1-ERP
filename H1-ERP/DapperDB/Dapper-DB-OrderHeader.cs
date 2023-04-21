@@ -82,5 +82,30 @@ namespace H1_ERP.DapperDB
                 return OrderHeader;
             }
         }
+
+        public void DeleteSalesOrderHeaderFromID(int id)
+        {
+            using (var connection = getConnection())
+            {
+                connection.Execute($"$DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] WHERE OrderID = {id};" +
+                $" DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id};"); 
+            }
+
+        }
+        public void UpdateSalesOrderHeader(SalesOrderHeader salesOrderHeader)
+        {
+            using(var conn = getConnection())
+            {
+                string sqlCommands = "";
+                foreach (var OrderLines in salesOrderHeader.OrderLines)
+                {
+                    sqlCommands += $"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SinglePrice.ToString().Replace(',', '.')}, OrderQuantity = {OrderLines.Quantity.ToString().Replace(',', '.')}, TotalQuantityPrice = {OrderLines.TotalQuantityPrice.ToString().Replace(',', '.')} WHERE OrderID = {salesOrderHeader} AND OrderLineID = {OrderLines.OrderLineID};\n";
+                }
+                sqlCommands = $"SET DATEFORMAT dmy;\nUPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {salesOrderHeader.TotalOrderPrice().ToString().Replace(',', '.')}, ExpectedDeliveryDate = CONVERT(datetime,'{salesOrderHeader.ExpectedDeliveryDate}', 103) WHERE OrderID = {salesOrderHeader.OrderID};\n" + sqlCommands;
+                conn.Execute(sqlCommands);
+            }
+
+        }
+
     }
 }
