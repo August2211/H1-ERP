@@ -26,5 +26,16 @@ namespace H1_ERP.DapperDB
 
         }
 
+        public List<Product> GetallProducts()
+        {
+
+            using (var conn = getConnection())
+            {
+                var query = conn.Query<Product>($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]").ToList();
+                return query; 
+            }
+
+        }
+
     }
 }
