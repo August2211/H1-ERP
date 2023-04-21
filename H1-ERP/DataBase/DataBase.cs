@@ -15,9 +15,22 @@ namespace H1_ERP.DataBase
     {
         void IllegalComments(string sql)
         {
-            if(sql.LastIndexOf('\'') < sql.LastIndexOf("--"))
+            int total = 0;
+            foreach (string s in sql.Split(""))
             {
-                throw new Exception("Injection not allowed");
+                if (s == "'") total++;
+                if (s == "--")
+                {
+                    if (total % 2 == 1)
+                    {
+                        throw new Exception("SQL Inject Detected");
+                    }
+                    break;
+                }
+            }
+            if (sql.LastIndexOf('\'') < sql.LastIndexOf("--"))
+            {
+                throw new Exception("SQL Inject Detected");
             }
         }
         private static SqlConnection getConnection()
@@ -31,7 +44,7 @@ namespace H1_ERP.DataBase
             SqlConnection connection = new SqlConnection(connectionString);
             if (connection.State != System.Data.ConnectionState.Open)
             {
-                    connection.Open();
+                connection.Open();
             }
             return connection;
         }
@@ -41,30 +54,30 @@ namespace H1_ERP.DataBase
         /// <param name="Sql"> Wrtie your SQL statement in this</param>
         /// <param name="connection">Your connection to a given DB</param>
         /// <returns>a dictionary with the rownumber as a key and the value as a list of obejcts(row content in database) :) if the statement does not contain anything it returns null</returns>
-        private Dictionary<object,List<object>> GetData(string Sql, SqlConnection connection)
+        private Dictionary<object, List<object>> GetData(string Sql, SqlConnection connection)
         {
             IllegalComments(Sql);
-            Dictionary <object,List<object>> Rows = new Dictionary<object, List<object>>();
+            Dictionary<object, List<object>> Rows = new Dictionary<object, List<object>>();
             SqlCommand sqlCommand = new SqlCommand(Sql, connection);
             SqlDataReader reader = sqlCommand.ExecuteReader();
             int rows = 0;
             while (reader.Read())
             {
-                rows = 0; 
+                rows = 0;
                 List<object> list = new List<object>();
                 while (reader.FieldCount > rows)
                 {
                     list.Add(reader[rows]);
                     rows++;
 
-                 
+
 
                 }
-                
+
                 Rows.Add(reader.GetValue(0), list);
-                foreach(var s in list)
+                foreach (var s in list)
                 {
-                    switch(s) 
+                    switch (s)
                     {
 
 
@@ -77,7 +90,7 @@ namespace H1_ERP.DataBase
             }
             reader.Close();
 
-            if (Rows.Count  <= 0)
+            if (Rows.Count <= 0)
             {
                 return null;
             }
@@ -183,7 +196,7 @@ namespace H1_ERP.DataBase
             IllegalComments(SQL);
             var connection = getConnection();
             SqlCommand command = new SqlCommand(SQL, connection);
-                command.ExecuteNonQuery();
+            command.ExecuteNonQuery();
             connection.Close();
         }
     }
