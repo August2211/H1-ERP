@@ -13,6 +13,13 @@ namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
+        void IllegalComments(string sql)
+        {
+            if(sql.LastIndexOf('\'') < sql.LastIndexOf("--"))
+            {
+                throw new Exception("Injection not allowed");
+            }
+        }
         private static SqlConnection getConnection()
         {
             SqlConnectionStringBuilder sb = new();
@@ -36,6 +43,7 @@ namespace H1_ERP.DataBase
         /// <returns>a dictionary with the rownumber as a key and the value as a list of obejcts(row content in database) :) if the statement does not contain anything it returns null</returns>
         private Dictionary<object,List<object>> GetData(string Sql, SqlConnection connection)
         {
+            IllegalComments(Sql);
             Dictionary <object,List<object>> Rows = new Dictionary<object, List<object>>();
             SqlCommand sqlCommand = new SqlCommand(Sql, connection);
             SqlDataReader reader = sqlCommand.ExecuteReader();
@@ -77,6 +85,7 @@ namespace H1_ERP.DataBase
         }
         public Dictionary<object, List<object>> GetData(string Sql)
         {
+            IllegalComments(Sql);
             var connection = getConnection();
             Dictionary<object, List<object>> Rows = new Dictionary<object, List<object>>();
             SqlCommand sqlCommand = new SqlCommand(Sql, connection);
@@ -103,6 +112,7 @@ namespace H1_ERP.DataBase
         }
         public Dictionary<object, object[]> GetDatafast(string Sql)
         {
+            IllegalComments(Sql);
             var connection = getConnection();
             Dictionary<object, object[]> Rows = new Dictionary<object, object[]>();
             using (var sqlCommand = new SqlCommand(Sql, connection))
@@ -129,6 +139,7 @@ namespace H1_ERP.DataBase
         }
         public Dictionary<object, object[]> GetdataFastFromJoinsWithouttheKeyvalueparoftheId(string sql)
         {
+            IllegalComments(sql);
             var connection = getConnection();
             Dictionary<object, object[]> Rows = new Dictionary<object, object[]>();
             int i = 0;
@@ -163,14 +174,16 @@ namespace H1_ERP.DataBase
         /// <param name="connection"></param>
         public void Exec_SQL_Command(string SQL, SqlConnection connection)
         {
+            IllegalComments(SQL);
             SqlCommand command = new SqlCommand(SQL, connection);
             command.ExecuteNonQuery();
         }
         public void Exec_SQL_Command(string SQL)
         {
+            IllegalComments(SQL);
             var connection = getConnection();
             SqlCommand command = new SqlCommand(SQL, connection);
-            command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
             connection.Close();
         }
     }
