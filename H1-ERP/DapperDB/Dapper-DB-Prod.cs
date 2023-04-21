@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using H1_ERP.DomainModel;
+using Org.BouncyCastle.Math.EC.Multiplier;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,13 +47,21 @@ namespace H1_ERP.DapperDB
 
         }
 
-        public SalesOrderHeader GetSalesOrderHeader()
+        public void UpdateProduct(Product Input)
         {
             using (var conn = getConnection())
             {
-
+                conn.Execute($"UPDATE [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.ProductName}', ProductDescription = '{Input.ProductDescription}',ProductSalePrice = '{Input.ProductSalePrice}',ProductPurchasePrice = '{Input.ProductPurchasePrice}', ProductLocation ='{Input.ProductLocation}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.ProductUnit}') WHERE ProductID = {Input.ProductID}"); 
             }
         }
+
+        //public SalesOrderHeader GetSalesOrderHeader()
+        //{
+        //    using (var conn = getConnection())
+        //    {
+
+        //    }
+        //}
 
     }
 }

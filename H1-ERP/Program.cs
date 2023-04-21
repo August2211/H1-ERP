@@ -17,7 +17,7 @@ namespace H1_ERP
             //MenuDisplay menuDisplay = new MenuDisplay();
             //Screen.Display(menuDisplay);
             DatabaseDapper database = new DatabaseDapper();
-            var gg =  database.GetProductFromID(4);
+            var gg =  database.GetAllCustomers();                                                                                                                                                                                                                                                                                                                                            
         }
     }
 }
