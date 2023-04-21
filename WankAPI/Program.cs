@@ -15,6 +15,7 @@ namespace WankAPI
             builder.Services.AddScoped <IRepos<Customer>, CustomerRepos>();
             builder.Services.AddScoped<IRepos<Product>, ProductrRpository>(); 
             builder.Services.AddScoped<IRepos<SalesOrderHeader>, SalesRepository>();
+            
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

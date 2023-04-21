@@ -1,10 +1,13 @@
 ﻿using H1_ERP.DomainModel;
+using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TECHCOOL.UI;
 
 namespace H1_ERP.DataBase
 {
@@ -68,13 +71,10 @@ namespace H1_ERP.DataBase
 
             if (Rows.Count  <= 0)
             {
-                return null; 
+                return null;
             }
-            return Rows; 
-
+            return Rows;
         }
-
-
         public Dictionary<object, List<object>> GetData(string Sql)
         {
             var connection = getConnection();
@@ -82,7 +82,6 @@ namespace H1_ERP.DataBase
             SqlCommand sqlCommand = new SqlCommand(Sql, connection);
             SqlDataReader reader = sqlCommand.ExecuteReader();
             int rows = 0;
-
             while (reader.Read())
             {
                 rows = 0;
@@ -92,11 +91,9 @@ namespace H1_ERP.DataBase
                     list.Add(reader[rows]);
                     rows++;
                 }
-
                 Rows.Add(reader.GetValue(0), list);
             }
             reader.Close();
-
             if (Rows.Count <= 0)
             {
                 return null;
@@ -104,7 +101,6 @@ namespace H1_ERP.DataBase
             connection.Close();
             return Rows;
         }
-
         public Dictionary<object, object[]> GetDatafast(string Sql)
         {
             var connection = getConnection();
@@ -114,19 +110,14 @@ namespace H1_ERP.DataBase
                 using (var reader = sqlCommand.ExecuteReader())
                 {
                     int rows = 0;
-
                     while (reader.Read())
                     {
                         rows = 0;
                         object[] list = new object[reader.FieldCount];
-
                         reader.GetValues(list);
-                        
-
                         Rows.Add(reader.GetValue(0), list);
                     }
                     reader.Close();
-
                     if (Rows.Count <= 0)
                     {
                         return null;
@@ -136,32 +127,25 @@ namespace H1_ERP.DataBase
                 }
             }
         }
-
-
         public Dictionary<object, object[]> GetdataFastFromJoinsWithouttheKeyvalueparoftheId(string sql)
         {
             var connection = getConnection();
             Dictionary<object, object[]> Rows = new Dictionary<object, object[]>();
-            int i = 0; 
+            int i = 0;
             using (var sqlCommand = new SqlCommand(sql, connection))
             {
                 using (var reader = sqlCommand.ExecuteReader())
                 {
                     int rows = 0;
-
                     while (reader.Read())
                     {
                         rows = 0;
                         object[] list = new object[reader.FieldCount];
-
                         reader.GetValues(list);
-
-
                         Rows.Add(i, list);
-                        ++i; 
+                        ++i;
                     }
                     reader.Close();
-
                     if (Rows.Count <= 0)
                     {
                         return null;
@@ -170,7 +154,6 @@ namespace H1_ERP.DataBase
                     return Rows;
                 }
             }
-
         }
 
         /// <summary>
@@ -181,9 +164,8 @@ namespace H1_ERP.DataBase
         public void Exec_SQL_Command(string SQL, SqlConnection connection)
         {
             SqlCommand command = new SqlCommand(SQL, connection);
-            command.ExecuteNonQuery();  
+            command.ExecuteNonQuery();
         }
-
         public void Exec_SQL_Command(string SQL)
         {
             var connection = getConnection();
@@ -192,6 +174,5 @@ namespace H1_ERP.DataBase
             connection.Close();
         }
     }
-
 }
 

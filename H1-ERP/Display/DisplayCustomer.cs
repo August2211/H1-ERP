@@ -400,7 +400,10 @@ namespace H1_ERP.Display
             listPage.AddKey(ConsoleKey.F3,Editfunction);
             listPage.AddKey(ConsoleKey.F5, Deletefunction);
             listPage.AddKey(ConsoleKey.F2,AddcustomerFunction);
+            Console.BufferHeight = 200; 
+
             var SelectedRow= listPage.Select(); 
+           
             if(SelectedRow == null)
             {
                 Clear(this);

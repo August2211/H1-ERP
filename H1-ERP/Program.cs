@@ -14,10 +14,9 @@ namespace H1_ERP
     {
         static void Main(string[] args)
         {
-            //MenuDisplay menuDisplay = new MenuDisplay();
-            //Screen.Display(menuDisplay);
-            DatabaseDapper database = new DatabaseDapper();
-            var gg =  database.GetAllCustomers();                                                                                                                                                                                                                                                                                                                                            
+            MenuDisplay menuDisplay = new MenuDisplay();
+            Screen.Display(menuDisplay);
+
         }
     }
 }
