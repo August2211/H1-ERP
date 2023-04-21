@@ -37,5 +37,14 @@ namespace H1_ERP.DapperDB
 
         }
 
+        public void DeleteProducFromID(int id)
+        {
+            using(var conn = getConnection())
+            {
+                conn.Execute($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {id}"); 
+            }
+
+        }
+
     }
 }
