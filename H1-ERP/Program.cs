@@ -6,6 +6,7 @@ using System.Runtime.Loader;
 using TECHCOOL.UI;
 using H1_ERP.DataBase;
 using H1_ERP.DapperDB;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace H1_ERP
 {
@@ -15,9 +16,8 @@ namespace H1_ERP
         {
             //MenuDisplay menuDisplay = new MenuDisplay();
             //Screen.Display(menuDisplay);
-            DatabaseDapper<Customer> database = new DatabaseDapper<Customer>();
-            var nemt = database.GetAllSingleEntities<Customer>("SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers]"); 
-
+            DatabaseDapper database = new DatabaseDapper();
+            var gg =  database.GetProductFromID(4); 
         }
     }
 }

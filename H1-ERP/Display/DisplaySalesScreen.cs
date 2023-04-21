@@ -100,8 +100,8 @@ namespace H1_ERP.Display
 
                 //Add all the SalesOrder data to the list.
                 list.Add(new SalesList($"{OrderHeader.OrderID}",
-                    $"{OrderHeader.Creationtime}",
-                    $"{OrderHeader.CompletionTime}",
+                    $"{OrderHeader.DateOfOrder}",
+                    $"{OrderHeader.ExpectedDeliveryDate}",
                     $"{OrderHeader.CustomerID}",
                     $"{CustomerFullName}",
                     $"{OrderHeader.TotalOrderPrice()}"));
@@ -142,7 +142,7 @@ namespace H1_ERP.Display
                     $" [Customers.Person] ON" +
                     $" [Customers.Person].PersonID = [Company.Employees].PersonID INNER JOIN" +
                     $" [Sales.Orders] ON" +
-                    $" [Sales.Orders].SalesPerson = [Company.Employees].Id WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}");
+                    $" [Sales.Orders].SalesPerson = [Company.Employees].OrderLineID WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}");
                 string address = data.ElementAt(0).Value[10] + " " + data.ElementAt(0).Value[11];
                 string zipcode = data.ElementAt(0).Value[12].ToString();
                 string city = data.ElementAt(0).Value[13].ToString();
@@ -240,7 +240,7 @@ namespace H1_ERP.Display
                 string CustomerFullName = OrderCustomer.FullName();
                 //Add details to the list.
                 SalesDetailsListPage.Add(new SalesListDetails($"{OrderHeader.OrderID}",
-                    $"{OrderHeader.Creationtime}", $"{OrderHeader.CompletionTime}",
+                    $"{OrderHeader.DateOfOrder}", $"{OrderHeader.ExpectedDeliveryDate}",
                     $"{OrderHeader.CustomerID}",
                     $"{CustomerFullName}"));
 

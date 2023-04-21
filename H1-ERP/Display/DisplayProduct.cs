@@ -25,7 +25,7 @@ namespace H1_ERP.Display
 
             foreach (Product product in products)
             {
-                listPage.Add(new ProductDisplay(product.ProductName, product.ProductId.ToString(), product.ProductQuantity.ToString(), product.ProductPurchasePrice, product.ProductSalePrice, (double)product.ProductPurchasePrice / (double)product.ProductSalePrice * 100));
+                listPage.Add(new ProductDisplay(product.ProductName, product.ProductID.ToString(), product.ProductQuantity.ToString(), product.ProductPurchasePrice, product.ProductSalePrice, (double)product.ProductPurchasePrice / (double)product.ProductSalePrice * 100));
 
             }
 
@@ -155,9 +155,9 @@ namespace H1_ERP.Display
                 SelectedCustomerDisplay.AddColumn("Avance %", "Title8");
                 SelectedCustomerDisplay.AddColumn("ProductUnit", "Title9");
                 SelectedCustomerDisplay.AddColumn("Avance KR", "Title10");
-                Product SelectedProduct = products.Select(x => x).Where(x => x.ProductId == Convert.ToInt32(SelectedRow.Title2)).FirstOrDefault();
+                Product SelectedProduct = products.Select(x => x).Where(x => x.ProductID == Convert.ToInt32(SelectedRow.Title2)).FirstOrDefault();
                 SelectedCustomerDisplay.Add(new ProductDisplay(
-                    SelectedProduct.ProductId.ToString(),
+                    SelectedProduct.ProductID.ToString(),
                     SelectedProduct.ProductName,
                     SelectedProduct.ProductDescription,
                     SelectedProduct.ProductSalePrice,

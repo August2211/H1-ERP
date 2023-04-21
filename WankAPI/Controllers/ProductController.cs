@@ -77,7 +77,7 @@ namespace WankAPI.Controllers
             try
             {
                 _dataBase.Update(product);
-                return Ok(product.ProductId);
+                return Ok(product.ProductID);
             }
             catch (Exception ex)
             {

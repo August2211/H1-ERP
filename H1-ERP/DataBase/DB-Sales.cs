@@ -44,8 +44,8 @@ namespace H1_ERP.DataBase
             {
                   res.OrderID = Convert.ToUInt32(s[0]);
                   res.CustomerID = Convert.ToUInt32(s[1]);
-                  res.Creationtime = Convert.ToDateTime(s[3]);
-                  res.CompletionTime = Convert.ToDateTime(s[4]);
+                  res.DateOfOrder = Convert.ToDateTime(s[3]);
+                  res.ExpectedDeliveryDate = Convert.ToDateTime(s[4]);
             }
             return res; 
         }  
@@ -75,7 +75,7 @@ namespace H1_ERP.DataBase
                         //we select the product with the matching ID 
                         var prod = products.Values.Select(x => x).Where(x => x.ElementAt(9).Equals(orderline[9])).FirstOrDefault();
                         Product product = new Product();
-                        product.ProductId = Convert.ToInt32(prod[9]);
+                        product.ProductID = Convert.ToInt32(prod[9]);
                         product.ProductName = prod[15].ToString();
                         product.ProductDescription = prod[16].ToString();
                         product.ProductSalePrice = Convert.ToInt32(prod[17]);
@@ -84,7 +84,7 @@ namespace H1_ERP.DataBase
                         product.ProductQuantity = Convert.ToInt32(prod[20]);
                         product.ProductUnit = Convert.ToInt32(prod[21]);
                         SalesOrderLine orderLine = new SalesOrderLine(product, Convert.ToUInt16(prod[20].ToString()));
-                        orderLine.Id = Convert.ToUInt32(orderline[8]);
+                        orderLine.OrderLineID = Convert.ToUInt32(orderline[8]);
                         orderLine.Quantity = Convert.ToUInt16(orderline[20]);
                         line.Add(orderLine);
                     }
@@ -92,8 +92,8 @@ namespace H1_ERP.DataBase
                     salesOrder.OrderID = Convert.ToUInt32(orderheaderline[0]);
                     salesOrder.CustomerID = Convert.ToUInt32(orderheaderline[1]);
                     salesOrder.TotalOrderPrice();
-                    salesOrder.Creationtime = Convert.ToDateTime(orderheaderline[3]);
-                    salesOrder.CompletionTime = Convert.ToDateTime((DateTime)orderheaderline[4]);
+                    salesOrder.DateOfOrder = Convert.ToDateTime(orderheaderline[3]);
+                    salesOrder.ExpectedDeliveryDate = Convert.ToDateTime((DateTime)orderheaderline[4]);
                     salesOrder.Condtion = (Condtion)Convert.ToInt32(orderheaderline[6]);
                     res.Add(salesOrder);
                 }
@@ -106,7 +106,7 @@ namespace H1_ERP.DataBase
         /// <param name="input"></param>
         public void InsertSalesOrderHeader(SalesOrderHeader input)
         { 
-            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.Orders] (CustomerID,TotalPriceOfOrder,DateOfOrder,ExpectedDeliveryDate) VALUES({input.CustomerID},{input.TotalOrderPrice()},{input.Creationtime},{input.CompletionTime})");
+            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.Orders] (CustomerID,TotalPriceOfOrder,DateOfOrder,ExpectedDeliveryDate) VALUES({input.CustomerID},{input.TotalOrderPrice()},{input.DateOfOrder},{input.ExpectedDeliveryDate})");
             //find the id of the inserted header by looking at the highest ID
             var Data = GetData("SELECT TOP (1) [OrderID] FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] ORDER BY [OrderID] desc;");
             int OrderID = 1; 
@@ -117,7 +117,7 @@ namespace H1_ERP.DataBase
             //InsertSalesOrderHeader all of the Orderlines in the table orderlines
             foreach (var OrderLine in input.OrderLines)
             {
-                Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] (SinglePrice,OrderQuantity,TotalQuantityPrice,OrderID,ProductID) VALUES({OrderLine.SingleUnitPrice},{OrderLine.Quantity},{OrderLine.TotalPrice},{OrderID},{OrderLine.Product.ProductId})");
+                Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] (SinglePrice,OrderQuantity,TotalQuantityPrice,OrderID,ProductID) VALUES({OrderLine.SinglePrice},{OrderLine.Quantity},{OrderLine.TotalQuantityPrice},{OrderID},{OrderLine.Product.ProductID})");
             }
         }
         /// <summary>
@@ -127,10 +127,10 @@ namespace H1_ERP.DataBase
         /// <param name="NewsalesHeader"></param>
         public void UpdateSalesorderHeader(int ID, SalesOrderHeader NewsalesHeader)
         {
-            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {NewsalesHeader.TotalOrderPrice()}, ExpectedDeliveryDate = {NewsalesHeader.CompletionTime} WHERE OrderID = {ID}");
+            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.Orders] SET TotalPriceOfOrder = {NewsalesHeader.TotalOrderPrice()}, ExpectedDeliveryDate = {NewsalesHeader.ExpectedDeliveryDate} WHERE OrderID = {ID}");
             foreach (var OrderLines in NewsalesHeader.OrderLines)
             {
-                Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SingleUnitPrice}, OrderQuantity = {OrderLines.Quantity}, TotalQuantityPrice = {OrderLines.TotalPrice} WHERE OrderID = {ID} AND OrderLineID ={OrderLines.Id}"); 
+                Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines] SET SinglePrice = {OrderLines.SinglePrice}, OrderQuantity = {OrderLines.Quantity}, TotalQuantityPrice = {OrderLines.TotalQuantityPrice} WHERE OrderID = {ID} AND OrderLineID ={OrderLines.OrderLineID}"); 
             }
         }
         /// <summary>

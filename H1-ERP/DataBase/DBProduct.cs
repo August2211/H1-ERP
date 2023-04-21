@@ -26,7 +26,7 @@ namespace H1_ERP.DataBase
           
             foreach (var s in data.Values)
             {
-                    product.ProductId = (int)s[0];
+                    product.ProductID = (int)s[0];
                     product.ProductName = (string)s[1];
                     product.ProductDescription = (string)s[2];
                     product.ProductSalePrice = (decimal)s[3];
@@ -46,7 +46,7 @@ namespace H1_ERP.DataBase
             foreach(var s in listofproducst.Values)
             {
                 Product product = new Product();
-                product.ProductId = (int)s[0];
+                product.ProductID = (int)s[0];
                 product.ProductName = (string)s[1];
                 product.ProductDescription = (string)s[2];
                 product.ProductPurchasePrice = (decimal)s[3];

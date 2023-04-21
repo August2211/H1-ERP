@@ -24,7 +24,7 @@ namespace H1_ERP.DomainModel
         /*---------------------------------*/
 
 
-        public int ProductId
+        public int ProductID
         {
             get
             {
