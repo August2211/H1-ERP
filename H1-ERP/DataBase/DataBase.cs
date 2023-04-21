@@ -16,10 +16,12 @@ namespace H1_ERP.DataBase
         void IllegalComments(string sql)
         {
             int total = 0;
-            foreach (string s in sql.Split(""))
+            int i = 1;
+            foreach (char c in sql.ToCharArray())
             {
-                if (s == "'") total++;
-                if (s == "--")
+                if (c == '\'') total++;
+
+                if (c == '-' && sql.ToCharArray()[i] == '-')
                 {
                     if (total % 2 == 1)
                     {
@@ -27,6 +29,7 @@ namespace H1_ERP.DataBase
                     }
                     break;
                 }
+                i++;
             }
             if (sql.LastIndexOf('\'') < sql.LastIndexOf("--"))
             {
