@@ -59,7 +59,7 @@ namespace H1_ERP.DataBase
                 var EmployeePersonID = GetData("SELECT TOP(1) PersonID FROM [dbo].[Customers.Person] ORDER BY PersonID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Company.Employees] VALUES (GETDATE(), GETDATE()+3000, {uniqueNumber * 1000}, {EmployeePersonID})");
                 var CustomerID = GetData("SELECT TOP(1) CustomerID FROM [dbo].[Customer.Customers] ORDER BY CustomerID desc").Values.ElementAt(0)[0];
-                var EmployeeID = GetData("SELECT TOP(1) OrderLineID FROM [dbo].[Company.Employees] ORDER BY OrderLineID desc").Values.ElementAt(0)[0];
+                var EmployeeID = GetData("SELECT TOP(1) Id FROM [dbo].[Company.Employees] ORDER BY Id desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Sales.Orders] (CustomerID, TotalPriceOfOrder, DateOfOrder, ExpectedDeliveryDate, Comments, Condition, SalesPerson) VALUES ({CustomerID}, 5{uniqueNumber}.99, '2023-03-23 16:03:00', '2023-03-30 16:03:00', 'Please deliver to the front door{uniqueNumber}.', {condition}, '{EmployeeID}')");
                 var OrderID = GetData("SELECT TOP(1) OrderID FROM [dbo].[Sales.Orders] ORDER BY OrderID desc").Values.ElementAt(0)[0];
                 Exec_SQL_Command($"INSERT INTO [dbo].[Product] (ProductName, ProductDescription, ProductSalePrice, ProductPurchasePrice, ProductLocation, ProductQuantity, ProductUnit) VALUES ('Product{uniqueNumber}', 'ProductDescription{uniqueNumber}', 2{uniqueNumber}, 3{uniqueNumber}, 'lll{uniqueNumber}', 5{uniqueNumber}, {uniqueNumber})");
