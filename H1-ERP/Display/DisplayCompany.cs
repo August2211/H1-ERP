@@ -75,6 +75,8 @@ namespace H1_ERP.Display
             // Retrieve a list of all companies from the database
             List<Company> companies = db.GetAllCompany();
 
+            if(companies == null) { Console.Clear(); Console.WriteLine("No companies found!"); return; }
+
             // Create a new CompanyDisplay object for each company and add it to the listPage
             foreach (var Company in companies)
             {
@@ -114,7 +116,7 @@ namespace H1_ERP.Display
                 // Use the listPage object to select a row of data
                 var SelectedRow = listPage.Select();
                 // If a CompanyDisplay object is selected, create a new ListPage object and add a column for CompanyName
-                if (SelectedRow.CompanyName != null)
+                if (SelectedRow != null && SelectedRow.CompanyName != null)
                 {
                     Clear();
                     Console.Clear();

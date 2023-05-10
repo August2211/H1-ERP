@@ -50,6 +50,10 @@ namespace H1_ERP.DataBase
             //Get the data from the 2 table's and join them together 
             var AllCompanies = GetData("SELECT * FROM [dbo].[Company] INNER JOIN [dbo].[Customer.Adress] ON [dbo].[Company].AdressID = [dbo].[Customer.Adress].AdressID");
 
+            if(AllCompanies == null || AllCompanies.Count == 0)
+            {
+                return null;
+            }
 
             // after the data is joined we take the indvidual value's and set them for our indvidual objects
             foreach (var row in AllCompanies.Values)
