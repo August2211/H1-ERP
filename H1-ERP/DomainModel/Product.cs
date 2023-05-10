@@ -132,11 +132,20 @@ namespace H1_ERP.DomainModel
             }
         }
         /*---------------------------------*/
+
+        /// <summary>
+        /// Calculates the profit of the product.
+        /// </summary>
+        /// <returns>The profit as decimal</returns>
         public decimal CalculateProfit()
         {
             return ProductSalePrice - ProductPurchasePrice;
         }
 
+        /// <summary>
+        /// Calculates the profit percentage of the product.
+        /// </summary>
+        /// <returns>The profit percentage as decimal</returns>
         public decimal CalculateProfitPercentage()
         {
             return (CalculateProfit() / ProductSalePrice) * 100;

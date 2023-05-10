@@ -145,27 +145,38 @@ namespace H1_ERP.DataBase
                 $" DELETE FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] WHERE OrderID = {id};");
         }
 
+        /// <summary>
+        /// Gets a salesorderheader with the given id
+        /// </summary>
+        /// <param name="id">The id of the salesorderheader to get from the database</param>
+        /// <returns>A salesorderheader</returns>
         public SalesOrderHeader GetFromID(int id)
         {
             return GetSalesOrderHeaderFromID(id);
-
         }
 
-        public List<SalesOrderHeader> GetAll(int id)
-        {
-            return GetAll();
-        }
-
+        /// <summary>
+        /// Deletes a salesorderheader with the given id
+        /// </summary>
+        /// <param name="id">The id of the salesorderheader to delete</param>
         public void Delete(int id)
         {
             DeleteSalesOrderHeaderFromID(id);
         }
 
+        /// <summary>
+        /// Updates theh given salesorderheader in the database
+        /// </summary>
+        /// <param name="enity">The salesorderheader to update</param>
         public void Update(SalesOrderHeader enity)
         {
             UpdateSalesorderHeader((int)enity.OrderID, enity);
         }
 
+        /// <summary>
+        /// Inserts the given salesorderheader into the database
+        /// </summary>
+        /// <param name="entity">The salesorderheader to insert</param>
         public void Insert(SalesOrderHeader entity)
         {
             InsertSalesOrderHeader(entity);
