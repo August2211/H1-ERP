@@ -99,6 +99,9 @@ namespace H1_ERP.Display
 
             Action<ProductDisplay> removeFunction = delegate (ProductDisplay product)
             {
+
+                DisplayProduct screen = new DisplayProduct();
+                Screen.Display(screen);
                 dataBase.Exec_SQL_Command($"DELETE FROM [dbo].[Sales.OrderLines] WHERE ProductID = {product.Title2}" +
                 $"DELETE FROM [dbo].[Product] WHERE ProductID = {product.Title2}");
             };
