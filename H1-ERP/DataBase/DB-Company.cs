@@ -93,12 +93,23 @@ namespace H1_ERP.DataBase
 
         public void DeleteCompany(int Input)
         {
-           Company company = new Company();
+           Company company1 = new Company();
             // Firstly we get the adressID from the database 
-            company.Address.AdressID = (uint)GetData($"SELECT AdressID FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input}").ElementAt(0).Value[0];
+            Address company = new Address();
+           company1.CompanyID = Convert.ToInt32(Input);
+           
+            company1.CompanyName = "Jens";
+            company.RoadName = "Jens";
+            company.StreetNumber = "Jens";
+            company.ZipCode = "Jens";
+            company.City = "Jens";
+            company.Country = "Jens";
+            company1.Address = company; 
+
+            company1.Address.AdressID = uint.Parse(GetData($"SELECT AdressID FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input}").ElementAt(0).Value[0].ToString());
             //delete in the order beneath to avoid errors
             Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input}");
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {company.Address.AdressID}");
+            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {company1.Address.AdressID}");
 
         }
     }
