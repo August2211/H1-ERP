@@ -79,7 +79,7 @@ namespace H1_ERP.DataBase
             var AddressID = GetData($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName,StreetNumber,ZipCode,City,Country) VALUES ('{Input.Address.RoadName}','{Input.Address.StreetNumber}', '{Input.Address.ZipCode}','{Input.Address.City}', '{Input.Address.Country}') " +
                 $"SELECT TOP(1) AdressID FROM [dbo].[Customer.Adress] ORDER BY AdressID desc").Values.ElementAt(0)[0];
 
-           Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Company](CompanyName,Currency,AdressID) VALUES ('{Input.CompanyName}','{(int)Input.Currency}','{AddressID}')");
+            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Company](CompanyName,Currency,AdressID) VALUES ('{Input.CompanyName}','{(int)Input.Currency}','{AddressID}')");
         }
         //Updata the Company in dataBase
         public void UpdateCompany(Company Input)
@@ -87,30 +87,28 @@ namespace H1_ERP.DataBase
             // we take the company obejct and update all the values in the database 
             Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] set RoadName = '{Input.Address.RoadName}',  StreetNumber='{Input.Address.StreetNumber}'," +
                              $" ZipCode='{Input.Address.ZipCode}', City= '{Input.Address.City}', Country='{Input.Address.Country}' WHERE AdressID='{Input.Address.AdressID}' " +
-                            $"UPDATE [H1PD021123_Gruppe4].[dbo].[Company] set CompanyName = '{Input.CompanyName}',  Currency='{((int)Input.Currency)}', 0dressID='{Input.Address.AdressID}'WHERE CompanyID='{Input.CompanyID}'"); 
+                            $"UPDATE [H1PD021123_Gruppe4].[dbo].[Company] set CompanyName = '{Input.CompanyName}',  Currency='{((int)Input.Currency)}', 0dressID='{Input.Address.AdressID}'WHERE CompanyID='{Input.CompanyID}'");
         }
         //DeleteSalesOrderHeaderFromID the Company from dataBase
 
         public void DeleteCompany(int Input)
         {
-           Company company1 = new Company();
+            Company company1 = new Company();
             // Firstly we get the adressID from the database 
             Address company = new Address();
-           company1.CompanyID = Convert.ToInt32(Input);
-           
+            company1.CompanyID = Convert.ToInt32(Input);
+
             company1.CompanyName = "Jens";
             company.RoadName = "Jens";
             company.StreetNumber = "Jens";
             company.ZipCode = "Jens";
             company.City = "Jens";
             company.Country = "Jens";
-            company1.Address = company; 
+            company1.Address = company;
 
-            company1.Address.AdressID = uint.Parse(GetData($"SELECT AdressID FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input}").ElementAt(0).Value[0].ToString());
-            //delete in the order beneath to avoid errors
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input}");
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {company1.Address.AdressID}");
-
+            company1.Address.AdressID = uint.Parse(GetData($"SELECT AdressID FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input} " +
+                $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Company] WHERE CompanyID = {Input} " +
+                $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {company1.Address.AdressID}").ElementAt(0).Value[0].ToString());
         }
     }
 }
