@@ -21,6 +21,7 @@ namespace H1_ERP.Display
             ListPage<ProductDisplay> listPage = new ListPage<ProductDisplay>();
             List<Product> products = dataBase.GetAllProduct();
 
+            if(products == null) { Console.WriteLine("No products found!"); return; }
 
 
             foreach (Product product in products)
