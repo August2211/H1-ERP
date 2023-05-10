@@ -24,13 +24,14 @@ namespace H1_ERP.DataBase
             int i = 1;
             foreach (char c in sql.ToCharArray())
             {
-                // If the char is a ' then add 1 to total
-                if (c == '\'') total++;
+                if (c == '\'')
+                {
+                    total++;
+                }
 
                 if (c == '-' && sql.ToCharArray()[i] == '-')
                 {
-                    // If the total is odd then throw an exception
-                    if (total % 2 == 1)
+                    if (total % 2 == 0)
                     {
                         throw new Exception("SQL Inject Detected");
                     }
