@@ -10,8 +10,8 @@ namespace H1_ERP.DomainModel
     public class Product
 
     {
-        ErrorHandling.ErrorHandling errorHandling =new(); //obj for ErrorHandling Class
-       
+        ErrorHandling.ErrorHandling errorHandling = new(); //obj for ErrorHandling Class
+
         private int _productId;
         private string _Name;
         private string _description;
@@ -24,15 +24,15 @@ namespace H1_ERP.DomainModel
         /*---------------------------------*/
 
 
-        public int ProductId        
+        public int ProductID
         {
             get
             {
                 return errorHandling.IsNull(_productId);
-               
+
             }
-            
-            set 
+
+            set
             {
                 _productId = errorHandling.IsNull(value);
 
@@ -40,93 +40,95 @@ namespace H1_ERP.DomainModel
         }
         /*---------------------------------*/
 
-        public string Name
+        public string ProductName
         {
 
-            get 
-            { 
-                return errorHandling.IsNull(_Name);
-            }
-            set { _Name = errorHandling.IsNull(value);  
-            
-            }
-        }
-        /*---------------------------------*/
-
-        public string Description
-        {
-            get 
+            get
             {
-                return errorHandling.IsNull (_description);
+                return errorHandling.IsNull(_Name);
             }
             set
             {
-                _description =errorHandling.IsNull (value);
+                _Name = errorHandling.IsNull(value);
+
             }
         }
         /*---------------------------------*/
 
-        public decimal SellingPrice
+        public string ProductDescription
         {
             get
-            { 
-                return errorHandling.IsNegative (_sellingPrice); 
-            }
-            set 
             {
-                _sellingPrice = errorHandling.IsNegative (value);
+                return errorHandling.IsNull(_description);
+            }
+            set
+            {
+                _description = errorHandling.IsNull(value);
             }
         }
         /*---------------------------------*/
 
-        public decimal PurchasePrice
+        public decimal ProductSalePrice
+        {
+            get
+            {
+                return errorHandling.IsNegative(_sellingPrice);
+            }
+            set
+            {
+                _sellingPrice = errorHandling.IsNegative(value);
+            }
+        }
+        /*---------------------------------*/
+
+        public decimal ProductPurchasePrice
         {
             get
             {
                 return errorHandling.IsNegative(_purchasePrice);
             }
-            set 
+            set
             {
-                _purchasePrice = errorHandling.IsNegative (value); 
+                _purchasePrice = errorHandling.IsNegative(value);
             }
         }
         /*---------------------------------*/
 
-        public string Location
+        public string ProductLocation
         {
-            get 
-            { 
-                return errorHandling.IsNull (_location);
+            get
+            {
+                return errorHandling.IsNull(_location);
             }
             set
             {
-                _location = errorHandling.IsNull (value); 
+                _location = errorHandling.IsNull(value);
             }
         }
         /*---------------------------------*/
 
         public int ProductQuantity
         {
-            get 
+            get
             {
-                return errorHandling.IsNull (_productquantity);
+                return errorHandling.IsNull(_productquantity);
             }
             set
             {
-                _productquantity = errorHandling.IsNull (value);
+                _productquantity = errorHandling.IsNull(value);
             }
         }
         /*---------------------------------*/
 
-        public int Unit
+        public int ProductUnit
         {
-            get 
+            get
             {
-                return errorHandling.IsNull (_unit);
+                return errorHandling.IsNull(_unit);
             }
             set
             {
-                _unit = errorHandling.IsNull (value); 
+                _unit = errorHandling.IsNull(value);
             }
         }
         ///*---------------------------------*/

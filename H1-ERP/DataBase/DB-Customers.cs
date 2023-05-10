@@ -23,13 +23,20 @@ namespace H1_ERP.DataBase
                 $"[Customer.Adress].StreetNumber, " +
                 $"[Customer.Adress].ZipCode, " +
                 $"[Customer.Adress].City, " +
-                $"[Customer.Adress].Country " +
+                $"[Customer.Adress].Country, " +
+                $"[Customers.Person].PersonID " +
                 $"FROM [Customer.Customers] " +
                 $"INNER JOIN [Customers.Person] on " +
                 $"[Customers.Person].PersonID = [Customer.Customers].PersonID " +
                 $"INNER JOIN [Customer.Adress] on " +
                 $"[Customer.Adress].AdressID = [Customers.Person].AdressID " +
                 $"WHERE CustomerID = {id}");
+
+            if (SelectedCustomer == null || SelectedCustomer.Count == 0)
+            {
+                return null;
+            }
+
             foreach (var row in SelectedCustomer.Values)
             {
                 result.CustomerId = Convert.ToInt32(SelectedCustomer.ElementAt(0).Value[0]);
@@ -37,6 +44,7 @@ namespace H1_ERP.DataBase
                 result.LastName = row[2].ToString();
                 result.Email = row[3].ToString();
                 result.PhoneNumber = row[4].ToString();
+                result.PersonID = Convert.ToUInt32(row[11]);
             }
             address.AdressID = Convert.ToUInt32(SelectedCustomer.ElementAt(0).Value[5]);
             address.RoadName = SelectedCustomer.ElementAt(0).Value[6].ToString();
@@ -44,6 +52,7 @@ namespace H1_ERP.DataBase
             address.ZipCode = SelectedCustomer.ElementAt(0).Value[8].ToString();
             address.City = SelectedCustomer.ElementAt(0).Value[9].ToString();
             address.Country = SelectedCustomer.ElementAt(0).Value[10].ToString();
+
 
             //Only set the address if the id is not 0
             if (address.AdressID != 0)
@@ -96,20 +105,33 @@ namespace H1_ERP.DataBase
         /// <param name="input"></param>
         public void InsertCustomer(Customer input)
         {
-            SqlConnection Connection = getConnection();
             //findes a the adress which has just been created
             uint adressid = InsertAddress(input.Address);
             //finds the current person that has been created for the customer
             uint personID = InsertPerson(input, adressid);
-            string purchasenull = "";
+            DateTime? purchasenull = null;
 
             if (input.LastPurchaseDate == null || input.LastPurchaseDate.ToString() == "")
             {
-                purchasenull = "NULL";
+                purchasenull = null;
             }
-            else { purchasenull = input.LastPurchaseDate.ToString(); }
-            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES({purchasenull},{personID})", Connection);
-            Connection.Close();
+            else { purchasenull = DateTime.Parse(input.LastPurchaseDate.ToString()); }
+            string SwitchThedatestring = purchasenull.ToString();
+
+            var splitted = SwitchThedatestring.Split('-', ' ');
+
+            string? ez = null;
+            if (splitted.Length >= 3)
+            {
+
+                string TempDate = splitted[0];
+                splitted[0] = splitted[2] + "-";
+                splitted[1] += "-";
+                splitted[2] = TempDate + " ";
+                ez = string.Join("", splitted);
+            }
+
+            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES(CONVERT(datetime,'{ez}',120),{personID})");
         }
         /// <summary>
         /// Updates a Customer 
@@ -117,16 +139,14 @@ namespace H1_ERP.DataBase
         /// <param name="input"></param>
         public void UpdateCustomer(Customer input)
         {
-            SqlConnection connection = getConnection();
             string nullhandelstring = input.LastPurchaseDate.ToString();
             if (nullhandelstring == null || nullhandelstring == "")
             {
                 nullhandelstring = "NULL";
             }
-            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] SET RoadName = '{input.Address.RoadName}',StreetNumber = '{input.Address.StreetNumber}',ZipCode = '{input.Address.ZipCode}',City = '{input.Address.City}', Country = '{input.Address.Country}' WHERE AdressID = {input.Address.AdressID}", connection);
-            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customers.Person] SET FirstName = '{input.FirstName}', LastName = '{input.LastName}', Email = '{input.Email}', PhoneNumber = '{input.PhoneNumber}' WHERE PersonID = {input.PersonID}", connection);
-            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Customers] SET LastPurchaseDate = {nullhandelstring} WHERE CustomerID = {input.CustomerId}", connection);
-            connection.Close();
+            Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] SET RoadName = '{input.Address.RoadName}',StreetNumber = '{input.Address.StreetNumber}',ZipCode = '{input.Address.ZipCode}',City = '{input.Address.City}', Country = '{input.Address.Country}' WHERE AdressID = {input.Address.AdressID} " +
+            $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customers.Person] SET FirstName = '{input.FirstName}', LastName = '{input.LastName}', Email = '{input.Email}', PhoneNumber = '{input.PhoneNumber}' WHERE PersonID = {input.PersonID} " +
+            $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Customers] SET LastPurchaseDate = {nullhandelstring} WHERE CustomerID = {input.CustomerId}");
         }
 
         /// <summary>
@@ -138,21 +158,28 @@ namespace H1_ERP.DataBase
             Customer customercustomer = GetCustomerFromID(ID);
 
 
+            if (customercustomer == null)
+            {
+                return;
+            }
             var FindcustmertoDelete = GetData($"SELECT OrderID FROM [dbo].[Sales.Orders] WHERE CustomerID = {customercustomer.CustomerId}");
             //it means they dont have an order then we look them up in some other tables
             if (FindcustmertoDelete != null)
             {
                 int OrderID = 0;
+                string OrderIDstring = "";
                 foreach (var id in FindcustmertoDelete.Values)
                 {
                     OrderID = Convert.ToInt32(id[0]);
-                    Exec_SQL_Command($"DELETE FROM [dbo].[Sales.Orderlines] WHERE OrderID = {OrderID}");
+                    OrderIDstring += OrderID.ToString() + ",";
                 }
-                Exec_SQL_Command($"DELETE FROM [dbo].[Sales.Orders] WHERE CustomerID = {ID}");
+                OrderIDstring = OrderIDstring.Remove(OrderIDstring.Length - 1);
+                Exec_SQL_Command($"DELETE FROM [dbo].[Sales.OrderLines] WHERE OrderID IN ({OrderIDstring}) " +
+                $"DELETE FROM [dbo].[Sales.Orders] WHERE CustomerID = {ID}");
             }
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] WHERE CustomerID ={customercustomer.CustomerId}");
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {customercustomer.PersonID}");
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {customercustomer.Address.AdressID}");
+            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] WHERE CustomerID ={customercustomer.CustomerId} " +
+            $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {customercustomer.PersonID} " +
+            $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {customercustomer.Address.AdressID}");
         }
         /// <summary>
         /// Finds the ID of a newly inserted address 
@@ -162,8 +189,8 @@ namespace H1_ERP.DataBase
         private uint InsertAddress(Address address)
         {
             uint AddressID = 0;
-            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ('{address.RoadName}','{address.StreetNumber}','{address.ZipCode}','{address.City}','{address.Country}')");
-            var GetAdressID = GetData("SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;");
+            var GetAdressID = GetData($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ('{address.RoadName}','{address.StreetNumber}','{address.ZipCode}','{address.City}','{address.Country}') " +
+                "SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;");
 
             foreach (var id in GetAdressID.Values)
             {
@@ -180,8 +207,8 @@ namespace H1_ERP.DataBase
         private uint InsertPerson(Customer input, uint adressid)
         {
             uint PersonID = 0;
-            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customers.Person] (FirstName,LastName,Email,PhoneNumber,AdressID) VALUES('{input.FirstName}','{input.LastName}','{input.Email}','{input.PhoneNumber}',{adressid})");
-            var PersonIDdata = GetData("SELECT TOP (1) [PersonID] FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] ORDER BY [PersonID] desc;");
+            var PersonIDdata = GetData($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customers.Person] (FirstName,LastName,Email,PhoneNumber,AdressID) VALUES('{input.FirstName}','{input.LastName}','{input.Email}','{input.PhoneNumber}',{adressid}) " +
+                "SELECT TOP (1) [PersonID] FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] ORDER BY [PersonID] desc;");
             foreach (var id in PersonIDdata.Values)
             {
                 PersonID = Convert.ToUInt32(id[0]);

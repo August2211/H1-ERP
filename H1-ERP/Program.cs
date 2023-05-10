@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Runtime.Loader;
 using TECHCOOL.UI;
 using H1_ERP.DataBase;
+using H1_ERP.DapperDB;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace H1_ERP
 {
@@ -14,6 +16,7 @@ namespace H1_ERP
         {
             MenuDisplay menuDisplay = new MenuDisplay();
             Screen.Display(menuDisplay);
+
         }
     }
 }

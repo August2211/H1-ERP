@@ -21,38 +21,26 @@ namespace H1_ERP.DomainModel
         public SalesOrderHeader(List<SalesOrderLine> input)
         {
             Condtion = Condtion.Created;
-            Creationtime = DateTime.Now; 
-            CompletionTime = DateTime.Now.AddDays(3);
+            DateOfOrder = DateTime.Now; 
+            ExpectedDeliveryDate = DateTime.Now.AddDays(3);
             OrderLines = input; 
+        }
+        public SalesOrderHeader()
+        {
+
         }
         
         public uint OrderID { get;  set; }
 
-        public DateTime Creationtime { get;  set; }
+        public DateTime DateOfOrder { get;  set; }
 
-        public DateTime CompletionTime { get;  set; }
+        public DateTime ExpectedDeliveryDate { get;  set; }
 
         public uint CustomerID { get; set; }
 
         public Condtion Condtion { get; set; }
 
-         public List<SalesOrderLine> OrderLines { get;  private set; }
-
-        public Condtion condition
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public SalesOrderLine salesOrderLine
-        {
-            get => default;
-            set
-            {
-            }
-        }
+         public List<SalesOrderLine> OrderLines { get; set; }
 
         /// <summary>
         /// This is a method for calculating the total price of the wholde order
@@ -60,7 +48,7 @@ namespace H1_ERP.DomainModel
         /// <returns></returns>
         public decimal TotalOrderPrice()
         {
-            return this.OrderLines.Select(x => x.TotalPrice).ToArray().Sum();
+            return this.OrderLines.Select(x => x.TotalQuantityPrice).ToArray().Sum();
         }
     }
 }

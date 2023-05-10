@@ -26,14 +26,14 @@ namespace H1_ERP.DataBase
           
             foreach (var s in data.Values)
             {
-                    product.ProductId = (int)s[0];
-                    product.Name = (string)s[1];
-                    product.Description = (string)s[2];
-                    product.SellingPrice = (decimal)s[3];
-                    product.PurchasePrice = (decimal)s[4];
-                    product.Location = (string)s[5];
+                    product.ProductID = (int)s[0];
+                    product.ProductName = (string)s[1];
+                    product.ProductDescription = (string)s[2];
+                    product.ProductSalePrice = (decimal)s[3];
+                    product.ProductPurchasePrice = (decimal)s[4];
+                    product.ProductLocation = (string)s[5];
                     product.ProductQuantity = (int)s[6];
-                    product.Unit = (int)s[7];                
+                    product.ProductUnit = (int)s[7];                
             }
             
             return product;
@@ -46,14 +46,14 @@ namespace H1_ERP.DataBase
             foreach(var s in listofproducst.Values)
             {
                 Product product = new Product();
-                product.ProductId = (int)s[0];
-                product.Name = (string)s[1];
-                product.Description = (string)s[2];
-                product.PurchasePrice = (decimal)s[3];
-                product.SellingPrice = (decimal)s[4];
-                product.Location = (string)s[5];
+                product.ProductID = (int)s[0];
+                product.ProductName = (string)s[1];
+                product.ProductDescription = (string)s[2];
+                product.ProductPurchasePrice = (decimal)s[3];
+                product.ProductSalePrice = (decimal)s[4];
+                product.ProductLocation = (string)s[5];
                 product.ProductQuantity= (int)s[6];
-                product.Unit = (int)s[7];
+                product.ProductUnit = (int)s[7];
                 list.Add(product);
             }
 
@@ -66,7 +66,7 @@ namespace H1_ERP.DataBase
         {
             SqlConnection connection = getConnection();
             connection.Open();
-            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Product](ProductName,ProductDescription,ProductSalePrice,ProductPurchasePrice,ProductLocation,ProductQuantity,ProductUnit) VALUES ('{Input.Name}','{Input.Description}','{Input.SellingPrice}','{Input.PurchasePrice}','{Input.Location}','{Input.ProductQuantity}','{Input.Unit}')";
+            string sql = $"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Product](ProductName,ProductDescription,ProductSalePrice,ProductPurchasePrice,ProductLocation,ProductQuantity,ProductUnit) VALUES ('{Input.ProductName}','{Input.ProductDescription}','{Input.ProductSalePrice}','{Input.ProductPurchasePrice}','{Input.ProductLocation}','{Input.ProductQuantity}','{Input.ProductUnit}')";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
@@ -76,16 +76,16 @@ namespace H1_ERP.DataBase
         {
             SqlConnection connection = getConnection();
             connection.Open();
-            string sql = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.Name}', ProductDescription = '{Input.Description}',ProductSalePrice = '{Input.SellingPrice}',ProductPurchasePrice = '{Input.PurchasePrice}', ProductLocation ='{Input.Location}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.Unit}')";
+            string sql = $"UPDATE [H1PD021123_Gruppe4].[dbo].[Product] set ProductName = '{Input.ProductName}', ProductDescription = '{Input.ProductDescription}',ProductSalePrice = '{Input.ProductSalePrice}',ProductPurchasePrice = '{Input.ProductPurchasePrice}', ProductLocation ='{Input.ProductLocation}', ProductQuantity'{Input.ProductQuantity}', ProductUnit='{Input.ProductUnit}')";
             SqlCommand sqlCommand = new SqlCommand(sql, connection);
             sqlCommand.ExecuteNonQuery();
             connection.Close();
         }
         //DeleteSalesOrderHeaderFromID the product from dataBase
 
-        public void DeleteProduct(Product Input)
+        public void DeleteProduct(int Input)
         {
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {Input.ProductId}"); 
+            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {Input}"); 
         }
     }
 }

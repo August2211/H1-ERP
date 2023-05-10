@@ -1,19 +1,48 @@
 ﻿using H1_ERP.DomainModel;
+using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TECHCOOL.UI;
 
 namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
+        void IllegalComments(string sql)
+        {
+            int total = 0;
+            int i = 1;
+            foreach (char c in sql.ToCharArray())
+            {
+                if (c == '\'')
+                {
+                    total++;
+                }
+
+                if (c == '-' && sql.ToCharArray()[i] == '-')
+                {
+                    if (total % 2 == 0)
+                    {
+                        throw new Exception("SQL Inject Detected");
+                    }
+                    break;
+                }
+                i++;
+            }
+            if (sql.LastIndexOf('\'') < sql.LastIndexOf("--"))
+            {
+                throw new Exception("SQL Inject Detected");
+            }
+        }
         private static SqlConnection getConnection()
         {
             SqlConnectionStringBuilder sb = new();
-            sb.DataSource = "docker.data.techcollege.dk";
+            sb.DataSource = "192.168.1.70";
             sb.InitialCatalog = "H1PD021123_Gruppe4";
             sb.UserID = "H1PD021123_Gruppe4";
             sb.Password = "H1PD021123_Gruppe4";
@@ -31,29 +60,30 @@ namespace H1_ERP.DataBase
         /// <param name="Sql"> Wrtie your SQL statement in this</param>
         /// <param name="connection">Your connection to a given DB</param>
         /// <returns>a dictionary with the rownumber as a key and the value as a list of obejcts(row content in database) :) if the statement does not contain anything it returns null</returns>
-        private Dictionary<object,List<object>> GetData(string Sql, SqlConnection connection)
+        private Dictionary<object, List<object>> GetData(string Sql, SqlConnection connection)
         {
-            Dictionary <object,List<object>> Rows = new Dictionary<object, List<object>>();
+            IllegalComments(Sql);
+            Dictionary<object, List<object>> Rows = new Dictionary<object, List<object>>();
             SqlCommand sqlCommand = new SqlCommand(Sql, connection);
             SqlDataReader reader = sqlCommand.ExecuteReader();
             int rows = 0;
             while (reader.Read())
             {
-                rows = 0; 
+                rows = 0;
                 List<object> list = new List<object>();
                 while (reader.FieldCount > rows)
                 {
                     list.Add(reader[rows]);
                     rows++;
 
-                 
+
 
                 }
-                
+
                 Rows.Add(reader.GetValue(0), list);
-                foreach(var s in list)
+                foreach (var s in list)
                 {
-                    switch(s) 
+                    switch (s)
                     {
 
 
@@ -66,23 +96,20 @@ namespace H1_ERP.DataBase
             }
             reader.Close();
 
-            if (Rows.Count  <= 0)
+            if (Rows.Count <= 0)
             {
-                return null; 
+                return null;
             }
-            return Rows; 
-
+            return Rows;
         }
-
-
         public Dictionary<object, List<object>> GetData(string Sql)
         {
+            IllegalComments(Sql);
             var connection = getConnection();
             Dictionary<object, List<object>> Rows = new Dictionary<object, List<object>>();
             SqlCommand sqlCommand = new SqlCommand(Sql, connection);
             SqlDataReader reader = sqlCommand.ExecuteReader();
             int rows = 0;
-
             while (reader.Read())
             {
                 rows = 0;
@@ -92,11 +119,9 @@ namespace H1_ERP.DataBase
                     list.Add(reader[rows]);
                     rows++;
                 }
-
                 Rows.Add(reader.GetValue(0), list);
             }
             reader.Close();
-
             if (Rows.Count <= 0)
             {
                 return null;
@@ -104,9 +129,9 @@ namespace H1_ERP.DataBase
             connection.Close();
             return Rows;
         }
-
         public Dictionary<object, object[]> GetDatafast(string Sql)
         {
+            IllegalComments(Sql);
             var connection = getConnection();
             Dictionary<object, object[]> Rows = new Dictionary<object, object[]>();
             using (var sqlCommand = new SqlCommand(Sql, connection))
@@ -114,19 +139,14 @@ namespace H1_ERP.DataBase
                 using (var reader = sqlCommand.ExecuteReader())
                 {
                     int rows = 0;
-
                     while (reader.Read())
                     {
                         rows = 0;
                         object[] list = new object[reader.FieldCount];
-
                         reader.GetValues(list);
-                        
-
                         Rows.Add(reader.GetValue(0), list);
                     }
                     reader.Close();
-
                     if (Rows.Count <= 0)
                     {
                         return null;
@@ -136,32 +156,26 @@ namespace H1_ERP.DataBase
                 }
             }
         }
-
-
         public Dictionary<object, object[]> GetdataFastFromJoinsWithouttheKeyvalueparoftheId(string sql)
         {
+            IllegalComments(sql);
             var connection = getConnection();
             Dictionary<object, object[]> Rows = new Dictionary<object, object[]>();
-            int i = 0; 
+            int i = 0;
             using (var sqlCommand = new SqlCommand(sql, connection))
             {
                 using (var reader = sqlCommand.ExecuteReader())
                 {
                     int rows = 0;
-
                     while (reader.Read())
                     {
                         rows = 0;
                         object[] list = new object[reader.FieldCount];
-
                         reader.GetValues(list);
-
-
                         Rows.Add(i, list);
-                        ++i; 
+                        ++i;
                     }
                     reader.Close();
-
                     if (Rows.Count <= 0)
                     {
                         return null;
@@ -170,7 +184,6 @@ namespace H1_ERP.DataBase
                     return Rows;
                 }
             }
-
         }
 
         /// <summary>
@@ -180,18 +193,18 @@ namespace H1_ERP.DataBase
         /// <param name="connection"></param>
         public void Exec_SQL_Command(string SQL, SqlConnection connection)
         {
+            IllegalComments(SQL);
             SqlCommand command = new SqlCommand(SQL, connection);
-            command.ExecuteNonQuery();  
+            command.ExecuteNonQuery();
         }
-
         public void Exec_SQL_Command(string SQL)
         {
+            IllegalComments(SQL);
             var connection = getConnection();
             SqlCommand command = new SqlCommand(SQL, connection);
             command.ExecuteNonQuery();
             connection.Close();
         }
     }
-
 }
 
