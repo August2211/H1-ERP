@@ -142,7 +142,7 @@ namespace H1_ERP.Display
                     $" [Customers.Person] ON" +
                     $" [Customers.Person].PersonID = [Company.Employees].PersonID INNER JOIN" +
                     $" [Sales.Orders] ON" +
-                    $" [Sales.Orders].SalesPerson = [Company.Employees].OrderLineID WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}");
+                    $" [Sales.Orders].SalesPerson = [Company.Employees].Id WHERE [dbo].[Sales.Orders].CustomerID = {salesOrderDetails.CustomerID}");
                 string address = data.ElementAt(0).Value[10] + " " + data.ElementAt(0).Value[11];
                 string zipcode = data.ElementAt(0).Value[12].ToString();
                 string city = data.ElementAt(0).Value[13].ToString();
@@ -156,7 +156,7 @@ namespace H1_ERP.Display
                 html = html.Replace("${DueDate}", salesOrderDetails.ExpectedDeliveryDate);
                 html = html.Replace("${Price}", data.ElementAt(0).Value[17].ToString());
                 string ordertable = "";
-                //foreach orderline we have we add a new table row and 5 column's accordingly 
+                //foreach orderline we have we add a new table row and 5 column's accordingly   
                 foreach (var s in data2.Values)
                 {
                     ordertable += "<tr style=\"1px solid black;\"><td> ";

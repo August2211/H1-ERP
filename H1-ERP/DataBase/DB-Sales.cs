@@ -56,7 +56,7 @@ namespace H1_ERP.DataBase
         public List<SalesOrderHeader> GetAll()
         {
 
-            var products = GetdataFastFromJoinsWithouttheKeyvalueparoftheId($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] INNER Join [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines]" +
+            var products = GetDataFastJoinSafe($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Sales.Orders] INNER Join [H1PD021123_Gruppe4].[dbo].[Sales.OrderLines]" +
                 $"on [dbo].[Sales.OrderLines].OrderID = [dbo].[Sales.Orders].OrderID Inner join  [H1PD021123_Gruppe4].[dbo].[Product]" +
                 $"on [dbo].[Product].ProductID =  [dbo].[Sales.OrderLines].ProductID");
             List<SalesOrderHeader> res = new List<SalesOrderHeader>();
