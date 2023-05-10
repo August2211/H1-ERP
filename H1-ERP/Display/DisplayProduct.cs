@@ -29,7 +29,7 @@ namespace H1_ERP.Display
             // It gets all products from database and puts them in a list.
             List<Product> products = dataBase.GetAllProduct();
 
-            if(products == null) { Console.WriteLine("No products found!"); return; }
+            if (products == null) { Console.WriteLine("No products found!"); return; }
 
 
             foreach (Product product in products)
@@ -79,7 +79,7 @@ namespace H1_ERP.Display
                 string newValue = Console.ReadLine();
                 //Creates an array of strings with a length of 8 and stores it in values.
                 string[] values = new string[8];
-               // Gets a specific value from data and stores it as the first element of values.
+                // Gets a specific value from data and stores it as the first element of values.
                 values[0] = data.ElementAt(0).Value[0].ToString();
                 values[1] = data.ElementAt(0).Value[1].ToString();
                 values[2] = data.ElementAt(0).Value[2].ToString();
@@ -88,7 +88,7 @@ namespace H1_ERP.Display
                 values[5] = data.ElementAt(0).Value[5].ToString();
                 values[6] = data.ElementAt(0).Value[6].ToString();
                 values[7] = data.ElementAt(0).Value[7].ToString();
-             
+
                 //Checks if the cursor position is at the top of the console window.
                 if (Console.GetCursorPosition().Top - 5 == 0)
                 {
@@ -98,7 +98,7 @@ namespace H1_ERP.Display
                 }
                 else
                 {
-                   // Sets the appropriate element of values to the new value entered by the user.
+                    // Sets the appropriate element of values to the new value entered by the user.
                     values[Console.GetCursorPosition().Top - 5] = newValue;
                     //Executes an SQL command to update the relevant row in the database with the new values.
                     dataBase.Exec_SQL_Command($"UPDATE [dbo].[Product] SET ProductName = '{values[1]}', ProductDescription = '{values[2]}', ProductSalePrice = '{values[3]}', ProductPurchasePrice = '{values[4]}', ProductLocation = '{values[5]}', ProductQuantity = '{values[6]}', ProductUnit = '{values[7]}' WHERE ProductID = '{values[0]}'");
@@ -122,7 +122,8 @@ namespace H1_ERP.Display
             // Define a delegate to remove a product from the database
             Action<ProductDisplay> removeFunction = delegate (ProductDisplay product)
             {  // Execute an SQL command to delete the product from the database
-                var data = dataBase.GetDatafast($"DELETE FROM [dbo].[Product] WHERE ProductID = {product.Title2}");
+                dataBase.Exec_SQL_Command($"DELETE FROM [dbo].[Sales.OrderLines] WHERE ProductID = {product.Title2} " +
+                    $"DELETE FROM [dbo].[Product] WHERE ProductID = {product.Title2}");
             };
             // Define a delegate to add a new product to the database
             Action<ProductDisplay> addFunction = delegate (ProductDisplay product)
