@@ -97,6 +97,7 @@ namespace H1_ERP.Display
                 {
                     NotDoneEditing= false;
                 }
+                //until the customer isn't done editing the given customer we keep drawing the selected customer screen  
                 while (NotDoneEditing == true)
                 {
 
@@ -110,6 +111,7 @@ namespace H1_ERP.Display
                         Console.SetCursorPosition(oldpos.Left + 1, oldpos.Top + 4);
 
                         var newval = Console.ReadLine();
+                        //the Switching of the old and new values 
                         if (newval != chosenvalue.Title1)
                         {
                             chosenvalue.Title1 = newval;
@@ -280,14 +282,12 @@ namespace H1_ERP.Display
                     if (chosenvalue != null)
                     {
                         var oldpos = Console.GetCursorPosition();
-                          
                         Console.SetCursorPosition(oldpos.Left + 1, oldpos.Top + 4);
-
                         Console.Write("                              ");
                         Console.SetCursorPosition(oldpos.Left + 1, oldpos.Top + 4);
-
                         var newval = Console.ReadLine();
-                        if(newval != chosenvalue.Title1)
+                        //the Switching of the old and new values 
+                        if (newval != chosenvalue.Title1)
                         {
                             chosenvalue.Title1 = newval;
                             if (Columnsandvalues.ContainsKey(oldpos.Top))
@@ -413,6 +413,7 @@ namespace H1_ERP.Display
 
             if (SelectedRow != null)
             {
+                //if the selected row is something other than null it means the user has pressed ENTER and therfore we display further details about the given Customer 
 
                 if (SelectedRow.Title1 != null)
                 {

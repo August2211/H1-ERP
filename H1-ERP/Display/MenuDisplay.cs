@@ -14,6 +14,7 @@ namespace H1_ERP.Display
         protected override void Draw()
         {
             Menu menu = new Menu(); 
+            // we make a menu with all of our screens and ad them to 
             DisplayCustomer displayCustomer= new DisplayCustomer(); 
             DisplayCompany displayCompany = new DisplayCompany();
             DisplayProduct displayProduct = new DisplayProduct();
