@@ -12,7 +12,7 @@ namespace H1_ERP.DataBase
             result.CustomerId = id;
             Address address = new Address();
             //Get the details of the Customer from the person table
-            var SelectedCustomer = GetdataFastFromJoinsWithouttheKeyvalueparoftheId($"SELECT " +
+            var SelectedCustomer = GetDataFastJoinSafe($"SELECT " +
                 $"[Customer.Customers].CustomerID, " +
                 $"[Customers.Person].FirstName, " +
                 $"[Customers.Person].LastName, " +
