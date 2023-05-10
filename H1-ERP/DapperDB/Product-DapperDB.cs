@@ -8,5 +8,6 @@ namespace H1_ERP.DapperDB
 {
     internal class Product_DapperDB
     {
+
     }
 }

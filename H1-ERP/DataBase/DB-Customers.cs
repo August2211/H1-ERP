@@ -12,7 +12,7 @@ namespace H1_ERP.DataBase
             result.CustomerId = id;
             Address address = new Address();
             //Get the details of the Customer from the person table
-            var SelectedCustomer = GetdataFastFromJoinsWithouttheKeyvalueparoftheId($"SELECT " +
+            var SelectedCustomer = GetDataFastJoinSafe($"SELECT " +
                 $"[Customer.Customers].CustomerID, " +
                 $"[Customers.Person].FirstName, " +
                 $"[Customers.Person].LastName, " +
@@ -31,7 +31,7 @@ namespace H1_ERP.DataBase
                 $"INNER JOIN [Customer.Adress] on " +
                 $"[Customer.Adress].AdressID = [Customers.Person].AdressID " +
                 $"WHERE CustomerID = {id}");
-
+            
             if (SelectedCustomer == null || SelectedCustomer.Count == 0)
             {
                 return null;
@@ -109,8 +109,9 @@ namespace H1_ERP.DataBase
             uint adressid = InsertAddress(input.Address);
             //finds the current person that has been created for the customer
             uint personID = InsertPerson(input, adressid);
-            DateTime? purchasenull = null;
 
+            DateTime? purchasenull = null;
+            // here we take the purchase date and do some string manipulation so it matche's the date format in the DB 
             if (input.LastPurchaseDate == null || input.LastPurchaseDate.ToString() == "")
             {
                 purchasenull = null;
@@ -120,7 +121,7 @@ namespace H1_ERP.DataBase
 
             var splitted = SwitchThedatestring.Split('-', ' ');
 
-            string? ez = null;
+            string? ChangedDate = null;
             if (splitted.Length >= 3)
             {
 
@@ -128,10 +129,10 @@ namespace H1_ERP.DataBase
                 splitted[0] = splitted[2] + "-";
                 splitted[1] += "-";
                 splitted[2] = TempDate + " ";
-                ez = string.Join("", splitted);
+                ChangedDate = string.Join("", splitted);
             }
 
-            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES(CONVERT(datetime,'{ez}',120),{personID})");
+            Exec_SQL_Command($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Customers] (LastPurchaseDate,PersonID) VALUES(CONVERT(datetime,'{ChangedDate}',120),{personID})");
         }
         /// <summary>
         /// Updates a Customer 
@@ -144,6 +145,7 @@ namespace H1_ERP.DataBase
             {
                 nullhandelstring = "NULL";
             }
+            //we update the customer object into the database with all of the given values
             Exec_SQL_Command($"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Adress] SET RoadName = '{input.Address.RoadName}',StreetNumber = '{input.Address.StreetNumber}',ZipCode = '{input.Address.ZipCode}',City = '{input.Address.City}', Country = '{input.Address.Country}' WHERE AdressID = {input.Address.AdressID} " +
             $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customers.Person] SET FirstName = '{input.FirstName}', LastName = '{input.LastName}', Email = '{input.Email}', PhoneNumber = '{input.PhoneNumber}' WHERE PersonID = {input.PersonID} " +
             $"UPDATE [H1PD021123_Gruppe4].[dbo].[Customer.Customers] SET LastPurchaseDate = {nullhandelstring} WHERE CustomerID = {input.CustomerId}");
@@ -174,9 +176,11 @@ namespace H1_ERP.DataBase
                     OrderIDstring += OrderID.ToString() + ",";
                 }
                 OrderIDstring = OrderIDstring.Remove(OrderIDstring.Length - 1);
+                //we delete the orderlines if the customer has an order 
                 Exec_SQL_Command($"DELETE FROM [dbo].[Sales.OrderLines] WHERE OrderID IN ({OrderIDstring}) " +
                 $"DELETE FROM [dbo].[Sales.Orders] WHERE CustomerID = {ID}");
             }
+            //aftwards we delete the values related to the given Customer 
             Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] WHERE CustomerID ={customercustomer.CustomerId} " +
             $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] WHERE PersonID = {customercustomer.PersonID} " +
             $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] WHERE AdressID = {customercustomer.Address.AdressID}");
@@ -188,7 +192,9 @@ namespace H1_ERP.DataBase
         /// <returns></returns>
         private uint InsertAddress(Address address)
         {
+            
             uint AddressID = 0;
+            // we take a Obejct of a new adress and afterwards we take the ID from the newly inserted adress id and return it
             var GetAdressID = GetData($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customer.Adress] (RoadName, StreetNumber, ZipCode, City, Country) VALUES  ('{address.RoadName}','{address.StreetNumber}','{address.ZipCode}','{address.City}','{address.Country}') " +
                 "SELECT TOP (1) [AdressID] FROM [H1PD021123_Gruppe4].[dbo].[Customer.Adress] ORDER BY [AdressID] desc;");
 
@@ -206,7 +212,9 @@ namespace H1_ERP.DataBase
         /// <returns></returns>
         private uint InsertPerson(Customer input, uint adressid)
         {
+           
             uint PersonID = 0;
+            //firstly we get Insert the data into the customer and the adress ID into the database and then we return the PersonID 
             var PersonIDdata = GetData($"INSERT INTO [H1PD021123_Gruppe4].[dbo].[Customers.Person] (FirstName,LastName,Email,PhoneNumber,AdressID) VALUES('{input.FirstName}','{input.LastName}','{input.Email}','{input.PhoneNumber}',{adressid}) " +
                 "SELECT TOP (1) [PersonID] FROM [H1PD021123_Gruppe4].[dbo].[Customers.Person] ORDER BY [PersonID] desc;");
             foreach (var id in PersonIDdata.Values)
