@@ -82,6 +82,7 @@ namespace H1_ERP.DataBase
 
             while (reader.Read())
             {
+                // Creates a new list, adds the rows to the lists and puts it in the dictionary with the primary key as dictionary key
                 rows = 0;
                 List<object> list = new List<object>();
                 while (reader.FieldCount > rows)

@@ -15,14 +15,17 @@ namespace H1_ERP.DataBase
 {
     public partial class DataBase
     {
-       
-     
+        /// <summary>
+        /// Gets a product with a specific id
+        /// </summary>
+        /// <param name="id">The id of the product</param>
+        /// <returns>A product with the given id</returns>
         public Product GetProductFromID(int id)
         {
-
             var data =  GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {id}"); 
             
-            Product product = new Product(); //obj 
+            // Creates a new product and adds the respective values to it
+            Product product = new Product(); 
           
             foreach (var s in data.Values)
             {
@@ -38,9 +41,14 @@ namespace H1_ERP.DataBase
             
             return product;
         }
-        //Get all product and return it to the list 
+
+        /// <summary>
+        /// Gets all products from the databaseq
+        /// </summary>
+        /// <returns>A list of Product</returns>
         public List<Product> GetAllProduct() 
         {
+            // Creates a list of products and adds the respective values to it
             List<Product> list = new List<Product>();
             var listofproducst = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]");
             foreach(var s in listofproducst.Values)
@@ -56,12 +64,13 @@ namespace H1_ERP.DataBase
                 product.ProductUnit = (int)s[7];
                 list.Add(product);
             }
-
-
             return list;
         }
         
-        //InsertSalesOrderHeader the product and put it in dataBase
+        /// <summary>
+        /// Inserts a product into the database
+        /// </summary>
+        /// <param name="Input">The product to be inserted into the database</param>
         public void InputProduct(Product Input)
         {
             SqlConnection connection = getConnection();
@@ -71,7 +80,10 @@ namespace H1_ERP.DataBase
             sqlCommand.ExecuteNonQuery();
             connection.Close();
         }
-        //Updata the product in dataBase
+        /// <summary>
+        /// Updates a product in the database
+        /// </summary>
+        /// <param name="Input">The product to be updated</param>
         public void UpdataProduct(Product Input)
         {
             SqlConnection connection = getConnection();
@@ -81,11 +93,14 @@ namespace H1_ERP.DataBase
             sqlCommand.ExecuteNonQuery();
             connection.Close();
         }
-        //DeleteSalesOrderHeaderFromID the product from dataBase
 
-        public void DeleteProduct(int Input)
+        /// <summary>
+        /// Deletes a product from the databasee
+        /// </summary>
+        /// <param name="ID">The id of the product to delete</param>
+        public void DeleteProduct(int ID)
         {
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {Input}"); 
+            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {ID}"); 
         }
     }
 }

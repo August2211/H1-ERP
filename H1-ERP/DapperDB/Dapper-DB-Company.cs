@@ -13,7 +13,12 @@ namespace H1_ERP.DapperDB
 {
     public partial class DatabaseDapper
     {
-        public Company GetCompanyFromID(int ID)
+        /// <summary>
+        /// Gets a company from the database with the given id
+        /// </summary>
+        /// <param name="ID">The id of the company to be selected</param>
+        /// <returns>The company</returns>
+        public Company? GetCompanyFromID(int ID)
         {
             Company? Company = null;
             using (var conn = getConnection())
