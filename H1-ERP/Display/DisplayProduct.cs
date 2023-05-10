@@ -99,7 +99,8 @@ namespace H1_ERP.Display
 
             Action<ProductDisplay> removeFunction = delegate (ProductDisplay product)
             {
-                var data = dataBase.GetDatafast($"DELETE FROM [dbo].[Product] WHERE ProductID = {product.Title2}");
+                var data = dataBase.GetDatafast($"DELETE FROM [dbo].[Sales.OrderLines] WHERE ProductID = {product.Title2}" +
+                    $"DELETE FROM [dbo].[Product] WHERE ProductID = {product.Title2}");
             };
 
             Action<ProductDisplay> addFunction = delegate (ProductDisplay product)
