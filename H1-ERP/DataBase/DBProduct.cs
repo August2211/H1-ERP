@@ -107,7 +107,8 @@ namespace H1_ERP.DataBase
         /// <param name="ID">The id of the product to delete</param>
         public void DeleteProduct(int ID)
         {
-            Exec_SQL_Command($"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {ID}"); 
+            Exec_SQL_Command($"DELETE FROM [dbo].[Sales.OrderLines] WHERE ProductID = {ID} " +
+                $"DELETE FROM [H1PD021123_Gruppe4].[dbo].[Product] WHERE ProductID = {ID}"); 
         }
     }
 }
