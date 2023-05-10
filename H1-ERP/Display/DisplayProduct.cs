@@ -101,6 +101,8 @@ namespace H1_ERP.Display
             {
                 var data = dataBase.GetDatafast($"DELETE FROM [dbo].[Sales.OrderLines] WHERE ProductID = {product.Title2}" +
                     $"DELETE FROM [dbo].[Product] WHERE ProductID = {product.Title2}");
+                DisplayProduct screen = new DisplayProduct();
+                Screen.Display(screen);
             };
 
             Action<ProductDisplay> addFunction = delegate (ProductDisplay product)

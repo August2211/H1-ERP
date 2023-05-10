@@ -352,108 +352,114 @@ namespace H1_ERP.Display
                 listPage.AddKey(ConsoleKey.Q, GoBackFunction);
 
                 var SelectedRow = listPage.Select();
-                if (SelectedRow.FirstName != null)
-                {
-                    Clear();
-                    Console.Clear();
-                    ListPage<SalesDisplay> SelectedSalesDisplay = new ListPage<SalesDisplay>();
-
-                    SelectedSalesDisplay.AddColumn("FirstName", "FirstName", 10);
-                    SelectedSalesDisplay.AddColumn("LastName", "LastName", 10);
-                    SelectedSalesDisplay.AddColumn("RoadName", "RoadName", 10);
-                    SelectedSalesDisplay.AddColumn("StreetNumber", "StreetNumber", 5);
-                    SelectedSalesDisplay.AddColumn("ZipCode", "ZipCode", 5);
-                    SelectedSalesDisplay.AddColumn("City", "City", 10);
-                    SelectedSalesDisplay.AddColumn("PhoneNumber", "PhoneNumber", 15);
-                    SelectedSalesDisplay.AddColumn("Email", "Email", 20);
-                    Customer SelectedSales = customers.Select(x => x).Where(x => x.FirstName == SelectedRow.FirstName).FirstOrDefault();
-                    SelectedSalesDisplay.Add(new SalesDisplay(SelectedSales.FirstName, SelectedSales.LastName, SelectedSales.Address.RoadName, SelectedSales.Address.StreetNumber, SelectedSales.Address.ZipCode, SelectedSales.Address.City, SelectedSales.PhoneNumber, SelectedSales.Email, SelectedSales.Address.AdressID.ToString()));
-
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Click 'F1' to edit Sales.");
-                    Console.WriteLine("Click 'F2' to add a new Sales.");
-                    Console.WriteLine("---------------------------------");
-                    Console.WriteLine("Click 'Enter' to save.");
-                    Console.WriteLine("Click 'Escape' to cancel.");
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-
-                    SelectedSalesDisplay.Draw();
-                }
-                ConsoleKeyInfo keyInfo = Console.ReadKey();
-
-                if (keyInfo.Key == ConsoleKey.F2)
+                if (SelectedRow != null)
                 {
 
-                    Form<SalesDisplay> editor = new Form<SalesDisplay>();
-                    editor.TextBox("FirstName", "FirstName");
-                    editor.TextBox("LastName", "LastName");
-                    editor.TextBox("RoadName", "RoadName");
-                    editor.TextBox("StreetNumber", "StreetNumber");
-                    editor.TextBox("ZipCode", "ZipCode");
-                    editor.TextBox("City", "City");
-                    editor.TextBox("PhoneNumber", "PhoneNumber");
-                    editor.TextBox("Email", "Email");
 
-                    try
+                    if (SelectedRow.FirstName != null)
                     {
-                        Console.SetCursorPosition(50, 10);
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine("-----Edit Sales details-----");
-                        Console.SetCursorPosition(46, 12);
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        editor.Edit(salesDisplay);
+                        Clear();
+                        Console.Clear();
+                        ListPage<SalesDisplay> SelectedSalesDisplay = new ListPage<SalesDisplay>();
 
+                        SelectedSalesDisplay.AddColumn("FirstName", "FirstName", 10);
+                        SelectedSalesDisplay.AddColumn("LastName", "LastName", 10);
+                        SelectedSalesDisplay.AddColumn("RoadName", "RoadName", 10);
+                        SelectedSalesDisplay.AddColumn("StreetNumber", "StreetNumber", 5);
+                        SelectedSalesDisplay.AddColumn("ZipCode", "ZipCode", 5);
+                        SelectedSalesDisplay.AddColumn("City", "City", 10);
+                        SelectedSalesDisplay.AddColumn("PhoneNumber", "PhoneNumber", 15);
+                        SelectedSalesDisplay.AddColumn("Email", "Email", 20);
+                        Customer SelectedSales = customers.Select(x => x).Where(x => x.FirstName == SelectedRow.FirstName).FirstOrDefault();
+                        SelectedSalesDisplay.Add(new SalesDisplay(SelectedSales.FirstName, SelectedSales.LastName, SelectedSales.Address.RoadName, SelectedSales.Address.StreetNumber, SelectedSales.Address.ZipCode, SelectedSales.Address.City, SelectedSales.PhoneNumber, SelectedSales.Email, SelectedSales.Address.AdressID.ToString()));
 
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("Click 'F1' to edit Sales.");
+                        Console.WriteLine("Click 'F2' to add a new Sales.");
+                        Console.WriteLine("---------------------------------");
+                        Console.WriteLine("Click 'Enter' to save.");
+                        Console.WriteLine("Click 'Escape' to cancel.");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+
+                        SelectedSalesDisplay.Draw();
                     }
-                    catch (Exception ex) { }
+                    ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-
-                    while (true)
+                    if (keyInfo.Key == ConsoleKey.F2)
                     {
 
-                        ConsoleKeyInfo saveKeyInfo = Console.ReadKey();
-                        if (saveKeyInfo.Key == ConsoleKey.Enter)
+                        Form<SalesDisplay> editor = new Form<SalesDisplay>();
+                        editor.TextBox("FirstName", "FirstName");
+                        editor.TextBox("LastName", "LastName");
+                        editor.TextBox("RoadName", "RoadName");
+                        editor.TextBox("StreetNumber", "StreetNumber");
+                        editor.TextBox("ZipCode", "ZipCode");
+                        editor.TextBox("City", "City");
+                        editor.TextBox("PhoneNumber", "PhoneNumber");
+                        editor.TextBox("Email", "Email");
+
+                        try
                         {
-                            Customer newCustomer = new Customer();
-                            Address newAddress = new Address();
+                            Console.SetCursorPosition(50, 10);
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.WriteLine("-----Edit Sales details-----");
+                            Console.SetCursorPosition(46, 12);
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            editor.Edit(salesDisplay);
 
-                            newAddress.StreetNumber = salesDisplay.StreetNumber;
-                            newAddress.City = salesDisplay.City;
-                            newAddress.ZipCode = salesDisplay.ZipCode;
-                            newAddress.RoadName = salesDisplay.RoadName;
-
-                            var getdataFast = db.GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] Inner join [dbo].[Customers.Person] " +
-                                $"on [Customers.Person].PersonID = [Customer.Customers].PersonID inner join  [dbo].[Customer.Adress] " +
-                                $"on [Customers.Person].AdressID = [Customer.Adress].AdressID WHERE CustomerID = {SelectedRow.ID}");
-                            newAddress.Country = getdataFast.ElementAt(0).Value[0].ToString();
-                            newAddress.AdressID = Convert.ToUInt32(getdataFast.ElementAt(0).Value[8]);
-
-                            newCustomer.FirstName = salesDisplay.FirstName;
-                            newCustomer.LastName = salesDisplay.LastName;
-                            newCustomer.PhoneNumber = salesDisplay.PhoneNumber;
-                            newCustomer.Email = salesDisplay.Email;
-                            newCustomer.PersonID = Convert.ToUInt32(getdataFast.ElementAt(0).Value[2]);
-
-
-                            newCustomer.Address = newAddress;
-                            newCustomer.CustomerId = newCustomer.CustomerId;
-
-                            db.UpdateCustomer(newCustomer);
-
-                            Console.SetCursorPosition(45, 21);
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Sales edit saved.");
-                            Console.ResetColor();
-                            break;
 
                         }
-                        else if (saveKeyInfo.Key == ConsoleKey.Escape)
+                        catch (Exception ex) { }
+
+
+                        while (true)
                         {
-                            Console.SetCursorPosition(45, 21);
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("sSales edit cancelled.");
-                            Console.ResetColor();
-                            break;
+
+                            ConsoleKeyInfo saveKeyInfo = Console.ReadKey();
+                            if (saveKeyInfo.Key == ConsoleKey.Enter)
+                            {
+                                Customer newCustomer = new Customer();
+                                Address newAddress = new Address();
+
+                                newAddress.StreetNumber = salesDisplay.StreetNumber;
+                                newAddress.City = salesDisplay.City;
+                                newAddress.ZipCode = salesDisplay.ZipCode;
+                                newAddress.RoadName = salesDisplay.RoadName;
+
+                                var getdataFast = db.GetDatafast($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Customer.Customers] Inner join [dbo].[Customers.Person] " +
+                                    $"on [Customers.Person].PersonID = [Customer.Customers].PersonID inner join  [dbo].[Customer.Adress] " +
+                                    $"on [Customers.Person].AdressID = [Customer.Adress].AdressID WHERE CustomerID = {SelectedRow.ID}");
+                                newAddress.Country = getdataFast.ElementAt(0).Value[0].ToString();
+                                newAddress.AdressID = Convert.ToUInt32(getdataFast.ElementAt(0).Value[8]);
+
+                                newCustomer.FirstName = salesDisplay.FirstName;
+                                newCustomer.LastName = salesDisplay.LastName;
+                                newCustomer.PhoneNumber = salesDisplay.PhoneNumber;
+                                newCustomer.Email = salesDisplay.Email;
+                                newCustomer.PersonID = Convert.ToUInt32(getdataFast.ElementAt(0).Value[2]);
+
+
+                                newCustomer.Address = newAddress;
+                                newCustomer.CustomerId = newCustomer.CustomerId;
+
+                                db.UpdateCustomer(newCustomer);
+
+                                Console.SetCursorPosition(45, 21);
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Sales edit saved.");
+                                Console.ResetColor();
+                                break;
+
+                            }
+                            else if (saveKeyInfo.Key == ConsoleKey.Escape)
+                            {
+                                Console.SetCursorPosition(45, 21);
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("sSales edit cancelled.");
+                                Console.ResetColor();
+                                break;
+
+                            }
 
                         }
                     }

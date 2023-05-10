@@ -13,6 +13,12 @@ namespace H1_ERP.DapperDB
 {
     public partial class DatabaseDapper
     {
+
+        /// <summary>
+        /// Returns a Company object with a spefic ID from the DB 
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         public Company GetCompanyFromID(int ID)
         {
             Company? Company = null;
@@ -29,6 +35,10 @@ namespace H1_ERP.DapperDB
                 return Company;
             }
         }
+        /// <summary>
+        /// Returns a list of all the Company's from the DB 
+        /// </summary>
+        /// <returns></returns>
         public List<Company> GetAllCompanies()
         {
             List<Company> Companies = new List<Company>();
@@ -44,11 +54,19 @@ namespace H1_ERP.DapperDB
             }
             return Companies;
         }
+        /// <summary>
+        /// Delete's the Company from the DB with specifc ID  
+        /// </summary>
+        /// <returns></returns>
         public void DeleteCompany(int ID)
         {
+            Company temcom = GetCompanyFromID(ID);
+
             using (var conn = getConnection())
             {
                 conn.Query($"DELETE FROM Company WHERE CompanyID = {ID}");
+                conn.Query($"DELETE FROM Adress WHERE AdressID = {temcom.Address.AdressID}");
+
             }
         }
     }
