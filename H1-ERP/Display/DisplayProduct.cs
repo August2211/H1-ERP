@@ -29,6 +29,7 @@ namespace H1_ERP.Display
             // It gets all products from database and puts them in a list.
             List<Product> products = dataBase.GetAllProduct();
 
+            if(products == null) { Console.WriteLine("No products found!"); return; }
 
 
             foreach (Product product in products)

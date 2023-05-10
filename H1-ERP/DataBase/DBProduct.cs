@@ -3,6 +3,7 @@ using H1_ERP.ErrorHandling;
 using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
@@ -50,8 +51,14 @@ namespace H1_ERP.DataBase
         {
             // Creates a list of products and adds the respective values to it
             List<Product> list = new List<Product>();
-            var listofproducst = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]");
-            foreach(var s in listofproducst.Values)
+            var listOfProducts = GetData($"SELECT * FROM [H1PD021123_Gruppe4].[dbo].[Product]");
+            
+            if(listOfProducts == null || listOfProducts.Count == 0)
+            {
+                return null;
+            }
+
+            foreach(var s in listOfProducts.Values)
             {
                 Product product = new Product();
                 product.ProductID = (int)s[0];
