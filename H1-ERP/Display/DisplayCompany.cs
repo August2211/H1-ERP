@@ -21,6 +21,7 @@ namespace H1_ERP.Display
 
         public class CompanyDisplay
         {
+            //Properties
             public string CompanyName { get; set; }
             public string Country { get; set; }
             public Company.currency Currency { get; set; }
@@ -32,7 +33,7 @@ namespace H1_ERP.Display
 
             public string TempID { get; set; }
 
-
+            //constructor 
             public CompanyDisplay(string companyName, string country, Company.currency currency, string tempID)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -42,7 +43,7 @@ namespace H1_ERP.Display
                 TempID = tempID;
             }
 
-
+            //constructor 
             public CompanyDisplay(string companyName, string country, Company.currency currency, string zipCode, string city, string roadName, string streetNumber)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -61,42 +62,58 @@ namespace H1_ERP.Display
         {
             Clear(this);
             Console.ForegroundColor = ConsoleColor.Blue;
+            
+            //instance for Database
             DataBase.DataBase db = new DataBase.DataBase();
 
+            // instance of the "ListPage" class, specialized to hold elements of type "CompanyDisplay"
             ListPage<CompanyDisplay> listPage = new ListPage<CompanyDisplay>();
-
+          
+            // Create a new CompanyDisplay object with the given parameters
             CompanyDisplay displayCopmany = new CompanyDisplay("CompanyName", "Country", Company.currency.DKK, "ZipCode", "City", "RoadName", "StreetNumber");
 
-
+            // Retrieve a list of all companies from the database
             List<Company> companies = db.GetAllCompany();
+
+            // Create a new CompanyDisplay object for each company and add it to the listPage
             foreach (var Company in companies)
             {
                 listPage.Add(new CompanyDisplay(Company.CompanyName, Company.Address.Country, Company.Currency,Company.CompanyID.ToString()));
             }
+
+            // Add columns to the listPage object for displaying company data
             listPage.AddColumn("CompanyName", "CompanyName", 20);
             listPage.AddColumn("Country", "Country", 20);
             listPage.AddColumn("Currency", "Currency", 10);
+
+            // delete function to remove a company from the database
             Action<CompanyDisplay> Deletefunction = delegate (CompanyDisplay company)
-            {
+            {   
+                // Convert the company's TempID to an integer ID
                 int id = Convert.ToInt32(company.TempID);
-                db.DeleteCompany(id);
+                db.DeleteCompany(id);   // Delete the company from the database using the ID
+                // Create a new DisplayCompany object and display it
                 DisplayCompany display = new DisplayCompany();
                 Screen.Display(display); 
             };
+            // Add a key to the listPage object that calls the Deletefunction method when the F5 key is pressed
             listPage.AddKey(ConsoleKey.F5, Deletefunction);
-
+     
+         
             Action<CompanyDisplay> GoBackFunction = delegate (CompanyDisplay display)
             {
                 MenuDisplay menuDisplay = new MenuDisplay();
                 Screen.Display(menuDisplay);
             };
+            // Add a key to the listPage object that calls the GoBackFunction delegate when the Q key is pressed
             listPage.AddKey(ConsoleKey.Q, GoBackFunction);
-
+            // Create a new Form object for CompanyDisplay class
             Form<CompanyDisplay> form = new Form<CompanyDisplay>();
             try
             {
+                // Use the listPage object to select a row of data
                 var SelectedRow = listPage.Select();
-
+                // If a CompanyDisplay object is selected, create a new ListPage object and add a column for CompanyName
                 if (SelectedRow.CompanyName != null)
                 {
                     Clear();
@@ -125,6 +142,7 @@ namespace H1_ERP.Display
 
                     ConsoleKeyInfo keyInfo = Console.ReadKey();
                        
+                    //F1 to edit
                     if (keyInfo.Key == ConsoleKey.F1)
                     {
                                        
@@ -195,7 +213,8 @@ namespace H1_ERP.Display
                     }
 
                     ConsoleKeyInfo keyInfo2 = Console.ReadKey();
-
+                 
+                    //F2 to add a new company
                     if (keyInfo2.Key == ConsoleKey.F2)
                     {
                                                                     
@@ -222,6 +241,7 @@ namespace H1_ERP.Display
                         while (true)
                         {
                             ConsoleKeyInfo saveKeyInfo = Console.ReadKey();
+                            //Enter to save
                             if (saveKeyInfo.Key == ConsoleKey.Enter)
                             {
                                 Company newCompany = new Company();

@@ -131,24 +131,15 @@ namespace H1_ERP.DomainModel
                 _unit = errorHandling.IsNull(value);
             }
         }
-        /*---------------------------------*/
+        ///*---------------------------------*/
+        //public decimal CalculateProfit()
+        //{
+        //    return SellingPrice - PurchasePrice;
+        //}
 
-        /// <summary>
-        /// Calculates the profit of the product.
-        /// </summary>
-        /// <returns>The profit as decimal</returns>
-        public decimal CalculateProfit()
-        {
-            return ProductSalePrice - ProductPurchasePrice;
-        }
-
-        /// <summary>
-        /// Calculates the profit percentage of the product.
-        /// </summary>
-        /// <returns>The profit percentage as decimal</returns>
-        public decimal CalculateProfitPercentage()
-        {
-            return (CalculateProfit() / ProductSalePrice) * 100;
-        }
+        //public decimal CalculateProfitPercentage()
+        //{
+        //    return (CalculateProfit() / SellingPrice) * 100;
+        //}
     }
 }
