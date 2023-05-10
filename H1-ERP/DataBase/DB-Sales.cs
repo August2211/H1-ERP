@@ -61,6 +61,10 @@ namespace H1_ERP.DataBase
                 $"on [dbo].[Product].ProductID =  [dbo].[Sales.OrderLines].ProductID");
             List<SalesOrderHeader> res = new List<SalesOrderHeader>();
 
+            if(products == null || products.Count == 0)
+            {
+                return null;
+            }
 
             foreach (var orderheaderline in products.Values)
             {

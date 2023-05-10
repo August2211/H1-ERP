@@ -60,6 +60,9 @@ namespace H1_ERP.Display
             
             DataBase.DataBase data = new DataBase.DataBase();
             List<Customer> customers = data.GetAllCustomers(); 
+
+            if(customers == null) { Console.Clear();  Console.WriteLine("No customers found"); Console.ReadKey(); return; }
+
             foreach(var customer in customers)
             {
                 listPage.Add(new CustomerDisplay(customer.CustomerId, customer.FullName(), customer.PhoneNumber, customer.Email)); 

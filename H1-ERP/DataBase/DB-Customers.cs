@@ -70,6 +70,11 @@ namespace H1_ERP.DataBase
                 "[dbo].[Customers.Person] ON [dbo].[Customers.Person].PersonID = [dbo].[Customer.Customers].PersonID INNER JOIN " +
                 "[dbo].[Customer.Adress] ON [dbo].[Customers.Person].AdressID = [dbo].[Customer.Adress].AdressID");
 
+            if(Allcustomers == null || Allcustomers.Count == 0)
+            {
+                return null;
+            }
+
             foreach (var Customerrow in Allcustomers.Values)
             {
                 Customer tempcustomer = new Customer();

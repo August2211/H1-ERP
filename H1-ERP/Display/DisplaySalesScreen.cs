@@ -88,6 +88,9 @@ namespace H1_ERP.Display
             //Get all customers
             List<Customer> Customers = db.GetAllCustomers();
 
+            if (SalesOrderHeaders == null) { Console.WriteLine("No sales orders found."); return; };
+            if (Customers == null) { Console.WriteLine("No customers found."); return; };
+
             SalesOrderHeaders.ForEach(OrderHeader =>
             {
                 List<SalesOrderLine> OrderLines = OrderHeader.OrderLines;
